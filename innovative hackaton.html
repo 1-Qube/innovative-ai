@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYNA — Startup Idea Stress-Testing Platform</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Syne, Space Grotesk, Space Mono, Bebas Neue / Anton for high-impact editorial typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- React & ReactDOM (Production UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel for in-browser JSX parsing -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#F5F4EE',
+            ink: '#111111',
+            lime: '#C8FF45',
+            violet: '#8170B5',
+            sand: '#E9E7DC',
+            subtle: '#6B6A65',
+            line: 'rgba(17, 17, 17, 0.14)',
+            lineDark: 'rgba(17, 17, 17, 0.85)',
+          },
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            display: ['"Syne"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+            condensed: ['"Anton"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Strict editorial aesthetic: no rounded pill fluff, no glassmorphism, no gradients */
+    :root {
+      --bg: #F5F4EE;
+      --ink: #111111;
+      --lime: #C8FF45;
+      --violet: #8170B5;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* Hide standard cursor only on fine pointer devices when custom cursor is active */
+    @media (pointer: fine) {
+      body.custom-cursor-active, 
+      body.custom-cursor-active * {
+        cursor: none !important;
+      }
+    }
+
+    /* Print styles for Startup Blueprint */
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .blueprint-sheet {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+      }
+    }
+
+    /* Custom Cursor Elements */
+    #cursor-dot {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background-color: var(--ink);
+      border-radius: 50%;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease;
+    }
+
+    #cursor-ring {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.2s ease,
+                  background-color 0.2s ease;
+    }
+
+    #cursor-ring.cursor-hover {
+      width: 58px;
+      height: 58px;
+      border-color: var(--ink);
+      background-color: rgba(200, 255, 69, 0.25);
+    }
+
+    #cursor-ring.cursor-challenger {
+      border-color: var(--violet);
+      background-color: rgba(129, 112, 181, 0.2);
+    }
+
+    /* Editorial Links & Buttons */
+    .link-hover {
+      position: relative;
+      display: inline-block;
+    }
+    .link-hover::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 1px;
+      bottom: -1px;
+      left: 0;
+      background-color: var(--ink);
+      transform-origin: bottom right;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .link-hover:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    /* Selection */
+    ::selection {
+      background: var(--lime);
+      color: var(--ink);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F4EE;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D3D1C5;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #111111;
+    }
+  </style>
+</head>
+<body class="custom-cursor-active">
+  <div id="cursor-dot" class="hidden md:block"></div>
+  <div id="cursor-ring" class="hidden md:block"></div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ==========================================
+    // INITIAL MOCK DATA (High quality, modular)
+    // ==========================================
+    const DEFAULT_PROJECTS = [
+      {
+        id: "syna-01",
+        title: "OmniLedger",
+        tagline: "Autonomous corporate expense fraud detection for mid-market CFOs",
+        stage: "MVP in Pilot",
+        status: "Stress-Tested",
+        verdict: "Survivable with Moat Pivot",
+        score: 78,
+        createdAt: "2026-03-24",
+        category: "Fintech / Enterprise AI",
+        roundsCompleted: 4,
+        keyTension: "LLM commodity wrappers vs deep ERP system-of-record moats",
+        targetAudience: "Mid-market CFOs and controllers managing $50M-$500M in revenue",
+        problemStatement: "Expense leakage and rogue invoice spoofing slip past automated rules, costing 2.4% of EBITDA.",
+        solution: "Agentic invoice reconcilement with zero-shot context cross-referencing Slack, contracts, and banking rails.",
+        disagreements: [
+          { point: "Distribution Wedge", builder: "Partner directly with NetSuite & Workday implementation consultants.", challenger: "Consultants already have lucrative RevOps kickbacks from Coupa and Navan." },
+          { point: "Pricing Power", builder: "Charge 15% of verified fraud prevented (pure ROI sale).", challenger: "CFOs hate variable risk-fees on compliance; legal will force flat $40k/yr capped seats." }
+        ]
+      },
+      {
+        id: "syna-02",
+        title: "Kith Living",
+        tagline: "Decentralized micro-assisted living communities for active baby boomers",
+        stage: "Idea Phase",
+        status: "High Vulnerability",
+        score: 54,
+        createdAt: "2026-03-28",
+        category: "Silver Economy / PropTech",
+        roundsCompleted: 4,
+        keyTension: "Severe state healthcare licensing liability vs capital-light franchise model",
+        targetAudience: "Independent seniors (age 72+) wanting community without institutional nursing homes",
+        problemStatement: "Traditional assisted living facilities feel like sterile hospitals and cost $9,500/month.",
+        solution: "Boutique co-living residences for 8-10 elders with shared on-demand certified concierge nursing.",
+        disagreements: [
+          { point: "Regulatory Exposure", builder: "Arbitrage residential zoning laws using private group-home exemptions.", challenger: "One fatal slip-and-fall triggers criminal state elder abuse investigation and instant revocation." }
+        ]
+      },
+      {
+        id: "syna-03",
+        title: "Argus Kernel",
+        tagline: "Sub-millisecond verification guardrails for autonomous physical robotics",
+        stage: "Pre-seed",
+        status: "Stress-Tested",
+        score: 89,
+        createdAt: "2026-04-02",
+        category: "Robotics / Safety Critical",
+        roundsCompleted: 4,
+        keyTension: "Long industrial OEM validation cycles vs developer speed",
+        targetAudience: "Warehouse autonomous mobile robot (AMR) system integrators",
+        problemStatement: "AI vision hallucination can cause 2-ton warehouse forklifts to miscalculate human safety buffers.",
+        solution: "Formal hardware-level mathematical proof engine running at 1000Hz on isolated edge chips.",
+        disagreements: [
+          { point: "Sales Cycle", builder: "Direct sell developer SDKs to robotics engineers building with ROS 2.", challenger: "Chief Safety Officers take 18-month ISO certification audits before SDKs touch hardware." }
+        ]
+      }
+    ];
+
+    const MOCK_DEBATE_TRANSCRIPT = [
+      {
+        round: 1,
+        title: "Market Wedge & Willingness to Pay",
+        builder: {
+          title: "The Builder",
+          subtitle: "Finds the offensive angle",
+          argument: "CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. OmniLedger doesn't ask for a workflow overhaul; it hooks into bank feeds via Plaid in 90 seconds and proves $34,000 in duplicate seat billing in round one. The ROI is immediate and indisputable."
+        },
+        challenger: {
+          title: "The Challenger",
+          subtitle: "Spots the structural fault",
+          argument: "Every expense vendor claims this. Coupa, Brex, Ramp, and Zip all have internal AI squads building this native feature right now. Why would a controller trust a standalone point solution with their sensitive raw general ledger feeds when their existing corporate card issuer gives it away for free?"
+        }
+      },
+      {
+        round: 2,
+        title: "Defensibility & LLM Commoditization",
+        builder: {
+          title: "The Builder",
+          subtitle: "Defending the moat",
+          argument: "Ramp and Brex only see credit card transactions. OmniLedger captures the multi-party conversation: the signed PDF contract in Ironclad, the Slack thread negotiating the discount, and the inbound ACH wire. That contextual cross-verification graph is completely invisible to credit card issuers."
+        },
+        challenger: {
+          title: "The Challenger",
+          subtitle: "Stress-testing the thesis",
+          argument: "Connecting Ironclad, Slack, and legacy Oracle ERP isn't an AI moat — it's an engineering integration quagmire. Mid-market IT teams delay enterprise API permissions by an average of 114 days. Your Customer Acquisition Cost (CAC) payback period will blow out past 22 months before your first 50 logos."
+        }
+      },
+      {
+        round: 3,
+        title: "Unit Economics & Go-to-Market Friction",
+        builder: {
+          title: "The Builder",
+          subtitle: "Architecting scale",
+          argument: "We bypass standard IT resistance by starting with the Accounts Payable (AP) clerk as a lightweight email parsing extension. The AP team forwards suspect invoices to an intake address. Once we save them 12 hours a week manually catching false billings, the CFO demands the full ERP connector."
+        },
+        challenger: {
+          title: "The Challenger",
+          subtitle: "Uncovering the death spiral",
+          argument: "An email forwarder has zero data switching costs. The moment Ramp rolls out their automated invoice match next quarter, you get churned instantly. Point solutions that don't own the transaction clearing rail always get compressed to zero margin."
+        }
+      },
+      {
+        round: 4,
+        title: "Existential Risk & The Fatal Vulnerability",
+        builder: {
+          title: "The Builder",
+          subtitle: "The endgame posture",
+          argument: "If we own the semantic truth between contracts and actual disbursements, OmniLedger naturally graduates into the autonomous payment execution rail itself. We don't stay a detector; we become the escrow gatekeeper for all mid-market enterprise disbursements."
+        },
+        challenger: {
+          title: "The Challenger",
+          subtitle: "The fatal verdict",
+          argument: "Becoming an execution rail introduces money transmission licenses, FINCEN compliance, and massive balance sheet liability. If your agentic reconciliation hallucinatingly blocks a mission-critical $2M vendor payment on payroll Friday, you will be sued out of existence. Your error tolerance is 0.000%."
+        }
+      }
+    ];
+
+    const DEFAULT_AUDIT = {
+      score: 78,
+      verdict: "Survivable with Moat Pivot",
+      conclusion: "Strong underlying demand wedge, but vulnerable to rapid commoditization if dependent solely on LLM wrappers without proprietary system telemetry.",
+      tension: "3.2σ",
+      consensus: "Split Decision",
+      dimensions: [
+        { name: "1. Demand Urgency & Willingness to Pay", score: 88, tone: "lime", note: "CFOs confirm acute pain around duplicate invoice fraud and unbudgeted software seat leaks." },
+        { name: "2. Defensibility vs Incumbents", score: 48, tone: "violet", note: "HIGH RISK: Brex, Ramp, and Coupa possess native rails and can release cloned telemetry within 9 months." },
+        { name: "3. GTM Velocity & Sales Cycle Friction", score: 65, tone: "ink", note: "IT security reviews will stall mid-market sales unless an agentless or read-only connector is deployed." }
+      ],
+      strengths: [
+        { title: "Instant Proof-of-Value", detail: "Ability to scrape 90 days of prior transactions and surface historical duplicate billing in 10 minutes creates immediate ROI legitimacy." },
+        { title: "Multi-Silo Semantic Graph", detail: "Incumbent card issuers cannot inspect signed Ironclad MSAs or Slack approvals, giving unique context superiority." },
+        { title: "Bottom-Up AP Advocate", detail: "Accounts Payable clerks will champion software that saves them 14 manual reconciliation hours per week." }
+      ],
+      killshots: [
+        { title: "Commodity Feature Trap", detail: "If positioned merely as AI invoice auditing, you will be priced down to a $20/seat micro-utility or discarded." },
+        { title: "Zero Switching Cost Churn", detail: "If the software does not hold write-access or clearing rights, clients switch the moment ERP vendors bundle a clone." },
+        { title: "Legal Liability Threshold", detail: "A single hallucinated false positive that halts payroll or a vendor wire could trigger immediate breach of contract claims." }
+      ],
+      pathA: {
+        title: "Path A: The Lightweight Workflow Wedge (Growth Hacker)",
+        body: "Stay 100% read-only. Avoid financial liability or wire handling. Charge a flat $36k/yr audit fee and rely on extreme viral AP department word-of-mouth.",
+        tradeoff: "Upside: Fast initial ARR. Downside: Low exit multiple."
+      },
+      pathB: {
+        title: "Path B: The Autonomous Clearing Moat (Ruthless VC)",
+        body: "Obtain fintech sponsorship, absorb banking licenses, and sit directly in the money transmission flow. Reject any customer unwilling to grant write-level execution.",
+        tradeoff: "Upside: Generational enterprise. Downside: 18-month burn to launch."
+      }
+    };
+
+    function toneBar(tone) {
+      if (tone === "violet") return "bg-violet";
+      if (tone === "lime") return "bg-lime";
+      return "bg-ink";
+    }
+
+    async function readNdjson(response, onEvent) {
+      if (!response.body || !response.body.getReader) {
+        const text = await response.text();
+        text.split("\n").filter(Boolean).forEach((line) => onEvent(JSON.parse(line)));
+        return;
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let cut = buffer.indexOf("\n");
+        while (cut >= 0) {
+          const line = buffer.slice(0, cut).trim();
+          buffer = buffer.slice(cut + 1);
+          if (line) onEvent(JSON.parse(line));
+          cut = buffer.indexOf("\n");
+        }
+      }
+      if (buffer.trim()) onEvent(JSON.parse(buffer.trim()));
+    }
+
+    // ==========================================
+    // NOTIFICATION TOAST COMPONENT
+    // ==========================================
+    function Toast({ message, type, onClose }) {
+      useEffect(() => {
+        const timer = setTimeout(onClose, 3400);
+        return () => clearTimeout(timer);
+      }, [onClose]);
+
+      return (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-ink text-ivory px-5 py-3 border border-ink shadow-2xl transition-all animate-bounce-in">
+          <span className={`w-2.5 h-2.5 ${type === 'alert' ? 'bg-violet' : 'bg-lime'}`}></span>
+          <span className="font-mono text-xs uppercase tracking-wider">{message}</span>
+          <button onClick={onClose} className="ml-3 text-xs opacity-60 hover:opacity-100">✕</button>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // TOP NAVIGATION
+    // ==========================================
+    function Navigation({ activePage, setActivePage, activeProject }) {
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+      const navItems = [
+        { id: 'landing', label: 'Overview' },
+        { id: 'dashboard', label: 'All Projects' },
+        { id: 'idealab', label: 'Idea Lab' },
+        { id: 'debate', label: 'Debate Room' },
+        { id: 'verdict', label: 'Verdict' },
+        { id: 'blueprint', label: 'Blueprint' },
+        { id: 'prototype', label: 'Prototype' },
+      ];
+
+      return (
+        <header className="border-b border-ink/15 bg-ivory sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setActivePage('landing')} 
+                className="font-condensed text-3xl tracking-wider text-ink font-bold hover:opacity-80 transition-opacity"
+              >
+                SYNA
+              </button>
+              <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest text-subtle border-l border-ink/20 pl-3">
+                Adversarial AI Idea Laboratory
+              </span>
+            </div>
+
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center space-x-8 font-mono text-xs uppercase tracking-wider">
+              {navItems.map((item) => {
+                const isActive = activePage === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActivePage(item.id)}
+                    className={`transition-colors py-1 ${
+                      isActive 
+                        ? 'text-ink font-bold border-b-2 border-ink' 
+                        : 'text-subtle hover:text-ink link-hover'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Direct CTA */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setActivePage('idealab')}
+                className="hidden sm:inline-flex items-center gap-2 bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-wider px-4 py-2.5 transition-all group"
+              >
+                <span>Stress-Test Idea</span>
+                <span className="text-lime group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+              </button>
+
+              {/* Mobile hamburger */}
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-ink"
+                aria-label="Toggle menu"
+              >
+                <div className="w-6 h-4 flex flex-col justify-between">
+                  <span className={`h-0.5 bg-ink w-full transition-transform ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+                  <span className={`h-0.5 bg-ink w-full ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+                  <span className={`h-0.5 bg-ink w-full transition-transform ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile drawer */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-ink/20 bg-ivory px-6 py-5 space-y-4">
+              <div className="flex flex-col space-y-3 font-mono text-xs uppercase tracking-wider">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActivePage(item.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`text-left py-2 border-b border-ink/10 ${
+                      activePage === item.id ? 'font-bold text-ink pl-2 border-l-2 border-ink' : 'text-subtle'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  setActivePage('idealab');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full bg-ink text-ivory py-3 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2"
+              >
+                <span>Start a debate</span>
+                <span className="text-lime">↗</span>
+              </button>
+            </div>
+          )}
+        </header>
+      );
+    }
+
+    // ==========================================
+    // PAGE 1: LANDING PAGE (Faithful to Reference)
+    // ==========================================
+    function LandingPage({ setActivePage, setDemoProject }) {
+      return (
+        <div className="min-h-screen">
+          {/* Main Hero Section directly replicating user screenshot */}
+          <section className="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
+            {/* Superhead */}
+            <div className="font-mono text-xs uppercase tracking-widest text-ink/70 mb-8">
+              A better idea starts with friction
+            </div>
+
+            {/* Two-Column Asymmetric Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+              {/* Left Column: Bold Editorial Headline & Thesis */}
+              <div className="lg:col-span-7 pr-0 lg:pr-8">
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-extrabold text-ink leading-[1.04] tracking-tight mb-8">
+                  Good ideas don’t need praise. They need pressure.
+                </h1>
+
+                <p className="font-sans text-base md:text-xl text-ink/80 max-w-xl font-normal leading-relaxed mb-10">
+                  SYNA puts your startup idea between a growth hacker and a ruthless VC. They debate. You leave with a verdict, a 14-day MVP plan, and a landing-page prototype.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-6">
+                  <button
+                    onClick={() => setActivePage('idealab')}
+                    className="bg-ink text-ivory hover:bg-black font-mono text-sm uppercase tracking-wider px-6 py-4 flex items-center gap-3 transition-transform active:scale-[0.98]"
+                  >
+                    <span>Stress-test your idea</span>
+                    <span className="text-lime font-bold">↗</span>
+                  </button>
+
+                  <button
+                    onClick={() => setDemoProject('syna-01')}
+                    className="font-mono text-sm uppercase tracking-wider text-ink border-b border-ink/40 pb-0.5 hover:border-ink transition-colors"
+                  >
+                    See an example debate
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Giant Typographic BUILD / BREAK split matching image */}
+              <div className="lg:col-span-5 relative pt-4 select-none">
+                <div className="relative border-b border-ink/20 pb-10">
+                  {/* BUILD block */}
+                  <div className="flex items-baseline justify-between">
+                    <span className="font-condensed text-7xl sm:text-8xl md:text-9xl text-ink font-bold tracking-tight">
+                      BUILD
+                    </span>
+                    <div className="text-right">
+                      <span className="font-mono text-xs font-bold text-ink block">01</span>
+                      <span className="font-mono text-[10px] tracking-widest uppercase text-subtle block max-w-[110px] leading-tight">
+                        Growth hacker finds the wedge
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Horizontal dividing line with Lime marker */}
+                  <div className="relative w-full my-4">
+                    <div className="w-full h-[1px] bg-ink/20"></div>
+                    <div className="absolute right-24 -top-[5px] w-[11px] h-[11px] bg-lime border border-ink"></div>
+                  </div>
+
+                  {/* BREAK block (shifted right and down) */}
+                  <div className="flex items-baseline justify-end gap-6 mt-4">
+                    <div className="text-right">
+                      <span className="font-mono text-xs font-bold text-ink block">02</span>
+                      <span className="font-mono text-[10px] tracking-widest uppercase text-subtle block max-w-[120px] leading-tight">
+                        Ruthless VC tries to kill it
+                      </span>
+                    </div>
+                    <span className="font-condensed text-7xl sm:text-8xl md:text-9xl text-ink font-bold tracking-tight">
+                      BREAK
+                    </span>
+                  </div>
+                </div>
+
+                {/* Micro meta note */}
+                <div className="mt-4 flex items-center justify-between font-mono text-[11px] text-subtle uppercase tracking-wider">
+                  <span>Adversarial Dialectic</span>
+                  <span>Synthetic Co-Founders</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Three Numbered Steps Section */}
+          <section className="border-t border-ink/20 bg-ivory">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 py-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/20 border border-ink/20 bg-ivory">
+                {/* Step 01 */}
+                <div className="p-8 md:p-10 flex flex-col justify-between">
+                  <div>
+                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">01</span>
+                    <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
+                      Submit an idea
+                    </h3>
+                    <p className="font-sans text-sm text-subtle leading-relaxed">
+                      Share your startup concept, target audience and the exact problem you’re solving. Zero vanity filters.
+                    </p>
+                  </div>
+                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
+                    <span>Intake: 2 mins</span>
+                    <span>Unbiased</span>
+                  </div>
+                </div>
+
+                {/* Step 02 */}
+                <div className="p-8 md:p-10 flex flex-col justify-between bg-[#F1EFE6]">
+                  <div>
+                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">02</span>
+                    <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
+                      Challenge assumptions
+                    </h3>
+                    <p className="font-sans text-sm text-subtle leading-relaxed">
+                      Two AI agents debate your idea in 4 structured rounds, relentlessly testing defensibility, moat, and CAC viability.
+                    </p>
+                  </div>
+                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
+                    <span>Engine: Multi-agent</span>
+                    <span className="text-violet font-semibold">Zero Consensus</span>
+                  </div>
+                </div>
+
+                {/* Step 03 */}
+                <div className="p-8 md:p-10 flex flex-col justify-between">
+                  <div>
+                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">03</span>
+                    <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
+                      Leave with a plan
+                    </h3>
+                    <p className="font-sans text-sm text-subtle leading-relaxed">
+                      Get a survival score, an editable 14-day MVP brief, and an interactive landing prototype built from the fight.
+                    </p>
+                  </div>
+                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
+                    <span>Export: Dossier & Brief</span>
+                    <span className="text-ink font-bold">100% Actionable</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Live Interactive Sample Debate Preview */}
+          <section className="border-t border-ink/20 py-20 bg-[#ECEAE0]">
+            <div className="max-w-7xl mx-auto px-6 md:px-10">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                  <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">Simulated Live Run</span>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
+                    Case Study: OmniLedger (Fraud Detection AI)
+                  </h2>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 bg-ink text-ivory font-mono text-xs uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-lime animate-pulse"></span>
+                    Round 01 of 04
+                  </span>
+                  <button 
+                    onClick={() => setDemoProject('syna-01')}
+                    className="font-mono text-xs uppercase tracking-wider underline hover:text-subtle"
+                  >
+                    Open Full Debate Room →
+                  </button>
+                </div>
+              </div>
+
+              {/* Opposing Preview Columns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left: Builder */}
+                <div className="bg-ivory border-2 border-ink p-8">
+                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-6">
+                    <div>
+                      <span className="font-mono text-xs uppercase tracking-widest text-subtle">Persona Alpha</span>
+                      <h4 className="font-condensed text-3xl tracking-wide uppercase text-ink">The Builder</h4>
+                    </div>
+                    <span className="px-2.5 py-1 bg-lime text-ink font-mono text-xs font-bold uppercase tracking-wider border border-ink">
+                      Advocate
+                    </span>
+                  </div>
+                  <p className="font-sans text-base text-ink/90 leading-relaxed italic border-l-2 border-ink pl-4 mb-6">
+                    “CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. We hook into Plaid in 90 seconds and prove $34k in fraud before lunch.”
+                  </p>
+                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between">
+                    <span>Focus: Speed of Wedge</span>
+                    <span>Willingness to pay: HIGH</span>
+                  </div>
+                </div>
+
+                {/* Right: Challenger */}
+                <div className="bg-ivory border-2 border-ink p-8">
+                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-6">
+                    <div>
+                      <span className="font-mono text-xs uppercase tracking-widest text-subtle">Persona Omega</span>
+                      <h4 className="font-condensed text-3xl tracking-wide uppercase text-ink">The Challenger</h4>
+                    </div>
+                    <span className="px-2.5 py-1 bg-violet text-ivory font-mono text-xs font-bold uppercase tracking-wider border border-ink">
+                      Skeptic
+                    </span>
+                  </div>
+                  <p className="font-sans text-base text-ink/90 leading-relaxed italic border-l-2 border-violet pl-4 mb-6">
+                    “Every corporate card vendor claims this. Brex, Ramp, and Zip give this away as a loss-leader. Mid-market CFOs won’t sign a separate SOC2 vendor liability waiver for a feature their bank is releasing for free.”
+                  </p>
+                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between">
+                    <span>Vulnerability: Commodity Risk</span>
+                    <span>Incumbent Threat: FATAL</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Philosophy / The Method */}
+          <section className="border-t border-ink/20 py-20 bg-ivory">
+            <div className="max-w-7xl mx-auto px-6 md:px-10">
+              <div className="max-w-3xl">
+                <span className="font-mono text-xs uppercase tracking-widest text-ink/60 mb-3 block">Methodology</span>
+                <h2 className="font-display text-3xl md:text-5xl font-bold text-ink leading-tight mb-8">
+                  Echo chambers kill startups before the market gets the chance.
+                </h2>
+                <div className="space-y-6 text-ink/80 font-sans text-lg leading-relaxed">
+                  <p>
+                    Most founders test their ideas with friendly peers, polite advisors, or generic ChatGPT prompts that suffer from sycophancy bias. They tell you what sounds good.
+                  </p>
+                  <p>
+                    SYNA is mathematically tuned for adversarial friction. We instantiate two divergent reasoning models: one tasked with finding defensible moats and untapped wedges, and the other explicitly rewarded for disproving unit economics, exposing CAC suicide traps, and discovering incumbent kill-shots.
+                  </p>
+                </div>
+
+                <div className="mt-12 flex items-center gap-6">
+                  <button
+                    onClick={() => setActivePage('idealab')}
+                    className="bg-ink text-ivory px-8 py-4 font-mono text-xs uppercase tracking-wider font-bold hover:bg-black"
+                  >
+                    Put Your Idea Under Pressure →
+                  </button>
+                  <button
+                    onClick={() => setActivePage('dashboard')}
+                    className="font-mono text-xs uppercase tracking-wider underline hover:text-subtle"
+                  >
+                    Explore Existing Tests
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Minimalist Editorial Footer */}
+          <footer className="border-t border-ink/20 py-12 bg-ivory">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <span className="font-condensed text-2xl font-bold tracking-wider">SYNA</span>
+                <span className="font-mono text-xs text-subtle border-l border-ink/20 pl-4">
+                  Better ideas. Stronger businesses.
+                </span>
+              </div>
+
+              <div className="flex items-center space-x-6 font-mono text-xs uppercase text-subtle">
+                <span className="hover:text-ink cursor-pointer">Methodology</span>
+                <span className="hover:text-ink cursor-pointer">Privacy</span>
+                <span className="hover:text-ink cursor-pointer">Terms</span>
+                <span className="hover:text-ink cursor-pointer">Audit Ledger</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // PAGE 2: DASHBOARD (Row-Based Editorial Table)
+    // ==========================================
+    function DashboardPage({ projects, setActivePage, setSelectedProjectId, onNewProjectClick }) {
+      const [searchTerm, setSearchTerm] = useState("");
+      const [filterStage, setFilterStage] = useState("all");
+
+      const filtered = projects.filter((p) => {
+        const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                              p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              p.tagline.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStage = filterStage === "all" || p.status.toLowerCase().includes(filterStage.toLowerCase());
+        return matchesSearch && matchesStage;
+      });
+
+      return (
+        <div className="max-w-7xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-ink/20 pb-8 mb-8 gap-6">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+                Directory / 06 Projects Tracked
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+                Stress-Test Dossiers
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={onNewProjectClick}
+                className="bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-wider px-5 py-3.5 flex items-center gap-2"
+              >
+                <span>+ Submit New Concept</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Search & Filter Strip */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pb-6 mb-2">
+            <div className="md:col-span-8">
+              <input
+                type="text"
+                placeholder="Search ideas by title, sector or thesis..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent border-b border-ink/40 py-2.5 font-mono text-sm text-ink placeholder:text-subtle/70 focus:outline-none focus:border-ink"
+              />
+            </div>
+            <div className="md:col-span-4 flex items-center justify-end gap-3 font-mono text-xs">
+              <span className="text-subtle uppercase">Filter:</span>
+              <button 
+                onClick={() => setFilterStage("all")}
+                className={`px-2.5 py-1 uppercase ${filterStage === "all" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+              >
+                All
+              </button>
+              <button 
+                onClick={() => setFilterStage("stress-tested")}
+                className={`px-2.5 py-1 uppercase ${filterStage === "stress-tested" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+              >
+                Tested
+              </button>
+              <button 
+                onClick={() => setFilterStage("vulnerability")}
+                className={`px-2.5 py-1 uppercase ${filterStage === "vulnerability" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+              >
+                Vulnerable
+              </button>
+            </div>
+          </div>
+
+          {/* Minimal Table Header (No cards) */}
+          <div className="hidden lg:grid grid-cols-12 gap-4 py-3 border-b-2 border-ink font-mono text-[11px] uppercase tracking-wider text-ink font-bold">
+            <div className="col-span-4">Startup Project & Thesis</div>
+            <div className="col-span-2">Sector & Stage</div>
+            <div className="col-span-2">Dialectic Tension</div>
+            <div className="col-span-2 text-center">Resilience Score</div>
+            <div className="col-span-2 text-right">Actions</div>
+          </div>
+
+          {/* Row Items */}
+          <div className="divide-y divide-ink/15 border-b border-ink/20">
+            {filtered.length === 0 ? (
+              <div className="py-16 text-center font-mono text-sm text-subtle">
+                No matching stress-test records located.
+              </div>
+            ) : (
+              filtered.map((item) => (
+                <div
+                  key={item.id}
+                  className="py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center hover:bg-sand/40 transition-colors px-2 -mx-2"
+                >
+                  {/* Name and Tagline */}
+                  <div className="lg:col-span-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-display text-xl font-bold text-ink">{item.title}</span>
+                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-ink/30 text-subtle">
+                        {item.stage}
+                      </span>
+                    </div>
+                    <p className="font-sans text-xs text-subtle line-clamp-2 max-w-md">
+                      {item.tagline}
+                    </p>
+                  </div>
+
+                  {/* Category & Date */}
+                  <div className="lg:col-span-2">
+                    <span className="font-mono text-xs text-ink block font-medium">{item.category}</span>
+                    <span className="font-mono text-[10px] text-subtle block">Tested: {item.createdAt}</span>
+                  </div>
+
+                  {/* Tension */}
+                  <div className="lg:col-span-2">
+                    <span className="font-mono text-[11px] text-ink/80 block line-clamp-2 italic">
+                      “{item.keyTension}”
+                    </span>
+                  </div>
+
+                  {/* Score */}
+                  <div className="lg:col-span-2 text-left lg:text-center">
+                    <div className="inline-flex items-center gap-2">
+                      <span className="font-condensed text-3xl font-bold text-ink">
+                        {item.score ?? "—"}
+                      </span>
+                      <span className="font-mono text-[10px] text-subtle">/100</span>
+                      <span className={`w-2.5 h-2.5 ${item.score >= 70 ? 'bg-lime' : 'bg-violet'}`}></span>
+                    </div>
+                    <span className="block font-mono text-[10px] uppercase text-subtle">
+                      {item.verdict}
+                    </span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="lg:col-span-2 flex items-center justify-start lg:justify-end gap-3 pt-2 lg:pt-0">
+                    <button
+                      onClick={() => {
+                        setSelectedProjectId(item.id);
+                        setActivePage('debate');
+                      }}
+                      className="font-mono text-xs uppercase px-3 py-1.5 border border-ink hover:bg-ink hover:text-ivory transition-colors"
+                    >
+                      Debate Room
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedProjectId(item.id);
+                        setActivePage('verdict');
+                      }}
+                      className="font-mono text-xs uppercase px-3 py-1.5 bg-ink text-ivory hover:bg-black transition-colors"
+                    >
+                      Report ↗
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Footer stats strip */}
+          <div className="mt-8 pt-4 flex flex-wrap items-center justify-between font-mono text-xs text-subtle gap-4">
+            <div>SIMULATED RUNTIME: 4 AGENTIC THREADS CONCLUDED</div>
+            <div className="flex gap-6">
+              <span>AVG RESILIENCE: 73.6%</span>
+              <span>FATAL FLAWS IDENTIFIED: 14</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // PAGE 3: IDEA LAB (Intake Form)
+    // ==========================================
+    function IdeaLabPage({ onLaunchDebate, showToast }) {
+      const [formData, setFormData] = useState({
+        title: "",
+        tagline: "",
+        targetAudience: "",
+        problemStatement: "",
+        solution: "",
+        stage: "Idea Phase",
+        revenueModel: "B2B Subscription (SaaS)",
+        biggestFear: ""
+      });
+
+      const [frictionScore, setFrictionScore] = useState(25);
+
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => {
+          const next = { ...prev, [name]: value };
+          // dynamic friction calculation based on completeness
+          let score = 25;
+          if (next.title.length > 2) score += 15;
+          if (next.problemStatement.length > 20) score += 20;
+          if (next.targetAudience.length > 10) score += 15;
+          if (next.solution.length > 20) score += 15;
+          if (next.biggestFear.length > 10) score += 10;
+          setFrictionScore(Math.min(100, score));
+          return next;
+        });
+      };
+
+      const handlePrepopulate = () => {
+        setFormData({
+          title: "VaporWare Sentinel",
+          tagline: "Real-time hardware bill-of-materials supply chain stress prediction",
+          targetAudience: "VP of Supply Chain at EV and aerospace Tier-1 manufacturers",
+          problemStatement: "Critical semiconductor delays are only caught when factory lines shut down, causing $400k/hr downtime.",
+          solution: "Predictive freight telemetry scraping customs manifests and silicon fab yields.",
+          stage: "MVP in Pilot",
+          revenueModel: "Enterprise Annual Contract Value ($120k/yr)",
+          biggestFear: "Taiwan geopolitical shock rendering software predictions useless."
+        });
+        setFrictionScore(95);
+        showToast("Pre-filled sample scenario: VaporWare Sentinel", "info");
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.title || !formData.problemStatement) {
+          showToast("Please provide at least a project title and problem statement", "alert");
+          return;
+        }
+
+        onLaunchDebate(formData);
+      };
+
+      return (
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+          {/* Header */}
+          <div className="border-b border-ink/20 pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+                Phase 01 // Intake Form
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+                Idea Stress Chamber
+              </h1>
+              <p className="font-sans text-sm text-subtle mt-2 max-w-xl">
+                Be ruthlessly honest. The sharper your inputs, the more brutally effective the Builder and Challenger will be.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handlePrepopulate}
+              className="font-mono text-xs uppercase tracking-wider border border-ink/40 px-4 py-2 hover:border-ink hover:bg-sand/30"
+            >
+              Fill Sample Scenario ⚡
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-10">
+            {/* Project Identification */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  01. Project Name / Working Title *
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  required
+                  placeholder="e.g. Nexus Grid, OmniLedger"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full bg-transparent border-b-2 border-ink py-2 font-display text-2xl text-ink placeholder:text-ink/25 focus:outline-none focus:border-black"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  02. Current Project Maturity
+                </label>
+                <select
+                  name="stage"
+                  value={formData.stage}
+                  onChange={handleChange}
+                  className="w-full bg-transparent border-b-2 border-ink py-2 font-mono text-base text-ink focus:outline-none"
+                >
+                  <option value="Idea Phase">Raw Thesis / Napkin Math</option>
+                  <option value="Pre-Prototype">Validation / Interviews</option>
+                  <option value="MVP in Pilot">MVP Built & Live in Alpha</option>
+                  <option value="Seed Revenue">Post-Revenue ($1k-$20k MRR)</option>
+                  <option value="Scaling">Growth / Seeking Series A</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Tagline */}
+            <div>
+              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                03. One-Sentence Hook (The Elevator Thesis)
+              </label>
+              <input
+                type="text"
+                name="tagline"
+                placeholder="Autonomous corporate expense fraud detection for mid-market CFOs"
+                value={formData.tagline}
+                onChange={handleChange}
+                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-base text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
+              />
+            </div>
+
+            {/* Target Audience */}
+            <div>
+              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                04. Specific Target Customer / Economic Buyer
+              </label>
+              <input
+                type="text"
+                name="targetAudience"
+                placeholder="Who has the corporate card or sign-off authority? (e.g. Series B VP of Eng)"
+                value={formData.targetAudience}
+                onChange={handleChange}
+                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-base text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
+              />
+            </div>
+
+            {/* Problem & Solution Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  05. The Bleeding Pain Point (Why now?) *
+                </label>
+                <textarea
+                  name="problemStatement"
+                  rows={4}
+                  required
+                  placeholder="What is failing right now? What is the tangible cost in dollars, hours, or churn?"
+                  value={formData.problemStatement}
+                  onChange={handleChange}
+                  className="w-full bg-transparent border border-ink/30 p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none focus:border-ink resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  06. Your Unfair Advantage / Proposed Secret Sauce
+                </label>
+                <textarea
+                  name="solution"
+                  rows={4}
+                  placeholder="How does this actually work technically? What prevents an intern from copying it?"
+                  value={formData.solution}
+                  onChange={handleChange}
+                  className="w-full bg-transparent border border-ink/30 p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none focus:border-ink resize-none"
+                />
+              </div>
+            </div>
+
+            {/* Vulnerability Pre-Check */}
+            <div className="pt-2">
+              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                07. The “Fatal Flaw” You Secretly Worry About
+              </label>
+              <input
+                type="text"
+                name="biggestFear"
+                placeholder="e.g. Open source model updates will make this free; or high sales cycle CAC."
+                value={formData.biggestFear}
+                onChange={handleChange}
+                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-sm text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
+              />
+            </div>
+
+            {/* Pre-Flight Friction Gauge & Action */}
+            <div className="border-t-2 border-ink pt-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs uppercase tracking-widest text-subtle">
+                    Intake Readiness:
+                  </span>
+                  <span className="font-mono text-xs font-bold text-ink">{frictionScore}% calibrated</span>
+                </div>
+                <div className="w-56 h-1.5 bg-ink/10 mt-2">
+                  <div 
+                    className="h-full bg-lime border-r border-ink transition-all duration-300" 
+                    style={{ width: `${frictionScore}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <button
+                  type="submit"
+                  className="w-full md:w-auto bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-widest px-8 py-4 flex items-center justify-center gap-3 shadow-md active:translate-y-0.5"
+                >
+                  <span>Ignite Adversarial Debate</span>
+                  <span className="text-lime text-base font-bold">→</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // PAGE 4: DEBATE ROOM (Builder vs Challenger)
+    // ==========================================
+    function DebateRoomPage({ currentProject, setActivePage, showToast, onIntervene, runState, onRetry }) {
+      const isLive = Boolean(currentProject?.live);
+      const transcript = (currentProject?.transcript && currentProject.transcript.length)
+        ? currentProject.transcript
+        : (isLive ? [] : MOCK_DEBATE_TRANSCRIPT);
+      const [currentRoundIndex, setCurrentRoundIndex] = useState(0);
+      const [isPlaying, setIsPlaying] = useState(false);
+      const [customCounterArg, setCustomCounterArg] = useState("");
+      const [intervening, setIntervening] = useState(false);
+      const injectedCounters = currentProject?.interventions || [];
+
+      useEffect(() => {
+        setCurrentRoundIndex(0);
+        setIsPlaying(false);
+      }, [currentProject?.id, transcript.length]);
+
+      const activeRound = transcript[Math.min(currentRoundIndex, Math.max(transcript.length - 1, 0))];
+      const liveRun = runState?.active && runState.projectId === currentProject?.id;
+      const waiting = isLive && transcript.length === 0;
+
+      useEffect(() => {
+        let interval;
+        if (isPlaying) {
+          interval = setInterval(() => {
+            setCurrentRoundIndex((prev) => {
+              if (prev < transcript.length - 1) {
+                return prev + 1;
+              }
+              setIsPlaying(false);
+              return prev;
+            });
+          }, 4500);
+        }
+        return () => clearInterval(interval);
+      }, [isPlaying, transcript.length]);
+
+      const handleAddIntervention = async (e) => {
+        e.preventDefault();
+        if (!customCounterArg.trim() || intervening) return;
+        const note = customCounterArg.trim();
+        setIntervening(true);
+        setCustomCounterArg("");
+        try {
+          await onIntervene({
+            note,
+            round: activeRound,
+            roundIndex: currentRoundIndex
+          });
+          showToast("Both agents answered your pushback", "info");
+        } catch (error) {
+          showToast(error.message || "Intervention failed", "alert");
+          setCustomCounterArg(note);
+        } finally {
+          setIntervening(false);
+        }
+      };
+
+      if (waiting) {
+        return (
+          <div className="min-h-screen bg-ivory">
+            <div className="max-w-3xl mx-auto px-6 md:px-10 py-24">
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle">Live chamber // {currentProject?.title}</span>
+              <h1 className="font-display text-4xl md:text-6xl font-bold text-ink mt-3 tracking-tight">
+                {runState?.error ? "The chamber stalled." : "Pressure is being applied."}
+              </h1>
+              <p className="font-sans text-lg text-ink/80 mt-6 max-w-xl">
+                {runState?.error || runState?.message || "Opening the debate…"}
+              </p>
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 border border-ink">
+                {[
+                  ["01", "Debate", runState?.phase === "debate" || !runState?.phase],
+                  ["02", "Verdict", runState?.phase === "verdict"],
+                  ["03", "Prototype", runState?.phase === "blueprint"]
+                ].map(([num, label, on]) => (
+                  <div key={num} className={`p-5 border-b sm:border-b-0 sm:border-r last:border-r-0 border-ink ${on ? "bg-lime" : "bg-ivory"}`}>
+                    <span className="font-mono text-xs">{num}</span>
+                    <div className="font-display text-xl font-bold mt-2">{label}</div>
+                  </div>
+                ))}
+              </div>
+              {(runState?.error || !liveRun) && (
+                <button onClick={onRetry} className="mt-8 bg-ink text-ivory px-6 py-3 font-mono text-xs uppercase tracking-wider">
+                  {runState?.error ? "Retry synthesis →" : "Resume synthesis →"}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-ivory pb-20">
+          {/* Top Dialectic Header Strip */}
+          <div className="border-b border-ink/20 bg-sand/30 py-4 px-6 md:px-10">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">
+                  {currentProject?.live ? `Live synthesis${currentProject.model ? " // " + currentProject.model : ""}` : "Sample dossier // not a live run"}
+                  {liveRun ? ` // ${runState.message}` : ""}
+                </span>
+                <h1 className="font-display text-2xl font-bold text-ink">
+                  Stress-Testing: {currentProject?.title || "OmniLedger"}
+                </h1>
+              </div>
+
+              {/* Round Selector Tabs */}
+              <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
+                {transcript.map((round, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentRoundIndex(idx)}
+                    className={`font-mono text-xs uppercase px-3 py-1.5 border transition-all whitespace-nowrap ${
+                      currentRoundIndex === idx 
+                        ? 'bg-ink text-ivory border-ink font-bold' 
+                        : 'bg-transparent text-subtle border-ink/20 hover:border-ink hover:text-ink'
+                    }`}
+                  >
+                    R{idx + 1}: {round.title.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Conclude Button */}
+              <button
+                onClick={() => setActivePage('verdict')}
+                className="bg-ink text-ivory px-4 py-2 font-mono text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-black"
+              >
+                <span>Generate Verdict</span>
+                <span className="text-lime font-bold">↗</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Current Round Banner */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10 pt-8 pb-4">
+            <div className="flex items-center justify-between border-b border-ink/15 pb-4">
+              <div>
+                <span className="font-mono text-xs uppercase tracking-widest text-subtle">
+                  ROUND 0{activeRound.round} OF 04
+                </span>
+                <h2 className="font-display text-3xl font-bold text-ink mt-0.5">
+                  {activeRound.title}
+                </h2>
+              </div>
+
+              {/* Play / Next Controls */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsPlaying(!isPlaying)}
+                  className="font-mono text-xs uppercase px-3 py-1.5 border border-ink flex items-center gap-2 hover:bg-ink hover:text-ivory transition-colors"
+                >
+                  <span className={`w-2 h-2 ${isPlaying ? 'bg-lime animate-ping' : 'bg-ink'}`}></span>
+                  {isPlaying ? 'Pause Auto-Debate' : 'Simulate Auto-Play'}
+                </button>
+
+                <button
+                  disabled={currentRoundIndex === transcript.length - 1}
+                  onClick={() => setCurrentRoundIndex(prev => Math.min(transcript.length - 1, prev + 1))}
+                  className="font-mono text-xs uppercase px-3 py-1.5 bg-sand/80 border border-ink/30 hover:border-ink disabled:opacity-30"
+                >
+                  Next Round →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Two Opposing Editorial Columns */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10 py-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+              
+              {/* LEFT: THE BUILDER */}
+              <div className="border-2 border-ink bg-ivory flex flex-col justify-between shadow-[4px_4px_0px_#111111]">
+                {/* Column Head */}
+                <div className="p-6 md:p-8 border-b-2 border-ink bg-[#FAF9F5]">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold">
+                      Persona 01 // Thesis Advocate
+                    </span>
+                    <span className="bg-lime text-ink px-2.5 py-1 font-mono text-[10px] uppercase font-bold tracking-wider border border-ink">
+                      Defensive Moat
+                    </span>
+                  </div>
+                  <h3 className="font-condensed text-4xl md:text-5xl font-bold tracking-tight text-ink uppercase">
+                    GROWTH HACKER
+                  </h3>
+                  <p className="font-mono text-xs text-subtle mt-1">
+                    Finds the wedge, the offer, and the distribution trick
+                  </p>
+                </div>
+
+                {/* Body Argument */}
+                <div className="p-6 md:p-8 flex-grow">
+                  <div className="mb-6 font-mono text-xs text-subtle uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-ink"></span>
+                    <span>Direct Argumentation:</span>
+                  </div>
+                  <p className="font-sans text-lg md:text-xl text-ink leading-relaxed font-normal">
+                    “{activeRound.builder.argument}”
+                  </p>
+
+                  <div className="mt-8 pt-6 border-t border-ink/15 space-y-3 font-mono text-xs">
+                    <div className="flex justify-between text-subtle">
+                      <span>PRIMARY LEVER:</span>
+                      <span className="text-ink font-bold text-right max-w-[60%]">{activeRound.builder.lever || "Unexploited customer pain"}</span>
+                    </div>
+                    <div className="flex justify-between text-subtle">
+                      <span>TIME TO VALUE:</span>
+                      <span className="text-ink font-bold text-right max-w-[60%]">{activeRound.builder.timeToValue || "Under 90 seconds"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer status */}
+                <div className="p-4 border-t border-ink/20 bg-sand/30 font-mono text-[10px] text-subtle flex justify-between uppercase">
+                  <span>Confidence: 84%</span>
+                  <span>Dialectic Status: Holding Line</span>
+                </div>
+              </div>
+
+              {/* RIGHT: THE CHALLENGER */}
+              <div className="border-2 border-ink bg-ivory flex flex-col justify-between shadow-[4px_4px_0px_#8170B5]">
+                {/* Column Head */}
+                <div className="p-6 md:p-8 border-b-2 border-ink bg-[#F7F5FA]">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-xs uppercase tracking-widest text-violet font-bold">
+                      Persona 02 // Structural Adversary
+                    </span>
+                    <span className="bg-violet text-ivory px-2.5 py-1 font-mono text-[10px] uppercase font-bold tracking-wider border border-ink">
+                      Execution Assassin
+                    </span>
+                  </div>
+                  <h3 className="font-condensed text-4xl md:text-5xl font-bold tracking-tight text-ink uppercase">
+                    RUTHLESS VC
+                  </h3>
+                  <p className="font-mono text-xs text-subtle mt-1">
+                    Exposes the kill-shot, the incumbent, and the fake moat
+                  </p>
+                </div>
+
+                {/* Body Argument */}
+                <div className="p-6 md:p-8 flex-grow">
+                  <div className="mb-6 font-mono text-xs text-violet uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-violet"></span>
+                    <span>Counter-Offensive Thesis:</span>
+                  </div>
+                  <p className="font-sans text-lg md:text-xl text-ink leading-relaxed font-normal">
+                    “{activeRound.challenger.argument}”
+                  </p>
+
+                  <div className="mt-8 pt-6 border-t border-ink/15 space-y-3 font-mono text-xs">
+                    <div className="flex justify-between text-subtle">
+                      <span>FATAL RISK:</span>
+                      <span className="text-violet font-bold text-right max-w-[60%]">{activeRound.challenger.fatalRisk || "Commoditization by incumbents"}</span>
+                    </div>
+                    <div className="flex justify-between text-subtle">
+                      <span>SALES FRICTION:</span>
+                      <span className="text-violet font-bold text-right max-w-[60%]">{activeRound.challenger.salesFriction || "Long approval cycle"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer status */}
+                <div className="p-4 border-t border-ink/20 bg-sand/30 font-mono text-[10px] text-subtle flex justify-between uppercase">
+                  <span>Skepticism Weight: MAXIMUM</span>
+                  <span className="text-violet font-semibold">Moat Challenge Active</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Founder Intervention Input Strip */}
+            <div className="mt-10 border border-ink bg-ivory p-6 md:p-8">
+              <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold block mb-2">
+                Inject Founder Pushback (Intervene in Debate)
+              </span>
+              <p className="font-sans text-xs text-subtle mb-4">
+                Disagree with the Challenger or see a flawed assumption from the Builder? Force both agents to reconcile your counter-data.
+              </p>
+
+              <form onSubmit={handleAddIntervention} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="text"
+                  placeholder="e.g. 'Actually, our pilot customers already signed SOC-2 waivers because our agent runs locally.'"
+                  value={customCounterArg}
+                  onChange={(e) => setCustomCounterArg(e.target.value)}
+                  className="flex-grow bg-transparent border-b-2 border-ink py-2.5 font-sans text-sm text-ink placeholder:text-subtle focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={intervening}
+                  className="bg-ink text-ivory px-6 py-2.5 font-mono text-xs uppercase tracking-wider hover:bg-black whitespace-nowrap disabled:opacity-50"
+                >
+                  {intervening ? "Agents answering…" : "Inject Interposition →"}
+                </button>
+              </form>
+
+              {/* Injected Counter History */}
+              {injectedCounters.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-ink/10 space-y-2">
+                  <span className="font-mono text-[10px] uppercase text-subtle">Founder Inputs Recorded:</span>
+                  {injectedCounters.map((item, i) => (
+                    <div key={i} className="bg-sand/50 p-3 border-l-2 border-ink space-y-2">
+                      <div className="font-mono text-xs flex justify-between gap-4">
+                        <span className="italic">“{item.text}”</span>
+                        <span className="text-[10px] text-subtle uppercase shrink-0">Round 0{item.round}</span>
+                      </div>
+                      {item.builderReply && (
+                        <p className="font-sans text-sm text-ink"><strong>Growth hacker:</strong> {item.builderReply}</p>
+                      )}
+                      {item.challengerReply && (
+                        <p className="font-sans text-sm text-ink"><strong>Ruthless VC:</strong> {item.challengerReply}</p>
+                      )}
+                      {item.shift && (
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-subtle">{item.shift}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // PAGE 5: VERDICT (Adversarial Audit Docket)
+    // ==========================================
+    function VerdictPage({ currentProject, setActivePage }) {
+      const p = currentProject || DEFAULT_PROJECTS[0];
+      const audit = p.audit || DEFAULT_AUDIT;
+      const dimensions = audit.dimensions || DEFAULT_AUDIT.dimensions;
+      const strengths = audit.strengths || DEFAULT_AUDIT.strengths;
+      const killshots = audit.killshots || DEFAULT_AUDIT.killshots;
+      const pathA = audit.pathA || DEFAULT_AUDIT.pathA;
+      const pathB = audit.pathB || DEFAULT_AUDIT.pathB;
+
+      return (
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+          {/* Top Dossier Meta */}
+          <div className="border-b-2 border-ink pb-6 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-3 mb-2 font-mono text-xs uppercase tracking-widest text-subtle">
+                <span>Adversarial Audit Docket</span>
+                <span>//</span>
+                <span>Ref: SYN-VERDICT-990</span>
+              </div>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+                Stress-Test Verdict: {p.title}
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => window.print()}
+                className="font-mono text-xs uppercase px-4 py-2 border border-ink hover:bg-sand/40"
+              >
+                Print Dossier ⎙
+              </button>
+              <button
+                onClick={() => setActivePage('blueprint')}
+                className="bg-ink text-ivory px-5 py-2 font-mono text-xs uppercase tracking-wider hover:bg-black flex items-center gap-2"
+              >
+                <span>Open Startup Blueprint</span>
+                <span className="text-lime">→</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Main Scorecard Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-12 border-2 border-ink bg-ivory mb-12">
+            {/* Massive Numerical Score Box */}
+            <div className="md:col-span-5 p-8 border-b md:border-b-0 md:border-r-2 border-ink flex flex-col justify-between bg-[#FAF9F5]">
+              <div>
+                <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">
+                  Aggregate Survival Score
+                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-condensed text-8xl md:text-9xl font-bold text-ink leading-none">
+                    {audit.score || p.score || 78}
+                  </span>
+                  <span className="font-mono text-sm text-subtle">/ 100</span>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-ink/20">
+                <span className="font-mono text-xs uppercase text-subtle block">Conclusion:</span>
+                <span className="font-display text-xl font-bold text-ink uppercase block mt-1">
+                  {audit.verdict || p.verdict || "Survivable with Moat Pivot"}
+                </span>
+                <p className="font-sans text-xs text-subtle mt-2 leading-relaxed">
+                  {audit.conclusion}
+                </p>
+              </div>
+            </div>
+
+            {/* Sub-Dimension Diagnostic Meters */}
+            <div className="md:col-span-7 p-8 flex flex-col justify-between">
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-6">
+                Dialectic Stress Parameters
+              </span>
+
+              <div className="space-y-6">
+                {dimensions.map((dim) => (
+                  <div key={dim.name}>
+                    <div className="flex justify-between font-mono text-xs uppercase mb-1.5 gap-4">
+                      <span className="text-ink font-bold">{dim.name}</span>
+                      <span className={`font-bold ${dim.tone === 'violet' ? 'text-violet' : ''}`}>{dim.score} / 100</span>
+                    </div>
+                    <div className="w-full h-2 bg-ink/10">
+                      <div className={`h-full border-r border-ink ${toneBar(dim.tone)}`} style={{ width: `${Math.max(4, Math.min(100, Number(dim.score) || 0))}%` }}></div>
+                    </div>
+                    <span className="font-sans text-[11px] text-subtle block mt-1">{dim.note}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-subtle">
+                <span>Tension Factor: {audit.tension || "—"}</span>
+                <span>Verdict Consensus: {audit.consensus || "Split Decision"}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Opposing Verdict Columns: Strengths vs Lethal Vulnerabilities */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            
+            {/* Validated Strengths (From Builder) */}
+            <div className="border border-ink p-8 bg-ivory">
+              <div className="flex items-center gap-2 mb-4 border-b border-ink/20 pb-3">
+                <span className="w-2.5 h-2.5 bg-lime"></span>
+                <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-ink">
+                  Validated Strategic Strengths
+                </h3>
+              </div>
+              <ul className="space-y-4 font-sans text-sm text-ink/90">
+                {strengths.map((item, i) => (
+                  <li key={item.title} className="flex items-start gap-3">
+                    <span className="font-mono text-xs font-bold text-ink mt-0.5">0{i + 1}</span>
+                    <span><strong>{item.title}:</strong> {item.detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Lethal Vulnerabilities (From Challenger) */}
+            <div className="border border-ink p-8 bg-ivory">
+              <div className="flex items-center gap-2 mb-4 border-b border-ink/20 pb-3">
+                <span className="w-2.5 h-2.5 bg-violet"></span>
+                <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-violet">
+                  Lethal Vulnerabilities (Kill-Shots)
+                </h3>
+              </div>
+              <ul className="space-y-4 font-sans text-sm text-ink/90">
+                {killshots.map((item, i) => (
+                  <li key={item.title} className="flex items-start gap-3">
+                    <span className="font-mono text-xs font-bold text-violet mt-0.5">0{i + 1}</span>
+                    <span><strong>{item.title}:</strong> {item.detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Strategic Irreconcilable Disagreements */}
+          <div className="border border-ink p-8 bg-[#FAF9F5] mb-12">
+            <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">
+              Unresolved Dialectic Disagreements
+            </span>
+            <h3 className="font-display text-2xl font-bold text-ink mb-6">
+              The Two Paths Forward
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-ink/20">
+              <div className="pr-0 md:pr-6">
+                <span className="font-mono text-xs uppercase font-bold text-ink block mb-2">
+                  {pathA.title}
+                </span>
+                <p className="font-sans text-sm text-subtle leading-relaxed mb-4">
+                  {pathA.body}
+                </p>
+                <div className="font-mono text-[11px] text-ink font-bold">
+                  {pathA.tradeoff}
+                </div>
+              </div>
+
+              <div className="pt-6 md:pt-0 md:pl-6">
+                <span className="font-mono text-xs uppercase font-bold text-violet block mb-2">
+                  {pathB.title}
+                </span>
+                <p className="font-sans text-sm text-subtle leading-relaxed mb-4">
+                  {pathB.body}
+                </p>
+                <div className="font-mono text-[11px] text-ink font-bold">
+                  {pathB.tradeoff}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action Footer */}
+          <div className="flex flex-col sm:flex-row items-center justify-between border-t border-ink/20 pt-8 gap-4">
+            <button
+              onClick={() => setActivePage('debate')}
+              className="font-mono text-xs uppercase tracking-wider text-subtle hover:text-ink"
+            >
+              ← Return to Debate Room
+            </button>
+            <button
+              onClick={() => setActivePage('blueprint')}
+              className="w-full sm:w-auto bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-widest px-8 py-4 flex items-center justify-center gap-3"
+            >
+              <span>Transform Into Startup Blueprint</span>
+              <span className="text-lime">→</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // PAGE 6: STARTUP BLUEPRINT (Living Brief)
+    // ==========================================
+    function BlueprintPage({ currentProject, showToast, setActivePage, onSave }) {
+      const p = currentProject || DEFAULT_PROJECTS[0];
+      const source = p.blueprint || {};
+
+      const [isEditing, setIsEditing] = useState(false);
+      const [briefData, setBriefData] = useState({
+        executiveThesis: source.executiveThesis || p.tagline || "Autonomous corporate expense fraud detection for mid-market CFOs",
+        idealCustomerProfile: source.idealCustomerProfile || p.targetAudience || "Mid-market CFOs and controllers managing $50M-$500M in revenue with 200+ SaaS vendors.",
+        wedgeStrategy: source.wedgeStrategy || "90-second retrospective audit parsing 180 days of bank logs to find immediate cash recoveries prior to sales sign-off.",
+        defensiveMoat: source.defensiveMoat || "Proprietary multi-modal reconciliation graph correlating contract clauses (Ironclad) with informal Slack commitments and raw bank clearing wires.",
+        vulnerabilityRemediation: source.vulnerabilityRemediation || "Do not touch raw payment transmission in Year 1. Partner with licensed partner banks via API to offload regulatory compliance while retaining semantic veto power.",
+        milestone1: source.milestone1 || "Deploy read-only pilots across 8 mid-market companies and verify at least $50,000 in prevented duplicate disbursements.",
+        milestone2: source.milestone2 || "Lock in two direct NetSuite and Workday marketplace distribution certifications to slash CAC by 60%.",
+        milestone3: source.milestone3 || "Achieve SOC-2 Type II and introduce automatic write-back reconciliation to entrench system switching costs."
+      });
+
+      const handleFieldChange = (key, val) => {
+        setBriefData(prev => ({ ...prev, [key]: val }));
+      };
+
+      const handleCopyBrief = () => {
+        const text = `
+SYNA ADVERSARIAL STARTUP BLUEPRINT
+PROJECT: ${p.title}
+SURVIVAL SCORE: ${p.score || 78}/100
+
+1. EXECUTIVE THESIS
+${briefData.executiveThesis}
+
+2. IDEAL CUSTOMER PROFILE
+${briefData.idealCustomerProfile}
+
+3. THE WEDGECRAFT
+${briefData.wedgeStrategy}
+
+4. DEFENSIVE MOAT
+${briefData.defensiveMoat}
+
+5. VULNERABILITY REMEDIATION
+${briefData.vulnerabilityRemediation}
+
+90-DAY EXECUTION GATES:
+- Day 30: ${briefData.milestone1}
+- Day 60: ${briefData.milestone2}
+- Day 90: ${briefData.milestone3}
+        `.trim();
+
+        navigator.clipboard.writeText(text);
+        showToast("Blueprint copied to clipboard in clean Markdown format", "info");
+      };
+
+      const handleExportPDF = () => {
+        window.print();
+      };
+
+      return (
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+          {/* Action Ribbon */}
+          <div className="no-print border-b border-ink/20 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block">
+                Deliverable Document // Editable Brief
+              </span>
+              <h1 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
+                Startup Blueprint: {p.title}
+              </h1>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => {
+                  if (isEditing && onSave) onSave(briefData);
+                  setIsEditing(!isEditing);
+                }}
+                className={`font-mono text-xs uppercase px-4 py-2.5 border transition-all ${
+                  isEditing 
+                    ? 'bg-lime text-ink border-ink font-bold' 
+                    : 'border-ink bg-transparent hover:bg-sand/40 text-ink'
+                }`}
+              >
+                {isEditing ? '✓ Lock Modifications' : '✎ Edit Blueprint'}
+              </button>
+
+              {p.landing && (
+                <button
+                  onClick={() => setActivePage('prototype')}
+                  className="font-mono text-xs uppercase px-4 py-2.5 border border-ink bg-lime hover:bg-lime/80"
+                >
+                  Open prototype →
+                </button>
+              )}
+
+              <button
+                onClick={handleCopyBrief}
+                className="font-mono text-xs uppercase px-4 py-2.5 border border-ink hover:bg-ink hover:text-ivory transition-colors"
+              >
+                Copy Markdown
+              </button>
+
+              <button
+                onClick={handleExportPDF}
+                className="bg-ink text-ivory font-mono text-xs uppercase px-5 py-2.5 hover:bg-black transition-colors flex items-center gap-2"
+              >
+                <span>Export Dossier (Print)</span>
+                <span>⎙</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Printable / Editable Dossier Sheet */}
+          <div className="blueprint-sheet border-2 border-ink bg-[#FAF9F5] p-8 md:p-14 shadow-lg">
+            
+            {/* Header Docket */}
+            <div className="border-b-2 border-ink pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+                  Confidential Strategy Formulation // Post-Friction
+                </span>
+                <h2 className="font-condensed text-6xl md:text-7xl font-bold tracking-tight text-ink uppercase">
+                  {p.title}
+                </h2>
+                <div className="flex items-center gap-4 mt-2 font-mono text-xs text-subtle">
+                  <span>CATEGORY: {p.category || "Enterprise Software"}</span>
+                  <span>•</span>
+                  <span>STATUS: VALIDATED FOR PRE-SEED</span>
+                </div>
+              </div>
+
+              <div className="text-left md:text-right">
+                <span className="font-mono text-[10px] uppercase text-subtle block">Calculated Resilience</span>
+                <span className="font-condensed text-5xl font-bold text-ink">
+                  {p.score || 78}<span className="text-sm font-mono text-subtle">/100</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Section 01: The Core Thesis */}
+            <div className="mb-10">
+              <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
+                <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
+                  01 // Executive Thesis & Value Proposition
+                </span>
+                {isEditing && <span className="font-mono text-[10px] text-violet uppercase">Editable</span>}
+              </div>
+              {isEditing ? (
+                <textarea
+                  rows={2}
+                  value={briefData.executiveThesis}
+                  onChange={(e) => handleFieldChange('executiveThesis', e.target.value)}
+                  className="w-full bg-sand/30 border border-ink p-3 font-sans text-base text-ink focus:outline-none"
+                />
+              ) : (
+                <p className="font-sans text-lg text-ink font-medium leading-relaxed">
+                  {briefData.executiveThesis}
+                </p>
+              )}
+            </div>
+
+            {/* Section 02: ICP & Target */}
+            <div className="mb-10">
+              <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
+                <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
+                  02 // Ideal Customer Profile (The Economic Buyer)
+                </span>
+                {isEditing && <span className="font-mono text-[10px] text-violet uppercase">Editable</span>}
+              </div>
+              {isEditing ? (
+                <textarea
+                  rows={2}
+                  value={briefData.idealCustomerProfile}
+                  onChange={(e) => handleFieldChange('idealCustomerProfile', e.target.value)}
+                  className="w-full bg-sand/30 border border-ink p-3 font-sans text-base text-ink focus:outline-none"
+                />
+              ) : (
+                <p className="font-sans text-base text-ink/90 leading-relaxed">
+                  {briefData.idealCustomerProfile}
+                </p>
+              )}
+            </div>
+
+            {/* Section 03 & 04 Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              {/* The Wedge */}
+              <div>
+                <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
+                  <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
+                    03 // The Distribution Wedge
+                  </span>
+                </div>
+                {isEditing ? (
+                  <textarea
+                    rows={4}
+                    value={briefData.wedgeStrategy}
+                    onChange={(e) => handleFieldChange('wedgeStrategy', e.target.value)}
+                    className="w-full bg-sand/30 border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                  />
+                ) : (
+                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/20">
+                    {briefData.wedgeStrategy}
+                  </p>
+                )}
+              </div>
+
+              {/* The Moat */}
+              <div>
+                <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
+                  <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
+                    04 // The Defensibility Moat
+                  </span>
+                </div>
+                {isEditing ? (
+                  <textarea
+                    rows={4}
+                    value={briefData.defensiveMoat}
+                    onChange={(e) => handleFieldChange('defensiveMoat', e.target.value)}
+                    className="w-full bg-sand/30 border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                  />
+                ) : (
+                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/20">
+                    {briefData.defensiveMoat}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Section 05: Vulnerability Remediation */}
+            <div className="mb-10 bg-ivory p-6 border-2 border-ink">
+              <span className="font-mono text-xs uppercase font-bold tracking-wider text-violet block mb-2">
+                05 // Anti-Fragility Action: Neutralizing Challenger Vulnerability
+              </span>
+              {isEditing ? (
+                <textarea
+                  rows={3}
+                  value={briefData.vulnerabilityRemediation}
+                  onChange={(e) => handleFieldChange('vulnerabilityRemediation', e.target.value)}
+                  className="w-full bg-transparent border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                />
+              ) : (
+                <p className="font-sans text-sm text-ink leading-relaxed">
+                  {briefData.vulnerabilityRemediation}
+                </p>
+              )}
+            </div>
+
+            {/* Section 06: 90-Day Execution Gates */}
+            <div>
+              <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink block border-b border-ink/20 pb-2 mb-4">
+                06 // 90-Day Kill-or-Double-Down Milestones
+              </span>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 border border-ink bg-ivory">
+                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 30 GATE:</span>
+                  {isEditing ? (
+                    <textarea
+                      rows={3}
+                      value={briefData.milestone1}
+                      onChange={(e) => handleFieldChange('milestone1', e.target.value)}
+                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                    />
+                  ) : (
+                    <p className="font-sans text-xs text-subtle leading-relaxed">
+                      {briefData.milestone1}
+                    </p>
+                  )}
+                </div>
+
+                <div className="p-4 border border-ink bg-ivory">
+                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 60 GATE:</span>
+                  {isEditing ? (
+                    <textarea
+                      rows={3}
+                      value={briefData.milestone2}
+                      onChange={(e) => handleFieldChange('milestone2', e.target.value)}
+                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                    />
+                  ) : (
+                    <p className="font-sans text-xs text-subtle leading-relaxed">
+                      {briefData.milestone2}
+                    </p>
+                  )}
+                </div>
+
+                <div className="p-4 border border-ink bg-ivory">
+                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 90 GATE:</span>
+                  {isEditing ? (
+                    <textarea
+                      rows={3}
+                      value={briefData.milestone3}
+                      onChange={(e) => handleFieldChange('milestone3', e.target.value)}
+                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                    />
+                  ) : (
+                    <p className="font-sans text-xs text-subtle leading-relaxed">
+                      {briefData.milestone3}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {(source.mvpScope || (source.steps && source.steps.length)) && (
+              <div className="mt-10">
+                <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink block border-b border-ink/20 pb-2 mb-4">
+                  07 // 14-Day Build, Not a Fantasy Company
+                </span>
+                {source.mvpScope && (
+                  <p className="font-sans text-sm text-ink mb-3"><strong>In scope:</strong> {source.mvpScope}</p>
+                )}
+                {source.outOfScope && (
+                  <p className="font-sans text-sm text-subtle mb-3"><strong>Out of scope:</strong> {source.outOfScope}</p>
+                )}
+                {source.stack && (
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-subtle mb-4">Stack: {source.stack}</p>
+                )}
+                {source.steps && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {source.steps.map((step) => (
+                      <div key={step.day} className="border border-ink p-4 bg-ivory">
+                        <span className="font-mono text-xs font-bold block mb-1">{step.day}</span>
+                        <p className="font-sans text-xs text-subtle leading-relaxed">{step.ship}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Document Verification Seal */}
+            <div className="mt-12 pt-6 border-t border-ink/20 flex flex-col sm:flex-row items-center justify-between text-subtle font-mono text-[10px] uppercase gap-2">
+              <span>{p.live ? "GENERATED VIA LIVE SYNA DEBATE" : "SAMPLE DOSSIER // RUN IDEA LAB FOR A LIVE SYNTHESIS"}</span>
+              <span>{p.model || "VERIFICATION STAMP: SAMPLE"}</span>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    function PrototypePage({ currentProject, showToast }) {
+      const landing = currentProject?.landing;
+      const [email, setEmail] = useState("");
+      const [joined, setJoined] = useState(false);
+      const [openFaq, setOpenFaq] = useState(0);
+      const [showScar, setShowScar] = useState(false);
+
+      if (!landing) {
+        return (
+          <div className="max-w-3xl mx-auto px-6 py-24">
+            <span className="font-mono text-xs uppercase tracking-widest text-subtle">Prototype // locked</span>
+            <h1 className="font-display text-4xl font-bold mt-3">No live landing yet.</h1>
+            <p className="font-sans text-subtle mt-4">Sample dossiers keep their blueprint. Run a new idea through Idea Lab to generate an interactive prototype from the debate.</p>
+          </div>
+        );
+      }
+
+      const join = (e) => {
+        e.preventDefault();
+        if (!email.includes("@")) {
+          showToast("Use a real email so the test is countable", "alert");
+          return;
+        }
+        const key = `syna-waitlist-${currentProject.id}`;
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        existing.push({ email, at: new Date().toISOString() });
+        localStorage.setItem(key, JSON.stringify(existing));
+        setJoined(true);
+        showToast(`Waitlist captured locally (${existing.length})`, "info");
+      };
+
+      return (
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 min-h-screen">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle">Interactive prototype // not a published site</span>
+              <h1 className="font-display text-3xl font-bold">Landing for {landing.brand || currentProject.title}</h1>
+            </div>
+            <button
+              onClick={() => setShowScar((v) => !v)}
+              className="font-mono text-xs uppercase border border-ink px-4 py-2 hover:bg-sand/40"
+            >
+              {showScar ? "Hide the scar" : "Show the VC scar this page answers"}
+            </button>
+          </div>
+
+          {showScar && landing.objection && (
+            <div className="border-2 border-ink bg-violet/10 p-5 mb-6">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-violet">Kill-shot the copy is built to survive</span>
+              <p className="font-display text-xl font-bold mt-1">{landing.objection.label}</p>
+              <p className="font-sans text-sm mt-2">{landing.objection.answer}</p>
+              {landing.experiment && (
+                <p className="font-mono text-[11px] uppercase mt-3">This week's test: {landing.experiment}</p>
+              )}
+            </div>
+          )}
+
+          <div className="border-2 border-ink bg-ivory shadow-[8px_8px_0_#111]">
+            <div className="border-b border-ink px-4 py-2 flex items-center gap-2 bg-sand/40">
+              <span className="w-2.5 h-2.5 bg-ink/30"></span>
+              <span className="w-2.5 h-2.5 bg-ink/30"></span>
+              <span className="w-2.5 h-2.5 bg-ink/30"></span>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-subtle ml-3">
+                {String(landing.brand || "prototype").toLowerCase().replace(/\s+/g, "")}.test
+              </span>
+            </div>
+
+            <div className="p-8 md:p-14 bg-[#FAF9F5]">
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle">{landing.eyebrow}</span>
+              <h2 className="font-display text-4xl md:text-6xl font-extrabold tracking-tight mt-3 max-w-3xl leading-[1.02]">
+                {landing.headline}
+              </h2>
+              <p className="font-sans text-lg text-ink/80 max-w-2xl mt-6">{landing.subhead}</p>
+
+              <form onSubmit={join} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-xl">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="flex-grow border-b-2 border-ink bg-transparent py-3 font-sans text-sm focus:outline-none"
+                />
+                <button className="bg-ink text-ivory px-5 py-3 font-mono text-xs uppercase tracking-wider">
+                  {joined ? "You're on the list" : (landing.cta || "Join the pilot")}
+                </button>
+              </form>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-subtle mt-4">{landing.proof}</p>
+              {landing.priceLine && (
+                <p className="font-sans text-sm mt-2">{landing.priceLine}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 border-t-2 border-ink">
+              {(landing.features || []).map((feature, i) => (
+                <div key={feature.title} className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-ink last:border-r-0">
+                  <span className="font-mono text-xs">0{i + 1}</span>
+                  <h3 className="font-display text-xl font-bold mt-2">{feature.title}</h3>
+                  <p className="font-sans text-sm text-subtle mt-2 leading-relaxed">{feature.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t-2 border-ink p-6 md:p-8">
+              <span className="font-mono text-xs uppercase tracking-widest">Questions a skeptical buyer asks</span>
+              <div className="mt-4 divide-y divide-ink/15 border-t border-ink/15">
+                {(landing.faq || []).map((item, i) => (
+                  <button
+                    key={item.q}
+                    onClick={() => setOpenFaq(i)}
+                    className="w-full text-left py-4"
+                  >
+                    <div className="font-display font-bold">{item.q}</div>
+                    {openFaq === i && <p className="font-sans text-sm text-subtle mt-2">{item.a}</p>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // MAIN APPLICATION CONTAINER & ROUTER
+    // ==========================================
+    function App() {
+      const [activePage, setActivePage] = useState('landing');
+      const [projects, setProjects] = useState(() => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('syna-projects-v1') || 'null');
+          if (Array.isArray(saved) && saved.length) return saved;
+        } catch (error) {}
+        return DEFAULT_PROJECTS;
+      });
+      const [selectedProjectId, setSelectedProjectId] = useState(() => localStorage.getItem('syna-selected-v1') || 'syna-01');
+      const [toast, setToast] = useState(null);
+      const [runState, setRunState] = useState({ active: false, projectId: null, phase: '', message: '', error: '' });
+      const [pendingIdea, setPendingIdea] = useState(null);
+
+      const showToast = (message, type = 'info') => {
+        setToast({ message, type });
+      };
+
+      useEffect(() => {
+        localStorage.setItem('syna-projects-v1', JSON.stringify(projects));
+      }, [projects]);
+
+      useEffect(() => {
+        if (selectedProjectId) localStorage.setItem('syna-selected-v1', selectedProjectId);
+      }, [selectedProjectId]);
+
+      const currentProject = projects.find(p => p.id === selectedProjectId) || projects[0];
+
+      const updateProject = (id, patch) => {
+        setProjects((prev) => prev.map((project) => project.id === id ? { ...project, ...patch } : project));
+      };
+
+      const runSynthesis = async (projectId, formData) => {
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'debate',
+          message: 'Contacting the free-tier chamber…',
+          error: ''
+        });
+        setPendingIdea(formData);
+        try {
+          const response = await fetch('/api/run', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          if (!response.ok) {
+            const failure = await response.json().catch(() => ({}));
+            throw new Error(failure.error || `Chamber returned ${response.status}`);
+          }
+          let failed = '';
+          await readNdjson(response, (event) => {
+            if (event.type === 'phase') {
+              setRunState((prev) => ({ ...prev, phase: event.phase, message: event.message, error: '' }));
+            }
+            if (event.type === 'debate') {
+              updateProject(projectId, {
+                transcript: event.rounds,
+                roundsCompleted: event.rounds.length,
+                status: 'Debate Live',
+                live: true,
+                model: event.model
+              });
+            }
+            if (event.type === 'verdict') {
+              updateProject(projectId, {
+                audit: event.audit,
+                score: event.score,
+                verdict: event.verdict,
+                keyTension: event.keyTension || formData.biggestFear,
+                disagreements: event.disagreements || [],
+                category: event.category || formData.stage,
+                status: 'Stress-Tested'
+              });
+            }
+            if (event.type === 'blueprint') {
+              updateProject(projectId, {
+                blueprint: event.blueprint,
+                landing: event.landing,
+                model: event.model || undefined
+              });
+            }
+            if (event.type === 'error') failed = event.message || 'Synthesis failed';
+          });
+          if (failed) throw new Error(failed);
+          setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
+          showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
+        } catch (error) {
+          const message = error.message && error.message.includes('Failed to fetch')
+            ? 'Start the local server with npm start, then open http://127.0.0.1:8788'
+            : (error.message || 'Synthesis failed');
+          setRunState({
+            active: true,
+            projectId,
+            phase: 'debate',
+            message: '',
+            error: message
+          });
+          updateProject(projectId, { status: 'Chamber stalled' });
+          showToast(message, 'alert');
+        }
+      };
+
+      const handleLaunchDebate = (formData) => {
+        const id = `syna-${Date.now().toString().slice(-6)}`;
+        const newProj = {
+          id,
+          title: formData.title,
+          tagline: formData.tagline || formData.problemStatement.slice(0, 90),
+          stage: formData.stage,
+          status: 'In chamber',
+          score: null,
+          createdAt: new Date().toISOString().split('T')[0],
+          category: formData.revenueModel || 'Early thesis',
+          roundsCompleted: 0,
+          keyTension: formData.biggestFear || 'Unresolved until the debate finishes',
+          targetAudience: formData.targetAudience,
+          problemStatement: formData.problemStatement,
+          solution: formData.solution,
+          revenueModel: formData.revenueModel,
+          biggestFear: formData.biggestFear,
+          live: true,
+          intake: formData,
+          disagreements: []
+        };
+        setProjects((prev) => [newProj, ...prev]);
+        setSelectedProjectId(id);
+        setActivePage('debate');
+        showToast(`Chamber opened for "${newProj.title}"`, 'info');
+        runSynthesis(id, formData);
+      };
+
+      const handleIntervene = async ({ note, round, roundIndex }) => {
+        const response = await fetch('/api/intervene', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idea: currentProject.intake || currentProject,
+            note,
+            round,
+            transcript: currentProject.transcript || MOCK_DEBATE_TRANSCRIPT
+          })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || 'Intervention failed');
+        const entry = {
+          round: roundIndex + 1,
+          text: note,
+          timestamp: 'Just now',
+          builderReply: data.builderReply,
+          challengerReply: data.challengerReply,
+          shift: data.shift
+        };
+        updateProject(currentProject.id, {
+          interventions: [...(currentProject.interventions || []), entry]
+        });
+      };
+
+      // Custom Cursor Implementation with Lag & Interactive Hover
+      useEffect(() => {
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        if (!dot || !ring) return;
+
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+          dot.style.display = 'none';
+          ring.style.display = 'none';
+          document.body.classList.remove('custom-cursor-active');
+          return;
+        }
+
+        let mouseX = -100;
+        let mouseY = -100;
+        let ringX = -100;
+        let ringY = -100;
+
+        const onMouseMove = (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        };
+
+        const render = () => {
+          // Smooth delayed following for the ring
+          ringX += (mouseX - ringX) * 0.18;
+          ringY += (mouseY - ringY) * 0.18;
+          ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+          requestAnimationFrame(render);
+        };
+
+        const onMouseOver = (e) => {
+          const target = e.target;
+          if (
+            target.closest('button') || 
+            target.closest('a') || 
+            target.closest('input') || 
+            target.closest('select') || 
+            target.closest('textarea') ||
+            target.closest('.interactive-target')
+          ) {
+            ring.classList.add('cursor-hover');
+            if (target.closest('.challenger-zone')) {
+              ring.classList.add('cursor-challenger');
+            }
+          } else {
+            ring.classList.remove('cursor-hover');
+            ring.classList.remove('cursor-challenger');
+          }
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseover', onMouseOver);
+        const animId = requestAnimationFrame(render);
+
+        return () => {
+          window.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseover', onMouseOver);
+          cancelAnimationFrame(animId);
+        };
+      }, []);
+
+      // Scroll to top on page change
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, [activePage]);
+
+      return (
+        <div className="flex flex-col min-h-screen">
+          {/* Global Navigation */}
+          <Navigation
+            activePage={activePage}
+            setActivePage={setActivePage}
+            activeProject={currentProject}
+          />
+
+          {/* Dynamic Page Router */}
+          <main className="flex-grow">
+            {activePage === 'landing' && (
+              <LandingPage
+                setActivePage={setActivePage}
+                setDemoProject={(id) => {
+                  setSelectedProjectId(id);
+                  setActivePage('debate');
+                }}
+              />
+            )}
+
+            {activePage === 'dashboard' && (
+              <DashboardPage
+                projects={projects}
+                setActivePage={setActivePage}
+                setSelectedProjectId={setSelectedProjectId}
+                onNewProjectClick={() => setActivePage('idealab')}
+              />
+            )}
+
+            {activePage === 'idealab' && (
+              <IdeaLabPage
+                onLaunchDebate={handleLaunchDebate}
+                showToast={showToast}
+              />
+            )}
+
+            {activePage === 'debate' && (
+              <DebateRoomPage
+                key={currentProject?.id || 'sample'}
+                currentProject={currentProject}
+                setActivePage={setActivePage}
+                showToast={showToast}
+                onIntervene={handleIntervene}
+                runState={runState}
+                onRetry={() => {
+                  const idea = pendingIdea || currentProject?.intake;
+                  if (idea && currentProject) runSynthesis(currentProject.id, idea);
+                  else showToast('Re-open Idea Lab and submit again', 'alert');
+                }}
+              />
+            )}
+
+            {activePage === 'verdict' && (
+              <VerdictPage
+                currentProject={currentProject}
+                setActivePage={setActivePage}
+              />
+            )}
+
+            {activePage === 'blueprint' && (
+              <BlueprintPage
+                key={currentProject?.id || 'sample'}
+                currentProject={currentProject}
+                showToast={showToast}
+                setActivePage={setActivePage}
+                onSave={(brief) => updateProject(currentProject.id, {
+                  blueprint: { ...(currentProject.blueprint || {}), ...brief }
+                })}
+              />
+            )}
+
+            {activePage === 'prototype' && (
+              <PrototypePage
+                key={currentProject?.id || 'sample'}
+                currentProject={currentProject}
+                showToast={showToast}
+              />
+            )}
+          </main>
+
+          {/* Toast Notification Container */}
+          {toast && (
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // Render the React App
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>
