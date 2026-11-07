@@ -1,4 +1,4 @@
-import { DEFAULT_MODELS } from "../../lib/syna-engine.js";
+import { DEFAULT_MODELS, DEFAULT_PROJECT_KEY } from "../../lib/syna-engine.js";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +12,7 @@ export async function onRequestOptions() {
 
 export async function onRequestGet(context) {
   const env = context.env || {};
-  const apiKey = env.GEMINI_API_KEY || "";
+  const apiKey = env.GEMINI_API_KEY || DEFAULT_PROJECT_KEY || "";
   const rawModels = String(env.GEMINI_MODELS || "")
     .split(",")
     .map((m) => m.trim())

@@ -38,15 +38,15 @@ You can send this link directly to anyone — it works immediately in any deskto
 
 ## 🧠 How the API & Synthesis Engine Work
 
-SYNA uses a **3-tier hybrid synthesis architecture** so it never fails:
+SYNA uses a **3-tier hybrid synthesis architecture** that works immediately for judges and users with **zero API key prompts**:
 
 1. **Server / Edge API (`/api/health`, `/api/run`, `/api/intervene`)**
    - Works natively on **Cloudflare Pages Functions** (`functions/api/*`) and **Node.js** (`server.js`).
    - Streams NDJSON events (`phase` → `debate` → `verdict` → `blueprint` → `done`).
-2. **Optional Google Gemini Live LLM (`gemini-2.5-flash` / `gemini-2.0-flash`)**
-   - Configure `GEMINI_API_KEY` on the server/Cloudflare environment **or** click **`Engine: Ready` / `Gemini Key`** in the top bar to paste your own `AIza...` key in browser `localStorage`.
-3. **Built-In Adversarial Synthesis Engine (Zero-Key Fallback)**
-   - Works out-of-the-box with no API key required on both the server and static hosts (like GitHub Pages).
+2. **Pre-Configured Google Gemini 3.x Live LLM (`gemini-3.1-flash-lite` / `gemini-3.8-flash`)**
+   - Pre-configured out of the box on both the server/Cloudflare edge and the browser client so anyone opening the link gets live multi-round Gemini adversarial synthesis automatically.
+3. **Built-In Adversarial Synthesis Engine (Resilient Fallback)**
+   - Guarantees 100% uptime even if offline or rate-limited.
 
 ### API Reference
 

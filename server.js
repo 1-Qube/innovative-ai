@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_MODELS,
+  DEFAULT_PROJECT_KEY,
   clip,
   validateIdea,
   runSynthesisStream,
@@ -35,7 +36,7 @@ loadEnv(path.join(__dirname, ".env"));
 
 const PORT = Number(process.env.PORT || 8788);
 const HOST = process.env.HOST || "0.0.0.0";
-const API_KEY = process.env.GEMINI_API_KEY || "";
+const API_KEY = process.env.GEMINI_API_KEY || DEFAULT_PROJECT_KEY || "";
 const RAW_MODELS = (process.env.GEMINI_MODELS || "")
   .split(",")
   .map((m) => m.trim())
