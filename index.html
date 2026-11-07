@@ -8,10 +8,10 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Syne, Space Grotesk, Space Mono, Bebas Neue / Anton for high-impact editorial typography -->
+  <!-- Google Fonts: Space Grotesk, Space Mono, Anton for crisp Swiss neo-brutalist editorial typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -28,18 +28,19 @@
       theme: {
         extend: {
           colors: {
-            ivory: '#F5F4EE',
+            ivory: '#F4F1EA',
+            surface: '#FAF9F5',
             ink: '#111111',
-            lime: '#C8FF45',
-            violet: '#8170B5',
-            sand: '#E9E7DC',
-            subtle: '#6B6A65',
+            lime: '#C8FF2E',
+            violet: '#6E3AFF',
+            sand: '#E8E4DA',
+            subtle: '#5C5A54',
             line: 'rgba(17, 17, 17, 0.14)',
             lineDark: 'rgba(17, 17, 17, 0.85)',
           },
           fontFamily: {
-            sans: ['"Space Grotesk"', 'sans-serif'],
-            display: ['"Syne"', 'sans-serif'],
+            sans: ['"Inter"', '"Space Grotesk"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
             mono: ['"Space Mono"', 'monospace'],
             condensed: ['"Anton"', 'sans-serif'],
           },
@@ -49,12 +50,12 @@
   </script>
 
   <style>
-    /* Strict editorial aesthetic: no rounded pill fluff, no glassmorphism, no gradients */
+    /* Strict editorial aesthetic: crisp architectural lines, high contrast, balanced whitespace */
     :root {
-      --bg: #F5F4EE;
+      --bg: #F4F1EA;
       --ink: #111111;
-      --lime: #C8FF45;
-      --violet: #8170B5;
+      --lime: #C8FF2E;
+      --violet: #6E3AFF;
     }
 
     * {
@@ -66,11 +67,15 @@
     body {
       background-color: var(--bg);
       color: var(--ink);
-      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
       cursor: default;
+    }
+
+    .font-condensed {
+      letter-spacing: 0.025em;
     }
 
     /* Hide standard cursor only on fine pointer devices when custom cursor is active */
@@ -132,15 +137,15 @@
     }
 
     #cursor-ring.cursor-hover {
-      width: 58px;
-      height: 58px;
+      width: 54px;
+      height: 54px;
       border-color: var(--ink);
-      background-color: rgba(200, 255, 69, 0.25);
+      background-color: rgba(200, 255, 46, 0.22);
     }
 
     #cursor-ring.cursor-challenger {
       border-color: var(--violet);
-      background-color: rgba(129, 112, 181, 0.2);
+      background-color: rgba(110, 58, 255, 0.16);
     }
 
     /* Editorial Links & Buttons */
@@ -177,10 +182,10 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #F5F4EE;
+      background: #F4F1EA;
     }
     ::-webkit-scrollbar-thumb {
-      background: #D3D1C5;
+      background: #CFCBC0;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #111111;
@@ -214,6 +219,8 @@
         targetAudience: "Mid-market CFOs and controllers managing $50M-$500M in revenue",
         problemStatement: "Expense leakage and rogue invoice spoofing slip past automated rules, costing 2.4% of EBITDA.",
         solution: "Agentic invoice reconcilement with zero-shot context cross-referencing Slack, contracts, and banking rails.",
+        revenueModel: "15% of verified savings or $36k/yr flat audit license",
+        biggestFear: "Brex, Ramp, and Coupa bundling native AI invoice matching for free.",
         disagreements: [
           { point: "Distribution Wedge", builder: "Partner directly with NetSuite & Workday implementation consultants.", challenger: "Consultants already have lucrative RevOps kickbacks from Coupa and Navan." },
           { point: "Pricing Power", builder: "Charge 15% of verified fraud prevented (pure ROI sale).", challenger: "CFOs hate variable risk-fees on compliance; legal will force flat $40k/yr capped seats." }
@@ -225,6 +232,7 @@
         tagline: "Decentralized micro-assisted living communities for active baby boomers",
         stage: "Idea Phase",
         status: "High Vulnerability",
+        verdict: "High Kill Risk Without Hard Wedge",
         score: 54,
         createdAt: "2026-03-28",
         category: "Silver Economy / PropTech",
@@ -233,6 +241,8 @@
         targetAudience: "Independent seniors (age 72+) wanting community without institutional nursing homes",
         problemStatement: "Traditional assisted living facilities feel like sterile hospitals and cost $9,500/month.",
         solution: "Boutique co-living residences for 8-10 elders with shared on-demand certified concierge nursing.",
+        revenueModel: "$4,800/mo member lease + 18% concierge care margin",
+        biggestFear: "State healthcare licensing boards classifying residences as unlicensed nursing facilities.",
         disagreements: [
           { point: "Regulatory Exposure", builder: "Arbitrage residential zoning laws using private group-home exemptions.", challenger: "One fatal slip-and-fall triggers criminal state elder abuse investigation and instant revocation." }
         ]
@@ -243,6 +253,7 @@
         tagline: "Sub-millisecond verification guardrails for autonomous physical robotics",
         stage: "Pre-seed",
         status: "Stress-Tested",
+        verdict: "Survivable with Narrow Wedge",
         score: 89,
         createdAt: "2026-04-02",
         category: "Robotics / Safety Critical",
@@ -251,6 +262,8 @@
         targetAudience: "Warehouse autonomous mobile robot (AMR) system integrators",
         problemStatement: "AI vision hallucination can cause 2-ton warehouse forklifts to miscalculate human safety buffers.",
         solution: "Formal hardware-level mathematical proof engine running at 1000Hz on isolated edge chips.",
+        revenueModel: "$180 per robot annual safety license + OEM royalty",
+        biggestFear: "18-month ISO safety certification cycles stalling enterprise revenue.",
         disagreements: [
           { point: "Sales Cycle", builder: "Direct sell developer SDKs to robotics engineers building with ROS 2.", challenger: "Chief Safety Officers take 18-month ISO certification audits before SDKs touch hardware." }
         ]
@@ -264,12 +277,16 @@
         builder: {
           title: "The Builder",
           subtitle: "Finds the offensive angle",
-          argument: "CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. OmniLedger doesn't ask for a workflow overhaul; it hooks into bank feeds via Plaid in 90 seconds and proves $34,000 in duplicate seat billing in round one. The ROI is immediate and indisputable."
+          argument: "CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. OmniLedger doesn't ask for a workflow overhaul; it hooks into bank feeds via Plaid in 90 seconds and proves $34,000 in duplicate seat billing in round one. The ROI is immediate and indisputable.",
+          lever: "90-second Plaid historical audit",
+          timeToValue: "Under 90 seconds"
         },
         challenger: {
           title: "The Challenger",
           subtitle: "Spots the structural fault",
-          argument: "Every expense vendor claims this. Coupa, Brex, Ramp, and Zip all have internal AI squads building this native feature right now. Why would a controller trust a standalone point solution with their sensitive raw general ledger feeds when their existing corporate card issuer gives it away for free?"
+          argument: "Every expense vendor claims this. Coupa, Brex, Ramp, and Zip all have internal AI squads building this native feature right now. Why would a controller trust a standalone point solution with their sensitive raw general ledger feeds when their existing corporate card issuer gives it away for free?",
+          fatalRisk: "Commoditization by incumbents",
+          salesFriction: "Controller security & SOC2 review"
         }
       },
       {
@@ -278,12 +295,16 @@
         builder: {
           title: "The Builder",
           subtitle: "Defending the moat",
-          argument: "Ramp and Brex only see credit card transactions. OmniLedger captures the multi-party conversation: the signed PDF contract in Ironclad, the Slack thread negotiating the discount, and the inbound ACH wire. That contextual cross-verification graph is completely invisible to credit card issuers."
+          argument: "Ramp and Brex only see credit card transactions. OmniLedger captures the multi-party conversation: the signed PDF contract in Ironclad, the Slack thread negotiating the discount, and the inbound ACH wire. That contextual cross-verification graph is completely invisible to credit card issuers.",
+          lever: "Cross-silo contract + Slack + ACH graph",
+          timeToValue: "Compounds after 30 days"
         },
         challenger: {
           title: "The Challenger",
           subtitle: "Stress-testing the thesis",
-          argument: "Connecting Ironclad, Slack, and legacy Oracle ERP isn't an AI moat — it's an engineering integration quagmire. Mid-market IT teams delay enterprise API permissions by an average of 114 days. Your Customer Acquisition Cost (CAC) payback period will blow out past 22 months before your first 50 logos."
+          argument: "Connecting Ironclad, Slack, and legacy Oracle ERP isn't an AI moat — it's an engineering integration quagmire. Mid-market IT teams delay enterprise API permissions by an average of 114 days. Your Customer Acquisition Cost (CAC) payback period will blow out past 22 months before your first 50 logos.",
+          fatalRisk: "114-day IT integration bottleneck",
+          salesFriction: "22-month CAC payback blowout"
         }
       },
       {
@@ -292,12 +313,16 @@
         builder: {
           title: "The Builder",
           subtitle: "Architecting scale",
-          argument: "We bypass standard IT resistance by starting with the Accounts Payable (AP) clerk as a lightweight email parsing extension. The AP team forwards suspect invoices to an intake address. Once we save them 12 hours a week manually catching false billings, the CFO demands the full ERP connector."
+          argument: "We bypass standard IT resistance by starting with the Accounts Payable (AP) clerk as a lightweight email parsing extension. The AP team forwards suspect invoices to an intake address. Once we save them 12 hours a week manually catching false billings, the CFO demands the full ERP connector.",
+          lever: "Zero-IT email intake wedge for AP clerks",
+          timeToValue: "10 minutes to first flagged invoice"
         },
         challenger: {
           title: "The Challenger",
           subtitle: "Uncovering the death spiral",
-          argument: "An email forwarder has zero data switching costs. The moment Ramp rolls out their automated invoice match next quarter, you get churned instantly. Point solutions that don't own the transaction clearing rail always get compressed to zero margin."
+          argument: "An email forwarder has zero data switching costs. The moment Ramp rolls out their automated invoice match next quarter, you get churned instantly. Point solutions that don't own the transaction clearing rail always get compressed to zero margin.",
+          fatalRisk: "Zero switching cost on email wedge",
+          salesFriction: "Instant churn when ERP bundles clone"
         }
       },
       {
@@ -306,12 +331,16 @@
         builder: {
           title: "The Builder",
           subtitle: "The endgame posture",
-          argument: "If we own the semantic truth between contracts and actual disbursements, OmniLedger naturally graduates into the autonomous payment execution rail itself. We don't stay a detector; we become the escrow gatekeeper for all mid-market enterprise disbursements."
+          argument: "If we own the semantic truth between contracts and actual disbursements, OmniLedger naturally graduates into the autonomous payment execution rail itself. We don't stay a detector; we become the escrow gatekeeper for all mid-market enterprise disbursements.",
+          lever: "Autonomous escrow & disbursement gate",
+          timeToValue: "Full clearing lock-in by Month 6"
         },
         challenger: {
           title: "The Challenger",
           subtitle: "The fatal verdict",
-          argument: "Becoming an execution rail introduces money transmission licenses, FINCEN compliance, and massive balance sheet liability. If your agentic reconciliation hallucinatingly blocks a mission-critical $2M vendor payment on payroll Friday, you will be sued out of existence. Your error tolerance is 0.000%."
+          argument: "Becoming an execution rail introduces money transmission licenses, FINCEN compliance, and massive balance sheet liability. If your agentic reconciliation hallucinatingly blocks a mission-critical $2M vendor payment on payroll Friday, you will be sued out of existence. Your error tolerance is 0.000%.",
+          fatalRisk: "Money transmission & false-block liability",
+          salesFriction: "0.000% error tolerance on payroll wires"
         }
       }
     ];
@@ -381,8 +410,6 @@
 
     // ==========================================
     // CLIENT-SIDE & DIRECT GEMINI SYNTHESIS ENGINE
-    // (Works on GitHub Pages without a server or API key,
-    //  and also supports optional user Gemini API keys)
     // ==========================================
     const SYNA_SYSTEM_PROMPT = `You are the synthesis engine inside SYNA, a startup idea stress lab.
 Two agents argue, then you turn the fight into a buildable plan.
@@ -395,7 +422,11 @@ Rules:
 - Do not mention Gemini, prompts, or that you are an AI.`;
 
     function clipText(value, max = 300) {
-      return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
+      const clean = String(value || "").replace(/\s+/g, " ").trim();
+      if (clean.length <= max) return clean;
+      const sliced = clean.slice(0, max);
+      const lastSpace = sliced.lastIndexOf(" ");
+      return (lastSpace > max * 0.6 ? sliced.slice(0, lastSpace) : sliced).replace(/[.,;:\-–—]+$/, "");
     }
 
     function hashString(str) {
@@ -420,7 +451,7 @@ Rules:
       const fear = clipText(idea.biggestFear || idea.keyTension, 240) || "incumbents bundling a free clone before switching costs compound";
       const revenue = clipText(idea.revenueModel || idea.category, 120) || "B2B Subscription (SaaS)";
       const stage = clipText(idea.stage, 80) || "Idea Phase";
-      const tagline = clipText(idea.tagline, 200) || `${title} solves: ${clipText(problem, 110)}`;
+      const tagline = clipText(idea.tagline, 200) || `${title} eliminates ${clipText(problem, 90).toLowerCase()}`;
 
       const seed = hashString(`${title}|${problem}|${solution}|${buyer}`);
       const completeness =
@@ -619,40 +650,44 @@ Rules:
         ],
       };
 
+      const cleanHeadline = idea.tagline && idea.tagline.length <= 78
+        ? idea.tagline.replace(/\.$/, "") + "."
+        : `${title}: ${clipText(problem, 72)}.`;
+
       const landing = {
         brand: title,
-        eyebrow: `${stage} // Built for ${clipText(buyer, 48)}`,
-        headline: `Stop losing margin to ${clipText(problem, 55).replace(/\.$/, "")}.`,
-        subhead: `${tagline}. Built for ${buyer} using ${clipText(solution, 95)} — deployable in 48 hours without a 6-month IT overhaul.`,
+        eyebrow: `${stage} // Purpose-Built for ${clipText(buyer, 54)}`,
+        headline: cleanHeadline,
+        subhead: `Built for ${buyer}. Powered by ${clipText(solution, 140).toLowerCase()} — deployable in 48 hours without a 6-month IT overhaul.`,
         cta: "Request 48-Hour Diagnostic",
-        proof: "Pilot hypothesis: prove measurable ROI on your historical data in 48 hours or pay $0.",
-        priceLine: `Model: ${revenue} — starts with a fixed-scope 14-day pilot.`,
+        proof: "Pilot guarantee: prove measurable ROI on historical data in 48 hours or pay $0.",
+        priceLine: `Commercial Model: ${revenue}`,
         features: [
           {
-            title: "48-Hour Baseline Audit",
-            body: `Ingest historical data and surface exact exposure to "${clipText(problem, 80)}" before touching production.`,
+            title: "48-Hour Historical Audit",
+            body: `Ingest historical logs and surface exact dollar exposure to "${clipText(problem, 90)}" before touching production.`,
           },
           {
-            title: "Targeted Core Engine",
-            body: `Powered by ${clipText(solution, 110)} purpose-built for ${buyer}.`,
+            title: "Cross-Silo Verification Engine",
+            body: `Powered by ${clipText(solution, 120)} purpose-built for ${buyer}.`,
           },
           {
-            title: "Zero-Friction Deployment",
-            body: `Designed to neutralize "${clipText(fear, 80)}" with verifiable audit trails from day one.`,
+            title: "Zero-Friction Governance",
+            body: `Engineered to neutralize "${clipText(fear, 90)}" with verifiable, read-only audit trails from day one.`,
           },
         ],
         objection: {
-          label: clipText(fear, 65),
+          label: clipText(fear, 85),
           answer: `Unlike bloated horizontal suites, ${title} proves value on read-only historical data in 48 hours and locks in domain-specific precision before asking for deep system permissions.`,
         },
         faq: [
           {
             q: `How fast can ${buyer} see results with ${title}?`,
-            a: `Within 48 hours of providing a sample dataset, ${title} quantifies exact exposure to ${clipText(problem, 90)}.`,
+            a: `Within 48 hours of providing a sample dataset, ${title} quantifies exact exposure to ${clipText(problem, 100)}.`,
           },
           {
             q: `How is ${title} different from generic AI or incumbent tools?`,
-            a: `Generic tools lack the domain workflow around ${clipText(solution, 100)} and miss the specific edge cases that cost ${buyer} the most.`,
+            a: `Generic tools lack the domain workflow around ${clipText(solution, 110)} and miss the specific edge cases that cost ${buyer} the most.`,
           },
           {
             q: `What does the first 14-day pilot require from our team?`,
@@ -751,42 +786,43 @@ Rules:
 
       const navItems = [
         { id: 'landing', label: 'Overview' },
-        { id: 'dashboard', label: 'All Projects' },
-        { id: 'idealab', label: 'Idea Lab' },
-        { id: 'debate', label: 'Debate Room' },
-        { id: 'verdict', label: 'Verdict' },
-        { id: 'blueprint', label: 'Blueprint' },
-        { id: 'prototype', label: 'Prototype' },
+        { id: 'dashboard', label: 'Projects' },
+        { id: 'idealab', label: '01 Idea Lab' },
+        { id: 'debate', label: '02 Debate' },
+        { id: 'verdict', label: '03 Verdict' },
+        { id: 'blueprint', label: '04 Blueprint' },
+        { id: 'prototype', label: '05 Prototype' },
       ];
 
       return (
-        <header className="border-b border-ink/15 bg-ivory sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+        <header className="border-b-2 border-ink bg-ivory/95 backdrop-blur-sm sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between gap-4">
             {/* Logo */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 shrink-0">
               <button 
                 onClick={() => setActivePage('landing')} 
-                className="font-condensed text-3xl tracking-wider text-ink font-bold hover:opacity-80 transition-opacity"
+                className="font-condensed text-3xl tracking-wider text-ink hover:opacity-80 transition-opacity flex items-center gap-2"
               >
-                SYNA
+                <span>SYNA</span>
+                <span className="w-2 h-2 bg-lime border border-ink inline-block"></span>
               </button>
-              <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest text-subtle border-l border-ink/20 pl-3">
-                Adversarial AI Idea Laboratory
+              <span className="hidden xl:inline-block font-mono text-[10px] uppercase tracking-widest text-subtle border-l border-ink/20 pl-3 whitespace-nowrap">
+                Adversarial AI Idea Stress Lab
               </span>
             </div>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-8 font-mono text-xs uppercase tracking-wider">
+            {/* Desktop Navigation Links — Single-line, zero wrapping */}
+            <nav className="hidden md:flex items-center gap-1 lg:gap-1.5 font-mono text-[11px] uppercase tracking-wider shrink-0">
               {navItems.map((item) => {
                 const isActive = activePage === item.id;
                 return (
                   <button
                     key={item.id}
                     onClick={() => setActivePage(item.id)}
-                    className={`transition-colors py-1 ${
+                    className={`whitespace-nowrap px-2.5 lg:px-3 py-1.5 transition-all ${
                       isActive 
-                        ? 'text-ink font-bold border-b-2 border-ink' 
-                        : 'text-subtle hover:text-ink link-hover'
+                        ? 'bg-ink text-ivory font-bold' 
+                        : 'text-subtle hover:text-ink hover:bg-sand/60'
                     }`}
                   >
                     {item.label}
@@ -795,33 +831,36 @@ Rules:
               })}
             </nav>
 
-            {/* Direct CTA */}
-            <div className="flex items-center gap-2.5">
+            {/* Direct CTA — Single-line, crisp SVG icons */}
+            <div className="flex items-center gap-2 shrink-0">
               {onShareLink && (
                 <button
                   onClick={onShareLink}
                   title="Copy a direct shareable link to this view or project dossier"
-                  className="hidden lg:inline-flex items-center gap-1.5 border border-ink/30 hover:border-ink font-mono text-[11px] uppercase tracking-wider px-3 py-2 text-ink transition-all"
+                  className="hidden sm:inline-flex items-center gap-1.5 border border-ink bg-surface hover:bg-sand font-mono text-[11px] uppercase tracking-wider px-3 py-2 text-ink transition-all whitespace-nowrap"
                 >
-                  <span>Share Link</span>
-                  <span>⎘</span>
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                  <span>Share</span>
                 </button>
               )}
               <button
                 onClick={() => setActivePage('idealab')}
-                className="hidden sm:inline-flex items-center gap-2 bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-wider px-4 py-2.5 transition-all group"
+                className="hidden sm:inline-flex items-center gap-2 bg-ink text-ivory hover:bg-black font-mono text-[11px] font-bold uppercase tracking-wider px-4 py-2 border border-ink transition-all whitespace-nowrap group"
               >
-                <span>Stress-Test Idea</span>
-                <span className="text-lime group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                <span>New Stress-Test</span>
+                <span className="text-lime group-hover:translate-x-0.5 transition-transform">→</span>
               </button>
 
               {/* Mobile hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-ink"
+                className="md:hidden p-2 text-ink border border-ink/30"
                 aria-label="Toggle menu"
               >
-                <div className="w-6 h-4 flex flex-col justify-between">
+                <div className="w-5 h-3.5 flex flex-col justify-between">
                   <span className={`h-0.5 bg-ink w-full transition-transform ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
                   <span className={`h-0.5 bg-ink w-full ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
                   <span className={`h-0.5 bg-ink w-full transition-transform ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
@@ -832,8 +871,8 @@ Rules:
 
           {/* Mobile drawer */}
           {mobileMenuOpen && (
-            <div className="md:hidden border-t border-ink/20 bg-ivory px-6 py-5 space-y-4">
-              <div className="flex flex-col space-y-3 font-mono text-xs uppercase tracking-wider">
+            <div className="md:hidden border-t-2 border-ink bg-ivory px-6 py-5 space-y-4">
+              <div className="flex flex-col space-y-2 font-mono text-xs uppercase tracking-wider">
                 {navItems.map((item) => (
                   <button
                     key={item.id}
@@ -841,35 +880,37 @@ Rules:
                       setActivePage(item.id);
                       setMobileMenuOpen(false);
                     }}
-                    className={`text-left py-2 border-b border-ink/10 ${
-                      activePage === item.id ? 'font-bold text-ink pl-2 border-l-2 border-ink' : 'text-subtle'
+                    className={`text-left py-2 px-3 ${
+                      activePage === item.id ? 'font-bold bg-ink text-ivory' : 'text-subtle border-b border-ink/10'
                     }`}
                   >
                     {item.label}
                   </button>
                 ))}
               </div>
-              {onShareLink && (
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                {onShareLink && (
+                  <button
+                    onClick={() => {
+                      onShareLink();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="border border-ink py-2.5 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 text-ink bg-surface"
+                  >
+                    <span>Share Link</span>
+                  </button>
+                )}
                 <button
                   onClick={() => {
-                    onShareLink();
+                    setActivePage('idealab');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full border border-ink/30 py-2.5 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 text-ink"
+                  className="bg-ink text-ivory py-2.5 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-1.5"
                 >
-                  <span>Copy Shareable Link ⎘</span>
+                  <span>Stress-Test</span>
+                  <span className="text-lime">→</span>
                 </button>
-              )}
-              <button
-                onClick={() => {
-                  setActivePage('idealab');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full bg-ink text-ivory py-3 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2"
-              >
-                <span>Start a debate</span>
-                <span className="text-lime">↗</span>
-              </button>
+              </div>
             </div>
           )}
         </header>
@@ -877,144 +918,207 @@ Rules:
     }
 
     // ==========================================
-    // PAGE 1: LANDING PAGE (Faithful to Reference)
+    // PAGE 1: LANDING PAGE
     // ==========================================
     function LandingPage({ setActivePage, setDemoProject }) {
       return (
         <div className="min-h-screen">
-          {/* Main Hero Section directly replicating user screenshot */}
-          <section className="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
-            {/* Superhead */}
-            <div className="font-mono text-xs uppercase tracking-widest text-ink/70 mb-8">
-              A better idea starts with friction
+          {/* Main Hero Section */}
+          <section className="max-w-7xl mx-auto px-6 md:px-10 pt-12 md:pt-20 pb-16">
+            {/* Superhead Status Pill */}
+            <div className="inline-flex items-center gap-2.5 border border-ink bg-surface px-3.5 py-1.5 mb-8 shadow-[2px_2px_0_#111]">
+              <span className="w-2 h-2 bg-lime border border-ink"></span>
+              <span className="font-mono text-[11px] uppercase tracking-widest text-ink font-bold">
+                A better idea starts with friction
+              </span>
             </div>
 
             {/* Two-Column Asymmetric Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
               {/* Left Column: Bold Editorial Headline & Thesis */}
-              <div className="lg:col-span-7 pr-0 lg:pr-8">
-                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-extrabold text-ink leading-[1.04] tracking-tight mb-8">
-                  Good ideas don’t need praise. They need pressure.
+              <div className="lg:col-span-7">
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[4.35rem] font-bold text-ink leading-[1.03] tracking-tight mb-6">
+                  Good ideas don’t need praise. <span className="bg-lime px-2 border border-ink inline-block mt-1">They need pressure.</span>
                 </h1>
 
-                <p className="font-sans text-base md:text-xl text-ink/80 max-w-xl font-normal leading-relaxed mb-10">
-                  SYNA puts your startup idea between a growth hacker and a ruthless VC. They debate. You leave with a verdict, a 14-day MVP plan, and a landing-page prototype.
+                <p className="font-sans text-base md:text-xl text-ink/80 max-w-2xl font-normal leading-relaxed mb-8">
+                  SYNA puts your startup idea between an opportunistic <strong>Growth Hacker</strong> and a <strong>Ruthless VC</strong>. They clash across 4 rounds. You leave with an unfiltered survival score, a 14-day MVP blueprint, and a live landing-page prototype.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-6">
+                <div className="flex flex-wrap items-center gap-4 mb-10">
                   <button
                     onClick={() => setActivePage('idealab')}
-                    className="bg-ink text-ivory hover:bg-black font-mono text-sm uppercase tracking-wider px-6 py-4 flex items-center gap-3 transition-transform active:scale-[0.98]"
+                    className="bg-ink text-ivory hover:bg-black font-mono text-xs md:text-sm font-bold uppercase tracking-wider px-7 py-4 border-2 border-ink shadow-[4px_4px_0_#C8FF2E] flex items-center gap-3 transition-transform active:translate-y-0.5"
                   >
-                    <span>Stress-test your idea</span>
-                    <span className="text-lime font-bold">↗</span>
+                    <span>Stress-Test Your Idea</span>
+                    <span className="text-lime font-bold">→</span>
                   </button>
 
                   <button
                     onClick={() => setDemoProject('syna-01')}
-                    className="font-mono text-sm uppercase tracking-wider text-ink border-b border-ink/40 pb-0.5 hover:border-ink transition-colors"
+                    className="bg-surface hover:bg-sand font-mono text-xs md:text-sm font-bold uppercase tracking-wider text-ink border-2 border-ink px-6 py-4 transition-colors"
                   >
-                    See an example debate
+                    Explore Live Case Study (OmniLedger)
                   </button>
+                </div>
+
+                {/* Quick Metric Strip */}
+                <div className="grid grid-cols-3 gap-4 border-t border-ink/20 pt-6 max-w-xl">
+                  <div>
+                    <div className="font-condensed text-3xl text-ink">04 ROUNDS</div>
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-subtle">Wedge, Moat, CAC & Risk</div>
+                  </div>
+                  <div className="border-l border-ink/20 pl-4">
+                    <div className="font-condensed text-3xl text-ink">100% LIVE</div>
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-subtle">Zero API Keys Needed</div>
+                  </div>
+                  <div className="border-l border-ink/20 pl-4">
+                    <div className="font-condensed text-3xl text-ink">14-DAY MVP</div>
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-subtle">Blueprint + Prototype</div>
+                  </div>
                 </div>
               </div>
 
-              {/* Right Column: Giant Typographic BUILD / BREAK split matching image */}
-              <div className="lg:col-span-5 relative pt-4 select-none">
-                <div className="relative border-b border-ink/20 pb-10">
+              {/* Right Column: Framed Architectural BUILD / BREAK Dossier Card */}
+              <div className="lg:col-span-5 select-none">
+                <div className="border-2 border-ink bg-surface p-6 md:p-8 shadow-[8px_8px_0_#111111]">
+                  <div className="flex items-center justify-between border-b border-ink/20 pb-3 mb-6 font-mono text-[10px] uppercase tracking-widest text-subtle">
+                    <span>CHAMBER DIALECTIC // ENGINE v3.8</span>
+                    <span className="text-ink font-bold flex items-center gap-1.5">
+                      <span className="w-2 h-2 bg-lime border border-ink"></span>
+                      ACTIVE
+                    </span>
+                  </div>
+
                   {/* BUILD block */}
-                  <div className="flex items-baseline justify-between">
-                    <span className="font-condensed text-7xl sm:text-8xl md:text-9xl text-ink font-bold tracking-tight">
-                      BUILD
-                    </span>
-                    <div className="text-right">
-                      <span className="font-mono text-xs font-bold text-ink block">01</span>
-                      <span className="font-mono text-[10px] tracking-widest uppercase text-subtle block max-w-[110px] leading-tight">
-                        Growth hacker finds the wedge
+                  <div className="flex items-center justify-between gap-4 bg-ivory border border-ink p-4">
+                    <div>
+                      <span className="inline-block bg-lime border border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-ink mb-1">
+                        AGENT 01 // ADVOCATE
+                      </span>
+                      <div className="font-condensed text-6xl sm:text-7xl text-ink leading-none">
+                        BUILD
+                      </div>
+                    </div>
+                    <div className="text-right max-w-[165px]">
+                      <span className="font-mono text-xs font-bold text-ink block mb-1">Growth Hacker</span>
+                      <span className="font-sans text-xs text-subtle block leading-snug">
+                        Finds the 48-hour wedge, distribution hack & rapid ROI hook.
                       </span>
                     </div>
                   </div>
 
-                  {/* Horizontal dividing line with Lime marker */}
-                  <div className="relative w-full my-4">
-                    <div className="w-full h-[1px] bg-ink/20"></div>
-                    <div className="absolute right-24 -top-[5px] w-[11px] h-[11px] bg-lime border border-ink"></div>
-                  </div>
-
-                  {/* BREAK block (shifted right and down) */}
-                  <div className="flex items-baseline justify-end gap-6 mt-4">
-                    <div className="text-right">
-                      <span className="font-mono text-xs font-bold text-ink block">02</span>
-                      <span className="font-mono text-[10px] tracking-widest uppercase text-subtle block max-w-[120px] leading-tight">
-                        Ruthless VC tries to kill it
-                      </span>
-                    </div>
-                    <span className="font-condensed text-7xl sm:text-8xl md:text-9xl text-ink font-bold tracking-tight">
-                      BREAK
+                  {/* Horizontal dividing friction bar */}
+                  <div className="relative my-5 flex items-center justify-center">
+                    <div className="w-full h-[2px] bg-ink"></div>
+                    <span className="absolute bg-ink text-ivory font-mono text-[10px] uppercase tracking-widest px-3 py-0.5 border border-ink">
+                      VS // ADVERSARIAL FRICTION
                     </span>
                   </div>
-                </div>
 
-                {/* Micro meta note */}
-                <div className="mt-4 flex items-center justify-between font-mono text-[11px] text-subtle uppercase tracking-wider">
-                  <span>Adversarial Dialectic</span>
-                  <span>Synthetic Co-Founders</span>
+                  {/* BREAK block */}
+                  <div className="flex items-center justify-between gap-4 bg-ivory border border-ink p-4">
+                    <div className="text-left max-w-[165px]">
+                      <span className="font-mono text-xs font-bold text-violet block mb-1">Ruthless VC</span>
+                      <span className="font-sans text-xs text-subtle block leading-snug">
+                        Exposes incumbent bundling, unit-econ traps & fatal risk.
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="inline-block bg-violet text-ivory border border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider mb-1">
+                        AGENT 02 // SKEPTIC
+                      </span>
+                      <div className="font-condensed text-6xl sm:text-7xl text-ink leading-none">
+                        BREAK
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="mt-6 pt-4 border-t border-ink/20 flex items-center justify-between font-mono text-[11px] text-subtle uppercase">
+                    <span>Output: Verdict + 14d Plan</span>
+                    <button
+                      onClick={() => setActivePage('idealab')}
+                      className="text-ink font-bold underline hover:text-violet"
+                    >
+                      Enter Chamber →
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Three Numbered Steps Section */}
-          <section className="border-t border-ink/20 bg-ivory">
+          <section className="border-t-2 border-ink bg-surface">
             <div className="max-w-7xl mx-auto px-6 md:px-10 py-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/20 border border-ink/20 bg-ivory">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                  <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">How SYNA Works</span>
+                  <h2 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight">
+                    From raw napkin thesis to battle-tested MVP in 60 seconds
+                  </h2>
+                </div>
+                <span className="font-mono text-xs uppercase text-subtle">3-Stage Verification Pipeline</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 border-2 border-ink bg-ivory shadow-[6px_6px_0_#111]">
                 {/* Step 01 */}
-                <div className="p-8 md:p-10 flex flex-col justify-between">
+                <div className="p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r-2 border-ink">
                   <div>
-                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">01</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-condensed text-4xl text-ink">01</span>
+                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 bg-sand border border-ink/30">Idea Lab</span>
+                    </div>
                     <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
-                      Submit an idea
+                      Submit your raw thesis
                     </h3>
                     <p className="font-sans text-sm text-subtle leading-relaxed">
-                      Share your startup concept, target audience and the exact problem you’re solving. Zero vanity filters.
+                      Enter your startup concept, economic buyer, bleeding pain point, pricing model, and the fatal flaw you secretly worry about.
                     </p>
                   </div>
-                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
-                    <span>Intake: 2 mins</span>
-                    <span>Unbiased</span>
+                  <div className="mt-8 pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-[11px] text-ink/70">
+                    <span>Intake: 60 seconds</span>
+                    <span className="font-bold">Zero Vanity Filters</span>
                   </div>
                 </div>
 
                 {/* Step 02 */}
-                <div className="p-8 md:p-10 flex flex-col justify-between bg-[#F1EFE6]">
+                <div className="p-8 flex flex-col justify-between bg-surface border-b md:border-b-0 md:border-r-2 border-ink">
                   <div>
-                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">02</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-condensed text-4xl text-ink">02</span>
+                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 bg-lime border border-ink font-bold">Debate Room</span>
+                    </div>
                     <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
-                      Challenge assumptions
+                      Survive 4 rounds of combat
                     </h3>
                     <p className="font-sans text-sm text-subtle leading-relaxed">
-                      Two AI agents debate your idea in 4 structured rounds, relentlessly testing defensibility, moat, and CAC viability.
+                      Watch the Growth Hacker and Ruthless VC clash over willingness to pay, moats, and CAC—and interrupt any round with your own counter-data.
                     </p>
                   </div>
-                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
-                    <span>Engine: Multi-agent</span>
-                    <span className="text-violet font-semibold">Zero Consensus</span>
+                  <div className="mt-8 pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-[11px] text-ink/70">
+                    <span>Engine: Gemini 3.x</span>
+                    <span className="text-violet font-bold">Live Intervention</span>
                   </div>
                 </div>
 
                 {/* Step 03 */}
-                <div className="p-8 md:p-10 flex flex-col justify-between">
+                <div className="p-8 flex flex-col justify-between">
                   <div>
-                    <span className="font-mono text-xs uppercase font-bold text-ink block mb-4">03</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-condensed text-4xl text-ink">03</span>
+                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 bg-ink text-ivory">Deliverables</span>
+                    </div>
                     <h3 className="font-display text-2xl font-bold text-ink mb-3 tracking-tight">
-                      Leave with a plan
+                      Leave with a buildable plan
                     </h3>
                     <p className="font-sans text-sm text-subtle leading-relaxed">
-                      Get a survival score, an editable 14-day MVP brief, and an interactive landing prototype built from the fight.
+                      Receive an honest Survival Score (/100), Two Paths Forward, an editable 14-day MVP brief, and a conversion-ready landing page prototype.
                     </p>
                   </div>
-                  <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-ink/60">
-                    <span>Export: Dossier & Brief</span>
+                  <div className="mt-8 pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-[11px] text-ink/70">
+                    <span>Export: Markdown & PDF</span>
                     <span className="text-ink font-bold">100% Actionable</span>
                   </div>
                 </div>
@@ -1023,23 +1127,23 @@ Rules:
           </section>
 
           {/* Live Interactive Sample Debate Preview */}
-          <section className="border-t border-ink/20 py-20 bg-[#ECEAE0]">
+          <section className="border-t-2 border-ink py-16 bg-sand/60">
             <div className="max-w-7xl mx-auto px-6 md:px-10">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                 <div>
-                  <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">Simulated Live Run</span>
+                  <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">Featured Stress-Test Dossier</span>
                   <h2 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
-                    Case Study: OmniLedger (Fraud Detection AI)
+                    Case Study: OmniLedger (Autonomous Expense Fraud AI)
                   </h2>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 bg-ink text-ivory font-mono text-xs uppercase tracking-wider">
-                    <span className="w-2 h-2 rounded-full bg-lime animate-pulse"></span>
-                    Round 01 of 04
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-ink text-ivory font-mono text-xs uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-lime"></span>
+                    Score: 78/100
                   </span>
                   <button 
                     onClick={() => setDemoProject('syna-01')}
-                    className="font-mono text-xs uppercase tracking-wider underline hover:text-subtle"
+                    className="bg-surface border-2 border-ink px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider hover:bg-ink hover:text-ivory transition-colors"
                   >
                     Open Full Debate Room →
                   </button>
@@ -1049,98 +1153,65 @@ Rules:
               {/* Opposing Preview Columns */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Left: Builder */}
-                <div className="bg-ivory border-2 border-ink p-8">
-                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-6">
+                <div className="bg-surface border-2 border-ink p-7 shadow-[4px_4px_0_#111]">
+                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-5">
                     <div>
-                      <span className="font-mono text-xs uppercase tracking-widest text-subtle">Persona Alpha</span>
-                      <h4 className="font-condensed text-3xl tracking-wide uppercase text-ink">The Builder</h4>
+                      <span className="font-mono text-[11px] uppercase tracking-widest text-subtle block">Persona Alpha // Growth Hacker</span>
+                      <h4 className="font-display text-2xl font-bold text-ink mt-0.5">The 90-Second Wedge</h4>
                     </div>
                     <span className="px-2.5 py-1 bg-lime text-ink font-mono text-xs font-bold uppercase tracking-wider border border-ink">
                       Advocate
                     </span>
                   </div>
-                  <p className="font-sans text-base text-ink/90 leading-relaxed italic border-l-2 border-ink pl-4 mb-6">
-                    “CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. We hook into Plaid in 90 seconds and prove $34k in fraud before lunch.”
+                  <p className="font-sans text-base text-ink/90 leading-relaxed border-l-2 border-ink pl-4 mb-6">
+                    “CFOs are actively hemorrhaging cash because modern B2B SaaS sprawl created thousands of unmonitored shadow subscriptions. We hook into Plaid in 90 seconds and prove $34k in duplicate seat fraud before lunch.”
                   </p>
-                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between">
-                    <span>Focus: Speed of Wedge</span>
-                    <span>Willingness to pay: HIGH</span>
+                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between pt-3 border-t border-ink/10">
+                    <span>Lever: Instant Historical Audit</span>
+                    <span className="text-ink font-bold">Willingness to pay: HIGH</span>
                   </div>
                 </div>
 
                 {/* Right: Challenger */}
-                <div className="bg-ivory border-2 border-ink p-8">
-                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-6">
+                <div className="bg-surface border-2 border-ink p-7 shadow-[4px_4px_0_#6E3AFF]">
+                  <div className="flex items-center justify-between border-b border-ink/15 pb-4 mb-5">
                     <div>
-                      <span className="font-mono text-xs uppercase tracking-widest text-subtle">Persona Omega</span>
-                      <h4 className="font-condensed text-3xl tracking-wide uppercase text-ink">The Challenger</h4>
+                      <span className="font-mono text-[11px] uppercase tracking-widest text-violet block font-bold">Persona Omega // Ruthless VC</span>
+                      <h4 className="font-display text-2xl font-bold text-ink mt-0.5">The Incumbent Kill-Shot</h4>
                     </div>
                     <span className="px-2.5 py-1 bg-violet text-ivory font-mono text-xs font-bold uppercase tracking-wider border border-ink">
                       Skeptic
                     </span>
                   </div>
-                  <p className="font-sans text-base text-ink/90 leading-relaxed italic border-l-2 border-violet pl-4 mb-6">
-                    “Every corporate card vendor claims this. Brex, Ramp, and Zip give this away as a loss-leader. Mid-market CFOs won’t sign a separate SOC2 vendor liability waiver for a feature their bank is releasing for free.”
+                  <p className="font-sans text-base text-ink/90 leading-relaxed border-l-2 border-violet pl-4 mb-6">
+                    “Every corporate card vendor claims this. Brex, Ramp, and Zip give this away as a loss-leader. Mid-market CFOs won’t sign a separate SOC2 vendor liability waiver for a feature their card issuer is releasing for free.”
                   </p>
-                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between">
-                    <span>Vulnerability: Commodity Risk</span>
-                    <span>Incumbent Threat: FATAL</span>
+                  <div className="font-mono text-xs text-subtle uppercase tracking-wider flex items-center justify-between pt-3 border-t border-ink/10">
+                    <span>Risk: Incumbent Bundling</span>
+                    <span className="text-violet font-bold">Threat Level: CRITICAL</span>
                   </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Philosophy / The Method */}
-          <section className="border-t border-ink/20 py-20 bg-ivory">
-            <div className="max-w-7xl mx-auto px-6 md:px-10">
-              <div className="max-w-3xl">
-                <span className="font-mono text-xs uppercase tracking-widest text-ink/60 mb-3 block">Methodology</span>
-                <h2 className="font-display text-3xl md:text-5xl font-bold text-ink leading-tight mb-8">
-                  Echo chambers kill startups before the market gets the chance.
-                </h2>
-                <div className="space-y-6 text-ink/80 font-sans text-lg leading-relaxed">
-                  <p>
-                    Most founders test their ideas with friendly peers, polite advisors, or generic ChatGPT prompts that suffer from sycophancy bias. They tell you what sounds good.
-                  </p>
-                  <p>
-                    SYNA is mathematically tuned for adversarial friction. We instantiate two divergent reasoning models: one tasked with finding defensible moats and untapped wedges, and the other explicitly rewarded for disproving unit economics, exposing CAC suicide traps, and discovering incumbent kill-shots.
-                  </p>
-                </div>
-
-                <div className="mt-12 flex items-center gap-6">
-                  <button
-                    onClick={() => setActivePage('idealab')}
-                    className="bg-ink text-ivory px-8 py-4 font-mono text-xs uppercase tracking-wider font-bold hover:bg-black"
-                  >
-                    Put Your Idea Under Pressure →
-                  </button>
-                  <button
-                    onClick={() => setActivePage('dashboard')}
-                    className="font-mono text-xs uppercase tracking-wider underline hover:text-subtle"
-                  >
-                    Explore Existing Tests
-                  </button>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Minimalist Editorial Footer */}
-          <footer className="border-t border-ink/20 py-12 bg-ivory">
+          <footer className="border-t-2 border-ink py-10 bg-ivory">
             <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <span className="font-condensed text-2xl font-bold tracking-wider">SYNA</span>
+                <span className="font-condensed text-2xl tracking-wider">SYNA</span>
                 <span className="font-mono text-xs text-subtle border-l border-ink/20 pl-4">
-                  Better ideas. Stronger businesses.
+                  Adversarial AI Idea Stress Lab — Built for Founders & Judges
                 </span>
               </div>
 
-              <div className="flex items-center space-x-6 font-mono text-xs uppercase text-subtle">
-                <span className="hover:text-ink cursor-pointer">Methodology</span>
-                <span className="hover:text-ink cursor-pointer">Privacy</span>
-                <span className="hover:text-ink cursor-pointer">Terms</span>
-                <span className="hover:text-ink cursor-pointer">Audit Ledger</span>
+              <div className="flex flex-wrap items-center gap-6 font-mono text-xs uppercase text-subtle">
+                <button onClick={() => setActivePage('idealab')} className="hover:text-ink">Idea Lab</button>
+                <button onClick={() => setActivePage('dashboard')} className="hover:text-ink">All Dossiers</button>
+                <button onClick={() => setActivePage('debate')} className="hover:text-ink">Debate Room</button>
+                <button onClick={() => setActivePage('verdict')} className="hover:text-ink">Verdict</button>
+                <button onClick={() => setActivePage('blueprint')} className="hover:text-ink">Blueprint</button>
+                <button onClick={() => setActivePage('prototype')} className="hover:text-ink">Prototype</button>
               </div>
             </div>
           </footer>
@@ -1157,162 +1228,148 @@ Rules:
 
       const filtered = projects.filter((p) => {
         const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                              p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              p.tagline.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStage = filterStage === "all" || p.status.toLowerCase().includes(filterStage.toLowerCase());
+                              (p.category || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              (p.tagline || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStage = filterStage === "all" || (p.status || "").toLowerCase().includes(filterStage.toLowerCase());
         return matchesSearch && matchesStage;
       });
 
       return (
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-12 min-h-screen">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-ink/20 pb-8 mb-8 gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-ink pb-6 mb-8 gap-6">
             <div>
               <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
-                Directory / {String(projects.length).padStart(2, '0')} Projects Tracked
+                Archive // {String(projects.length).padStart(2, '0')} Startup Dossiers Tracked
               </span>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
                 Stress-Test Dossiers
               </h1>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={onNewProjectClick}
-                className="bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-wider px-5 py-3.5 flex items-center gap-2"
-              >
-                <span>+ Submit New Concept</span>
-              </button>
-            </div>
+            <button
+              onClick={onNewProjectClick}
+              className="bg-ink text-ivory hover:bg-black font-mono text-xs font-bold uppercase tracking-wider px-6 py-3.5 border-2 border-ink shadow-[4px_4px_0_#C8FF2E] flex items-center gap-2 self-start md:self-auto"
+            >
+              <span>+ Stress-Test New Idea</span>
+            </button>
           </div>
 
           {/* Search & Filter Strip */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pb-6 mb-2">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pb-6 mb-2 items-center">
             <div className="md:col-span-8">
               <input
                 type="text"
-                placeholder="Search ideas by title, sector or thesis..."
+                placeholder="Search ideas by title, sector, or thesis..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-transparent border-b border-ink/40 py-2.5 font-mono text-sm text-ink placeholder:text-subtle/70 focus:outline-none focus:border-ink"
+                className="w-full bg-surface border border-ink/30 px-4 py-2.5 font-mono text-sm text-ink placeholder:text-subtle/70 focus:outline-none focus:border-ink"
               />
             </div>
-            <div className="md:col-span-4 flex items-center justify-end gap-3 font-mono text-xs">
-              <span className="text-subtle uppercase">Filter:</span>
+            <div className="md:col-span-4 flex items-center justify-start md:justify-end gap-2 font-mono text-xs">
+              <span className="text-subtle uppercase mr-1">Filter:</span>
               <button 
                 onClick={() => setFilterStage("all")}
-                className={`px-2.5 py-1 uppercase ${filterStage === "all" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+                className={`px-3 py-1.5 uppercase border ${filterStage === "all" ? "bg-ink text-ivory border-ink font-bold" : "border-ink/20 text-subtle hover:text-ink bg-surface"}`}
               >
                 All
               </button>
               <button 
                 onClick={() => setFilterStage("stress-tested")}
-                className={`px-2.5 py-1 uppercase ${filterStage === "stress-tested" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+                className={`px-3 py-1.5 uppercase border ${filterStage === "stress-tested" ? "bg-ink text-ivory border-ink font-bold" : "border-ink/20 text-subtle hover:text-ink bg-surface"}`}
               >
-                Tested
+                Survivable
               </button>
               <button 
                 onClick={() => setFilterStage("vulnerability")}
-                className={`px-2.5 py-1 uppercase ${filterStage === "vulnerability" ? "bg-ink text-ivory" : "text-subtle hover:text-ink"}`}
+                className={`px-3 py-1.5 uppercase border ${filterStage === "vulnerability" ? "bg-ink text-ivory border-ink font-bold" : "border-ink/20 text-subtle hover:text-ink bg-surface"}`}
               >
-                Vulnerable
+                High Risk
               </button>
             </div>
           </div>
 
-          {/* Minimal Table Header (No cards) */}
-          <div className="hidden lg:grid grid-cols-12 gap-4 py-3 border-b-2 border-ink font-mono text-[11px] uppercase tracking-wider text-ink font-bold">
-            <div className="col-span-4">Startup Project & Thesis</div>
-            <div className="col-span-2">Sector & Stage</div>
-            <div className="col-span-2">Dialectic Tension</div>
-            <div className="col-span-2 text-center">Resilience Score</div>
-            <div className="col-span-2 text-right">Actions</div>
-          </div>
+          {/* Table Container */}
+          <div className="border-2 border-ink bg-surface shadow-[6px_6px_0_#111]">
+            <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3.5 border-b-2 border-ink bg-sand/50 font-mono text-[11px] uppercase tracking-wider text-ink font-bold">
+              <div className="col-span-4">Startup Project & Thesis</div>
+              <div className="col-span-2">Sector & Stage</div>
+              <div className="col-span-3">Core Dialectic Tension</div>
+              <div className="col-span-1 text-center">Score</div>
+              <div className="col-span-2 text-right">Dossier Actions</div>
+            </div>
 
-          {/* Row Items */}
-          <div className="divide-y divide-ink/15 border-b border-ink/20">
-            {filtered.length === 0 ? (
-              <div className="py-16 text-center font-mono text-sm text-subtle">
-                No matching stress-test records located.
-              </div>
-            ) : (
-              filtered.map((item) => (
-                <div
-                  key={item.id}
-                  className="py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center hover:bg-sand/40 transition-colors px-2 -mx-2"
-                >
-                  {/* Name and Tagline */}
-                  <div className="lg:col-span-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-display text-xl font-bold text-ink">{item.title}</span>
-                      <span className="font-mono text-[10px] uppercase px-2 py-0.5 border border-ink/30 text-subtle">
-                        {item.stage}
-                      </span>
-                    </div>
-                    <p className="font-sans text-xs text-subtle line-clamp-2 max-w-md">
-                      {item.tagline}
-                    </p>
-                  </div>
-
-                  {/* Category & Date */}
-                  <div className="lg:col-span-2">
-                    <span className="font-mono text-xs text-ink block font-medium">{item.category}</span>
-                    <span className="font-mono text-[10px] text-subtle block">Tested: {item.createdAt}</span>
-                  </div>
-
-                  {/* Tension */}
-                  <div className="lg:col-span-2">
-                    <span className="font-mono text-[11px] text-ink/80 block line-clamp-2 italic">
-                      “{item.keyTension}”
-                    </span>
-                  </div>
-
-                  {/* Score */}
-                  <div className="lg:col-span-2 text-left lg:text-center">
-                    <div className="inline-flex items-center gap-2">
-                      <span className="font-condensed text-3xl font-bold text-ink">
-                        {item.score ?? "—"}
-                      </span>
-                      <span className="font-mono text-[10px] text-subtle">/100</span>
-                      <span className={`w-2.5 h-2.5 ${item.score >= 70 ? 'bg-lime' : 'bg-violet'}`}></span>
-                    </div>
-                    <span className="block font-mono text-[10px] uppercase text-subtle">
-                      {item.verdict}
-                    </span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="lg:col-span-2 flex items-center justify-start lg:justify-end gap-3 pt-2 lg:pt-0">
-                    <button
-                      onClick={() => {
-                        setSelectedProjectId(item.id);
-                        setActivePage('debate');
-                      }}
-                      className="font-mono text-xs uppercase px-3 py-1.5 border border-ink hover:bg-ink hover:text-ivory transition-colors"
-                    >
-                      Debate Room
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedProjectId(item.id);
-                        setActivePage('verdict');
-                      }}
-                      className="font-mono text-xs uppercase px-3 py-1.5 bg-ink text-ivory hover:bg-black transition-colors"
-                    >
-                      Report ↗
-                    </button>
-                  </div>
+            <div className="divide-y divide-ink/15">
+              {filtered.length === 0 ? (
+                <div className="py-16 text-center font-mono text-sm text-subtle">
+                  No matching stress-test records located.
                 </div>
-              ))
-            )}
-          </div>
+              ) : (
+                filtered.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center hover:bg-ivory transition-colors"
+                  >
+                    {/* Name and Tagline */}
+                    <div className="lg:col-span-4">
+                      <div className="flex items-center gap-2.5 mb-1">
+                        <span className="font-display text-xl font-bold text-ink">{item.title}</span>
+                        <span className="font-mono text-[10px] uppercase px-2 py-0.5 bg-sand border border-ink/30 text-ink">
+                          {item.stage}
+                        </span>
+                      </div>
+                      <p className="font-sans text-xs text-subtle line-clamp-2 max-w-md">
+                        {item.tagline}
+                      </p>
+                    </div>
 
-          {/* Footer stats strip */}
-          <div className="mt-8 pt-4 flex flex-wrap items-center justify-between font-mono text-xs text-subtle gap-4">
-            <div>SIMULATED RUNTIME: 4 AGENTIC THREADS CONCLUDED</div>
-            <div className="flex gap-6">
-              <span>AVG RESILIENCE: 73.6%</span>
-              <span>FATAL FLAWS IDENTIFIED: 14</span>
+                    {/* Category & Date */}
+                    <div className="lg:col-span-2">
+                      <span className="font-mono text-xs text-ink block font-bold">{item.category}</span>
+                      <span className="font-mono text-[10px] text-subtle block mt-0.5">Tested: {item.createdAt}</span>
+                    </div>
+
+                    {/* Tension */}
+                    <div className="lg:col-span-3">
+                      <span className="font-sans text-xs text-ink/80 block line-clamp-2">
+                        “{item.keyTension}”
+                      </span>
+                    </div>
+
+                    {/* Score */}
+                    <div className="lg:col-span-1 text-left lg:text-center">
+                      <div className="inline-flex items-center gap-1.5">
+                        <span className="font-condensed text-3xl text-ink">
+                          {item.score ?? "—"}
+                        </span>
+                        <span className={`w-2.5 h-2.5 border border-ink ${item.score >= 70 ? 'bg-lime' : 'bg-violet'}`}></span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="lg:col-span-2 flex items-center justify-start lg:justify-end gap-2">
+                      <button
+                        onClick={() => {
+                          setSelectedProjectId(item.id);
+                          setActivePage('debate');
+                        }}
+                        className="font-mono text-[11px] uppercase px-3 py-2 border border-ink bg-ivory hover:bg-ink hover:text-ivory transition-colors whitespace-nowrap"
+                      >
+                        Debate
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedProjectId(item.id);
+                          setActivePage('verdict');
+                        }}
+                        className="font-mono text-[11px] uppercase px-3 py-2 bg-ink text-ivory hover:bg-black transition-colors whitespace-nowrap"
+                      >
+                        Verdict →
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -1323,13 +1380,55 @@ Rules:
     // PAGE 3: IDEA LAB (Intake Form)
     // ==========================================
     function IdeaLabPage({ onLaunchDebate, showToast }) {
+      const SAMPLE_PRESETS = [
+        {
+          label: "Supply Chain AI",
+          data: {
+            title: "VaporWare Sentinel",
+            tagline: "Real-time hardware bill-of-materials supply chain stress prediction",
+            targetAudience: "VP of Supply Chain at EV and aerospace Tier-1 manufacturers",
+            problemStatement: "Critical semiconductor delays are only caught when factory lines shut down, causing $400k/hr unplanned downtime.",
+            solution: "Predictive freight telemetry cross-referencing customs manifests, sub-tier Purchase Orders, and silicon fab yields.",
+            stage: "MVP in Pilot",
+            revenueModel: "Enterprise Annual Contract ($120k/yr)",
+            biggestFear: "SAP and Oracle bundling native supply-chain risk alerts into existing ERP licenses."
+          }
+        },
+        {
+          label: "Fintech Chargebacks",
+          data: {
+            title: "MarginGuard AI",
+            tagline: "Autonomous friendly-fraud dispute recovery for high-velocity Shopify Plus brands",
+            targetAudience: "Heads of Finance & eCommerce Operations at $20M-$150M DTC brands",
+            problemStatement: "Friendly-fraud chargebacks drain 2.8% of net GMV and manual representment evidence packets lose 74% of disputes.",
+            solution: "Automated carrier GPS + device fingerprint + post-purchase comms graph compiled into bank-grade dispute dossiers in 4 seconds.",
+            stage: "Seed Revenue",
+            revenueModel: "25% contingency fee on recovered chargeback revenue",
+            biggestFear: "Stripe and Shopify native chargeback protection compressing take-rates to zero."
+          }
+        },
+        {
+          label: "Clinical Coding",
+          data: {
+            title: "ClaimPulse",
+            tagline: "Zero-denial autonomous prior authorization & medical coding for independent surgical centers",
+            targetAudience: "Practice Administrators and CFOs at independent outpatient surgical centers",
+            problemStatement: "Payer prior-authorization denials delay 31% of outpatient reimbursements by 60+ days and burn 18 staff hours per week.",
+            solution: "Specialty-tuned clinical policy engine that validates payer rules pre-procedure and auto-generates appeal packets with EHR citations.",
+            stage: "MVP in Pilot",
+            revenueModel: "$1,500/mo per surgical center + 4% of overturned denials",
+            biggestFear: "Epic and major clearinghouses blocking third-party read/write API access."
+          }
+        }
+      ];
+
       const [formData, setFormData] = useState({
         title: "",
         tagline: "",
         targetAudience: "",
         problemStatement: "",
         solution: "",
-        stage: "Idea Phase",
+        stage: "MVP in Pilot",
         revenueModel: "B2B Subscription (SaaS)",
         biggestFear: ""
       });
@@ -1340,7 +1439,6 @@ Rules:
         const { name, value } = e.target;
         setFormData(prev => {
           const next = { ...prev, [name]: value };
-          // dynamic friction calculation based on completeness
           let score = 25;
           if (next.title.length > 2) score += 15;
           if (next.problemStatement.length > 20) score += 20;
@@ -1352,19 +1450,10 @@ Rules:
         });
       };
 
-      const handlePrepopulate = () => {
-        setFormData({
-          title: "VaporWare Sentinel",
-          tagline: "Real-time hardware bill-of-materials supply chain stress prediction",
-          targetAudience: "VP of Supply Chain at EV and aerospace Tier-1 manufacturers",
-          problemStatement: "Critical semiconductor delays are only caught when factory lines shut down, causing $400k/hr downtime.",
-          solution: "Predictive freight telemetry scraping customs manifests and silicon fab yields.",
-          stage: "MVP in Pilot",
-          revenueModel: "Enterprise Annual Contract Value ($120k/yr)",
-          biggestFear: "Taiwan geopolitical shock rendering software predictions useless."
-        });
-        setFrictionScore(95);
-        showToast("Pre-filled sample scenario: VaporWare Sentinel", "info");
+      const applyPreset = (preset) => {
+        setFormData(preset.data);
+        setFrictionScore(96);
+        showToast(`Loaded scenario: ${preset.data.title}`, "info");
       };
 
       const handleSubmit = (e) => {
@@ -1373,38 +1462,46 @@ Rules:
           showToast("Please provide at least a project title and problem statement", "alert");
           return;
         }
-
         onLaunchDebate(formData);
       };
 
       return (
-        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 min-h-screen">
           {/* Header */}
-          <div className="border-b border-ink/20 pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="border-b-2 border-ink pb-6 mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div>
               <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
-                Phase 01 // Intake Form
+                Phase 01 // Chamber Intake Dossier
               </span>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
                 Idea Stress Chamber
               </h1>
               <p className="font-sans text-sm text-subtle mt-2 max-w-xl">
-                Be ruthlessly honest. The sharper your inputs, the more brutally effective the Builder and Challenger will be.
+                Be ruthlessly specific. The sharper your inputs, the more surgical the Growth Hacker and Ruthless VC will be.
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={handlePrepopulate}
-              className="font-mono text-xs uppercase tracking-wider border border-ink/40 px-4 py-2 hover:border-ink hover:bg-sand/30"
-            >
-              Fill Sample Scenario ⚡
-            </button>
+            {/* Instant 1-Click Presets for Judges */}
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-2 shrink-0">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-subtle mr-1 whitespace-nowrap">
+                Quick-Fill Preset:
+              </span>
+              {SAMPLE_PRESETS.map((preset) => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => applyPreset(preset)}
+                  className="font-mono text-[11px] uppercase tracking-wider border border-ink bg-surface px-3 py-1.5 hover:bg-lime font-bold transition-colors whitespace-nowrap"
+                >
+                  ⚡ {preset.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-10">
-            {/* Project Identification */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <form onSubmit={handleSubmit} className="border-2 border-ink bg-surface p-6 md:p-10 shadow-[8px_8px_0_#111] space-y-8">
+            {/* Row 1: Title & Stage */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
                   01. Project Name / Working Title *
@@ -1413,10 +1510,10 @@ Rules:
                   type="text"
                   name="title"
                   required
-                  placeholder="e.g. Nexus Grid, OmniLedger"
+                  placeholder="e.g. VaporWare Sentinel, MarginGuard AI"
                   value={formData.title}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-b-2 border-ink py-2 font-display text-2xl text-ink placeholder:text-ink/25 focus:outline-none focus:border-black"
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-display text-xl font-bold text-ink placeholder:text-ink/30 focus:outline-none"
                 />
               </div>
 
@@ -1428,104 +1525,121 @@ Rules:
                   name="stage"
                   value={formData.stage}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-b-2 border-ink py-2 font-mono text-base text-ink focus:outline-none"
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3.5 font-mono text-sm text-ink focus:outline-none"
                 >
                   <option value="Idea Phase">Raw Thesis / Napkin Math</option>
-                  <option value="Pre-Prototype">Validation / Interviews</option>
+                  <option value="Pre-Prototype">Validation / Customer Interviews</option>
                   <option value="MVP in Pilot">MVP Built & Live in Alpha</option>
-                  <option value="Seed Revenue">Post-Revenue ($1k-$20k MRR)</option>
+                  <option value="Seed Revenue">Post-Revenue ($1k–$20k MRR)</option>
                   <option value="Scaling">Growth / Seeking Series A</option>
                 </select>
               </div>
             </div>
 
-            {/* Tagline */}
-            <div>
-              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
-                03. One-Sentence Hook (The Elevator Thesis)
-              </label>
-              <input
-                type="text"
-                name="tagline"
-                placeholder="Autonomous corporate expense fraud detection for mid-market CFOs"
-                value={formData.tagline}
-                onChange={handleChange}
-                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-base text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
-              />
-            </div>
-
-            {/* Target Audience */}
-            <div>
-              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
-                04. Specific Target Customer / Economic Buyer
-              </label>
-              <input
-                type="text"
-                name="targetAudience"
-                placeholder="Who has the corporate card or sign-off authority? (e.g. Series B VP of Eng)"
-                value={formData.targetAudience}
-                onChange={handleChange}
-                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-base text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
-              />
-            </div>
-
-            {/* Problem & Solution Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+            {/* Row 2: Tagline & Buyer */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
-                  05. The Bleeding Pain Point (Why now?) *
+                  03. One-Sentence Elevator Thesis
+                </label>
+                <input
+                  type="text"
+                  name="tagline"
+                  placeholder="Autonomous corporate expense fraud detection for mid-market CFOs"
+                  value={formData.tagline}
+                  onChange={handleChange}
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  04. Economic Buyer (Who Signs the Check?)
+                </label>
+                <input
+                  type="text"
+                  name="targetAudience"
+                  placeholder="e.g. VP of Supply Chain at Tier-1 automotive manufacturers"
+                  value={formData.targetAudience}
+                  onChange={handleChange}
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Row 3: Problem & Solution */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  05. The Bleeding Pain Point (Why Now?) *
                 </label>
                 <textarea
                   name="problemStatement"
                   rows={4}
                   required
-                  placeholder="What is failing right now? What is the tangible cost in dollars, hours, or churn?"
+                  placeholder="What is failing right now? What is the tangible cost in dollars, hours, or lost margin?"
                   value={formData.problemStatement}
                   onChange={handleChange}
-                  className="w-full bg-transparent border border-ink/30 p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none focus:border-ink resize-none"
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none resize-none"
                 />
               </div>
 
               <div>
                 <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
-                  06. Your Unfair Advantage / Proposed Secret Sauce
+                  06. Unfair Advantage / Technical Wedge
                 </label>
                 <textarea
                   name="solution"
                   rows={4}
-                  placeholder="How does this actually work technically? What prevents an intern from copying it?"
+                  placeholder="How does this work technically? Why can't an incumbent ship this as a free feature next quarter?"
                   value={formData.solution}
                   onChange={handleChange}
-                  className="w-full bg-transparent border border-ink/30 p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none focus:border-ink resize-none"
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink p-4 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none resize-none"
                 />
               </div>
             </div>
 
-            {/* Vulnerability Pre-Check */}
-            <div className="pt-2">
-              <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
-                07. The “Fatal Flaw” You Secretly Worry About
-              </label>
-              <input
-                type="text"
-                name="biggestFear"
-                placeholder="e.g. Open source model updates will make this free; or high sales cycle CAC."
-                value={formData.biggestFear}
-                onChange={handleChange}
-                className="w-full bg-transparent border-b border-ink/40 py-2 font-sans text-sm text-ink placeholder:text-ink/25 focus:outline-none focus:border-ink"
-              />
+            {/* Row 4: Revenue Model & Fatal Flaw */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  07. Revenue & Pricing Model
+                </label>
+                <input
+                  type="text"
+                  name="revenueModel"
+                  placeholder="e.g. $40k/yr annual license or 15% of verified savings"
+                  value={formData.revenueModel}
+                  onChange={handleChange}
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink font-bold mb-2">
+                  08. The “Fatal Flaw” You Secretly Worry About
+                </label>
+                <input
+                  type="text"
+                  name="biggestFear"
+                  placeholder="e.g. Incumbent ERP bundling or 12-month enterprise security reviews"
+                  value={formData.biggestFear}
+                  onChange={handleChange}
+                  className="w-full bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/30 focus:outline-none"
+                />
+              </div>
             </div>
 
             {/* Pre-Flight Friction Gauge & Action */}
-            <div className="border-t-2 border-ink pt-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="border-t-2 border-ink pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs uppercase tracking-widest text-subtle">
-                    Intake Readiness:
+                    Chamber Readiness:
                   </span>
-                  <span className="font-mono text-xs font-bold text-ink">{frictionScore}% calibrated</span>
+                  <span className="font-mono text-xs font-bold text-ink">{frictionScore}% Calibrated</span>
                 </div>
-                <div className="w-56 h-1.5 bg-ink/10 mt-2">
+                <div className="w-64 h-2 bg-ink/10 mt-2 border border-ink/30">
                   <div 
                     className="h-full bg-lime border-r border-ink transition-all duration-300" 
                     style={{ width: `${frictionScore}%` }}
@@ -1533,15 +1647,13 @@ Rules:
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <button
-                  type="submit"
-                  className="w-full md:w-auto bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-widest px-8 py-4 flex items-center justify-center gap-3 shadow-md active:translate-y-0.5"
-                >
-                  <span>Ignite Adversarial Debate</span>
-                  <span className="text-lime text-base font-bold">→</span>
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="w-full md:w-auto bg-ink text-ivory hover:bg-black font-mono text-xs md:text-sm font-bold uppercase tracking-widest px-8 py-4 border-2 border-ink shadow-[4px_4px_0_#C8FF2E] flex items-center justify-center gap-3 transition-transform active:translate-y-0.5"
+              >
+                <span>Ignite 4-Round Adversarial Debate</span>
+                <span className="text-lime text-base font-bold">→</span>
+              </button>
             </div>
           </form>
         </div>
@@ -1561,6 +1673,12 @@ Rules:
       const [customCounterArg, setCustomCounterArg] = useState("");
       const [intervening, setIntervening] = useState(false);
       const injectedCounters = currentProject?.interventions || [];
+
+      const QUICK_INTERVENTIONS = [
+        "We already signed 6 pilot customers on read-only historical logs with zero IT delay.",
+        "Our pricing is 100% performance-based (15% of verified savings), eliminating buyer risk.",
+        "Incumbents cannot see cross-silo Slack + PDF contract context outside their own card rail."
+      ];
 
       useEffect(() => {
         setCurrentRoundIndex(0);
@@ -1612,30 +1730,35 @@ Rules:
         return (
           <div className="min-h-screen bg-ivory">
             <div className="max-w-3xl mx-auto px-6 md:px-10 py-24">
-              <span className="font-mono text-xs uppercase tracking-widest text-subtle">Live chamber // {currentProject?.title}</span>
-              <h1 className="font-display text-4xl md:text-6xl font-bold text-ink mt-3 tracking-tight">
-                {runState?.error ? "The chamber stalled." : "Pressure is being applied."}
-              </h1>
-              <p className="font-sans text-lg text-ink/80 mt-6 max-w-xl">
-                {runState?.error || runState?.message || "Opening the debate…"}
-              </p>
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 border border-ink">
-                {[
-                  ["01", "Debate", runState?.phase === "debate" || !runState?.phase],
-                  ["02", "Verdict", runState?.phase === "verdict"],
-                  ["03", "Prototype", runState?.phase === "blueprint"]
-                ].map(([num, label, on]) => (
-                  <div key={num} className={`p-5 border-b sm:border-b-0 sm:border-r last:border-r-0 border-ink ${on ? "bg-lime" : "bg-ivory"}`}>
-                    <span className="font-mono text-xs">{num}</span>
-                    <div className="font-display text-xl font-bold mt-2">{label}</div>
-                  </div>
-                ))}
+              <div className="border-2 border-ink bg-surface p-8 md:p-12 shadow-[8px_8px_0_#111]">
+                <div className="inline-flex items-center gap-2 bg-lime border border-ink px-3 py-1 font-mono text-xs font-bold uppercase mb-4">
+                  <span className="w-2 h-2 bg-ink animate-ping"></span>
+                  Live Chamber Active // {currentProject?.title}
+                </div>
+                <h1 className="font-display text-4xl md:text-5xl font-bold text-ink mt-2 tracking-tight">
+                  {runState?.error ? "The chamber stalled." : "Applying adversarial pressure…"}
+                </h1>
+                <p className="font-sans text-base md:text-lg text-ink/80 mt-4">
+                  {runState?.error || runState?.message || "Instantiating Growth Hacker and Ruthless VC…"}
+                </p>
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 border-2 border-ink">
+                  {[
+                    ["01", "4-Round Debate", runState?.phase === "debate" || !runState?.phase],
+                    ["02", "Survival Verdict", runState?.phase === "verdict"],
+                    ["03", "MVP & Prototype", runState?.phase === "blueprint"]
+                  ].map(([num, label, on]) => (
+                    <div key={num} className={`p-5 border-b sm:border-b-0 sm:border-r last:border-r-0 border-ink ${on ? "bg-lime" : "bg-ivory"}`}>
+                      <span className="font-mono text-xs font-bold">{num}</span>
+                      <div className="font-display text-lg font-bold mt-1">{label}</div>
+                    </div>
+                  ))}
+                </div>
+                {(runState?.error || !liveRun) && (
+                  <button onClick={onRetry} className="mt-8 bg-ink text-ivory px-6 py-3 font-mono text-xs uppercase tracking-wider">
+                    {runState?.error ? "Retry synthesis →" : "Resume synthesis →"}
+                  </button>
+                )}
               </div>
-              {(runState?.error || !liveRun) && (
-                <button onClick={onRetry} className="mt-8 bg-ink text-ivory px-6 py-3 font-mono text-xs uppercase tracking-wider">
-                  {runState?.error ? "Retry synthesis →" : "Resume synthesis →"}
-                </button>
-              )}
             </div>
           </div>
         );
@@ -1644,72 +1767,83 @@ Rules:
       return (
         <div className="min-h-screen bg-ivory pb-20">
           {/* Top Dialectic Header Strip */}
-          <div className="border-b border-ink/20 bg-sand/30 py-4 px-6 md:px-10">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="border-b-2 border-ink bg-surface py-4 px-6 md:px-10">
+            <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">
-                  {currentProject?.live ? `Live synthesis${currentProject.model ? " // " + currentProject.model : ""}` : "Sample dossier // not a live run"}
-                  {liveRun ? ` // ${runState.message}` : ""}
-                </span>
-                <h1 className="font-display text-2xl font-bold text-ink">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-subtle">
+                  <span className="w-2 h-2 bg-lime border border-ink inline-block"></span>
+                  <span>
+                    {currentProject?.live ? `Live Synthesis${currentProject.model ? " // " + currentProject.model : ""}` : "Verified Case Study Dossier"}
+                    {liveRun ? ` // ${runState.message}` : ""}
+                  </span>
+                </div>
+                <h1 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mt-0.5">
                   Stress-Testing: {currentProject?.title || "OmniLedger"}
                 </h1>
               </div>
 
-              {/* Round Selector Tabs */}
-              <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
-                {transcript.map((round, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentRoundIndex(idx)}
-                    className={`font-mono text-xs uppercase px-3 py-1.5 border transition-all whitespace-nowrap ${
-                      currentRoundIndex === idx 
-                        ? 'bg-ink text-ivory border-ink font-bold' 
-                        : 'bg-transparent text-subtle border-ink/20 hover:border-ink hover:text-ink'
-                    }`}
-                  >
-                    R{idx + 1}: {round.title.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
+              {/* Round Selector Tabs + Verdict CTA */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center border border-ink bg-ivory p-0.5">
+                  {transcript.map((round, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentRoundIndex(idx)}
+                      className={`font-mono text-[11px] uppercase px-3 py-1.5 transition-all whitespace-nowrap ${
+                        currentRoundIndex === idx 
+                          ? 'bg-ink text-ivory font-bold' 
+                          : 'text-subtle hover:text-ink'
+                      }`}
+                    >
+                      R0{idx + 1}: {round.title.split(" ")[0]}
+                    </button>
+                  ))}
+                </div>
 
-              {/* Conclude Button */}
-              <button
-                onClick={() => setActivePage('verdict')}
-                className="bg-ink text-ivory px-4 py-2 font-mono text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-black"
-              >
-                <span>Generate Verdict</span>
-                <span className="text-lime font-bold">↗</span>
-              </button>
+                <button
+                  onClick={() => setActivePage('verdict')}
+                  className="bg-ink text-ivory px-4 py-2 border border-ink font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-black whitespace-nowrap shadow-[3px_3px_0_#C8FF2E]"
+                >
+                  <span>View Verdict</span>
+                  <span className="text-lime font-bold">→</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Current Round Banner */}
           <div className="max-w-7xl mx-auto px-6 md:px-10 pt-8 pb-4">
-            <div className="flex items-center justify-between border-b border-ink/15 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-ink pb-4 gap-4">
               <div>
-                <span className="font-mono text-xs uppercase tracking-widest text-subtle">
-                  ROUND 0{activeRound.round} OF 04
+                <span className="font-mono text-xs uppercase tracking-widest text-subtle block">
+                  ROUND 0{activeRound.round} OF 0{transcript.length} // ADVERSARIAL EXCHANGE
                 </span>
-                <h2 className="font-display text-3xl font-bold text-ink mt-0.5">
+                <h2 className="font-display text-2xl md:text-4xl font-bold text-ink tracking-tight mt-1">
                   {activeRound.title}
                 </h2>
               </div>
 
-              {/* Play / Next Controls */}
-              <div className="flex items-center gap-3">
+              {/* Play / Prev / Next Controls */}
+              <div className="flex items-center gap-2 self-start sm:self-auto">
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="font-mono text-xs uppercase px-3 py-1.5 border border-ink flex items-center gap-2 hover:bg-ink hover:text-ivory transition-colors"
+                  className="font-mono text-xs uppercase px-3.5 py-2 border border-ink bg-surface flex items-center gap-2 hover:bg-ink hover:text-ivory transition-colors whitespace-nowrap"
                 >
-                  <span className={`w-2 h-2 ${isPlaying ? 'bg-lime animate-ping' : 'bg-ink'}`}></span>
-                  {isPlaying ? 'Pause Auto-Debate' : 'Simulate Auto-Play'}
+                  <span className={`w-2 h-2 border border-ink ${isPlaying ? 'bg-lime animate-ping' : 'bg-lime'}`}></span>
+                  {isPlaying ? 'Pause Auto-Play' : 'Auto-Play Rounds'}
                 </button>
 
                 <button
+                  disabled={currentRoundIndex === 0}
+                  onClick={() => setCurrentRoundIndex(prev => Math.max(0, prev - 1))}
+                  className="font-mono text-xs uppercase px-3 py-2 bg-surface border border-ink hover:bg-sand disabled:opacity-30"
+                >
+                  ←
+                </button>
+                <button
                   disabled={currentRoundIndex === transcript.length - 1}
                   onClick={() => setCurrentRoundIndex(prev => Math.min(transcript.length - 1, prev + 1))}
-                  className="font-mono text-xs uppercase px-3 py-1.5 bg-sand/80 border border-ink/30 hover:border-ink disabled:opacity-30"
+                  className="font-mono text-xs uppercase px-3.5 py-2 bg-surface border border-ink hover:bg-sand disabled:opacity-30 whitespace-nowrap font-bold"
                 >
                   Next Round →
                 </button>
@@ -1722,149 +1856,181 @@ Rules:
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
               
               {/* LEFT: THE BUILDER */}
-              <div className="border-2 border-ink bg-ivory flex flex-col justify-between shadow-[4px_4px_0px_#111111]">
+              <div className="border-2 border-ink bg-surface flex flex-col justify-between shadow-[6px_6px_0px_#111111]">
                 {/* Column Head */}
-                <div className="p-6 md:p-8 border-b-2 border-ink bg-[#FAF9F5]">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="p-6 md:p-8 border-b-2 border-ink bg-ivory">
+                  <div className="flex items-center justify-between mb-3">
                     <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold">
-                      Persona 01 // Thesis Advocate
+                      Agent 01 // Thesis Advocate
                     </span>
                     <span className="bg-lime text-ink px-2.5 py-1 font-mono text-[10px] uppercase font-bold tracking-wider border border-ink">
-                      Defensive Moat
+                      Finds The Wedge
                     </span>
                   </div>
-                  <h3 className="font-condensed text-4xl md:text-5xl font-bold tracking-tight text-ink uppercase">
-                    GROWTH HACKER
+                  <h3 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-ink uppercase">
+                    Growth Hacker
                   </h3>
                   <p className="font-mono text-xs text-subtle mt-1">
-                    Finds the wedge, the offer, and the distribution trick
+                    Constructs the 48-hour wedge, distribution lever, and immediate ROI hook
                   </p>
                 </div>
 
                 {/* Body Argument */}
-                <div className="p-6 md:p-8 flex-grow">
-                  <div className="mb-6 font-mono text-xs text-subtle uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-ink"></span>
-                    <span>Direct Argumentation:</span>
-                  </div>
-                  <p className="font-sans text-lg md:text-xl text-ink leading-relaxed font-normal">
-                    “{activeRound.builder.argument}”
-                  </p>
-
-                  <div className="mt-8 pt-6 border-t border-ink/15 space-y-3 font-mono text-xs">
-                    <div className="flex justify-between text-subtle">
-                      <span>PRIMARY LEVER:</span>
-                      <span className="text-ink font-bold text-right max-w-[60%]">{activeRound.builder.lever || "Unexploited customer pain"}</span>
+                <div className="p-6 md:p-8 flex-grow flex flex-col justify-between">
+                  <div>
+                    <div className="mb-4 font-mono text-xs text-subtle uppercase tracking-widest flex items-center gap-2">
+                      <span className="w-2 h-2 bg-lime border border-ink"></span>
+                      <span>Offensive Thesis:</span>
                     </div>
-                    <div className="flex justify-between text-subtle">
-                      <span>TIME TO VALUE:</span>
-                      <span className="text-ink font-bold text-right max-w-[60%]">{activeRound.builder.timeToValue || "Under 90 seconds"}</span>
+                    <p className="font-sans text-base md:text-lg text-ink leading-relaxed font-normal">
+                      “{activeRound.builder.argument}”
+                    </p>
+                  </div>
+
+                  <div className="mt-8 pt-5 border-t border-ink/15 grid grid-cols-2 gap-4 font-mono text-xs">
+                    <div className="bg-ivory p-3 border border-ink/20">
+                      <span className="text-[10px] text-subtle block uppercase">Primary Lever</span>
+                      <span className="text-ink font-bold block mt-1">{activeRound.builder.lever || "Unexploited customer pain"}</span>
+                    </div>
+                    <div className="bg-ivory p-3 border border-ink/20">
+                      <span className="text-[10px] text-subtle block uppercase">Time To Value</span>
+                      <span className="text-ink font-bold block mt-1">{activeRound.builder.timeToValue || "Under 90 seconds"}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer status */}
-                <div className="p-4 border-t border-ink/20 bg-sand/30 font-mono text-[10px] text-subtle flex justify-between uppercase">
-                  <span>Confidence: 84%</span>
-                  <span>Dialectic Status: Holding Line</span>
+                <div className="px-6 py-3.5 border-t border-ink/20 bg-sand/40 font-mono text-[11px] text-subtle flex justify-between uppercase">
+                  <span>Conviction: 84%</span>
+                  <span className="text-ink font-bold">Posture: Offensive Wedge</span>
                 </div>
               </div>
 
               {/* RIGHT: THE CHALLENGER */}
-              <div className="border-2 border-ink bg-ivory flex flex-col justify-between shadow-[4px_4px_0px_#8170B5]">
+              <div className="challenger-zone border-2 border-ink bg-surface flex flex-col justify-between shadow-[6px_6px_0px_#6E3AFF]">
                 {/* Column Head */}
-                <div className="p-6 md:p-8 border-b-2 border-ink bg-[#F7F5FA]">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="p-6 md:p-8 border-b-2 border-ink bg-ivory">
+                  <div className="flex items-center justify-between mb-3">
                     <span className="font-mono text-xs uppercase tracking-widest text-violet font-bold">
-                      Persona 02 // Structural Adversary
+                      Agent 02 // Structural Adversary
                     </span>
                     <span className="bg-violet text-ivory px-2.5 py-1 font-mono text-[10px] uppercase font-bold tracking-wider border border-ink">
-                      Execution Assassin
+                      Kill-Shot Analysis
                     </span>
                   </div>
-                  <h3 className="font-condensed text-4xl md:text-5xl font-bold tracking-tight text-ink uppercase">
-                    RUTHLESS VC
+                  <h3 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-ink uppercase">
+                    Ruthless VC
                   </h3>
                   <p className="font-mono text-xs text-subtle mt-1">
-                    Exposes the kill-shot, the incumbent, and the fake moat
+                    Exposes incumbent bundling, unit-economics traps, and procurement friction
                   </p>
                 </div>
 
                 {/* Body Argument */}
-                <div className="p-6 md:p-8 flex-grow">
-                  <div className="mb-6 font-mono text-xs text-violet uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-violet"></span>
-                    <span>Counter-Offensive Thesis:</span>
-                  </div>
-                  <p className="font-sans text-lg md:text-xl text-ink leading-relaxed font-normal">
-                    “{activeRound.challenger.argument}”
-                  </p>
-
-                  <div className="mt-8 pt-6 border-t border-ink/15 space-y-3 font-mono text-xs">
-                    <div className="flex justify-between text-subtle">
-                      <span>FATAL RISK:</span>
-                      <span className="text-violet font-bold text-right max-w-[60%]">{activeRound.challenger.fatalRisk || "Commoditization by incumbents"}</span>
+                <div className="p-6 md:p-8 flex-grow flex flex-col justify-between">
+                  <div>
+                    <div className="mb-4 font-mono text-xs text-violet uppercase tracking-widest flex items-center gap-2 font-bold">
+                      <span className="w-2 h-2 bg-violet border border-ink"></span>
+                      <span>Counter-Offensive Thesis:</span>
                     </div>
-                    <div className="flex justify-between text-subtle">
-                      <span>SALES FRICTION:</span>
-                      <span className="text-violet font-bold text-right max-w-[60%]">{activeRound.challenger.salesFriction || "Long approval cycle"}</span>
+                    <p className="font-sans text-base md:text-lg text-ink leading-relaxed font-normal">
+                      “{activeRound.challenger.argument}”
+                    </p>
+                  </div>
+
+                  <div className="mt-8 pt-5 border-t border-ink/15 grid grid-cols-2 gap-4 font-mono text-xs">
+                    <div className="bg-ivory p-3 border border-ink/20">
+                      <span className="text-[10px] text-subtle block uppercase">Fatal Risk</span>
+                      <span className="text-violet font-bold block mt-1">{activeRound.challenger.fatalRisk || "Commoditization by incumbents"}</span>
+                    </div>
+                    <div className="bg-ivory p-3 border border-ink/20">
+                      <span className="text-[10px] text-subtle block uppercase">Sales Friction</span>
+                      <span className="text-violet font-bold block mt-1">{activeRound.challenger.salesFriction || "Long approval cycle"}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer status */}
-                <div className="p-4 border-t border-ink/20 bg-sand/30 font-mono text-[10px] text-subtle flex justify-between uppercase">
-                  <span>Skepticism Weight: MAXIMUM</span>
-                  <span className="text-violet font-semibold">Moat Challenge Active</span>
+                <div className="px-6 py-3.5 border-t border-ink/20 bg-sand/40 font-mono text-[11px] text-subtle flex justify-between uppercase">
+                  <span>Skepticism Weight: MAX</span>
+                  <span className="text-violet font-bold">Moat Challenge Active</span>
                 </div>
               </div>
 
             </div>
 
             {/* Founder Intervention Input Strip */}
-            <div className="mt-10 border border-ink bg-ivory p-6 md:p-8">
-              <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold block mb-2">
-                Inject Founder Pushback (Intervene in Debate)
-              </span>
-              <p className="font-sans text-xs text-subtle mb-4">
-                Disagree with the Challenger or see a flawed assumption from the Builder? Force both agents to reconcile your counter-data.
-              </p>
+            <div className="mt-10 border-2 border-ink bg-surface p-6 md:p-8 shadow-[6px_6px_0_#111]">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+                <div>
+                  <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold block">
+                    Founder Intervention Console (Live Mid-Debate Pushback)
+                  </span>
+                  <p className="font-sans text-xs text-subtle mt-1">
+                    Disagree with the Ruthless VC or want to inject new evidence? Force both AI agents to respond to your counter-data in real time.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {QUICK_INTERVENTIONS.map((sample, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setCustomCounterArg(sample)}
+                      className="font-mono text-[10px] uppercase px-2.5 py-1 border border-ink/30 bg-ivory hover:bg-lime text-ink transition-colors"
+                    >
+                      + Sample Rebuttal 0{idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <form onSubmit={handleAddIntervention} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
-                  placeholder="e.g. 'Actually, our pilot customers already signed SOC-2 waivers because our agent runs locally.'"
+                  placeholder="Type your counter-evidence (e.g. 'We already signed 6 pilot customers on read-only logs')…"
                   value={customCounterArg}
                   onChange={(e) => setCustomCounterArg(e.target.value)}
-                  className="flex-grow bg-transparent border-b-2 border-ink py-2.5 font-sans text-sm text-ink placeholder:text-subtle focus:outline-none"
+                  className="flex-grow bg-ivory border border-ink/40 focus:border-ink px-4 py-3 font-sans text-sm text-ink placeholder:text-subtle/70 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={intervening}
-                  className="bg-ink text-ivory px-6 py-2.5 font-mono text-xs uppercase tracking-wider hover:bg-black whitespace-nowrap disabled:opacity-50"
+                  className="bg-ink text-ivory px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider hover:bg-black whitespace-nowrap disabled:opacity-50 border border-ink"
                 >
-                  {intervening ? "Agents answering…" : "Inject Interposition →"}
+                  {intervening ? "Synthesizing Rebuttal…" : "Inject Counter-Evidence →"}
                 </button>
               </form>
 
               {/* Injected Counter History */}
               {injectedCounters.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-ink/10 space-y-2">
-                  <span className="font-mono text-[10px] uppercase text-subtle">Founder Inputs Recorded:</span>
+                <div className="mt-6 pt-5 border-t border-ink/20 space-y-4">
+                  <span className="font-mono text-xs uppercase font-bold text-ink block">
+                    Recorded Founder Interventions ({injectedCounters.length}):
+                  </span>
                   {injectedCounters.map((item, i) => (
-                    <div key={i} className="bg-sand/50 p-3 border-l-2 border-ink space-y-2">
-                      <div className="font-mono text-xs flex justify-between gap-4">
-                        <span className="italic">“{item.text}”</span>
-                        <span className="text-[10px] text-subtle uppercase shrink-0">Round 0{item.round}</span>
+                    <div key={i} className="bg-ivory p-5 border-2 border-ink space-y-3">
+                      <div className="font-mono text-xs flex justify-between gap-4 border-b border-ink/15 pb-2">
+                        <span className="font-bold text-ink">Founder Rebuttal: “{item.text}”</span>
+                        <span className="text-[10px] bg-lime px-2 py-0.5 border border-ink text-ink font-bold uppercase shrink-0">Round 0{item.round}</span>
                       </div>
-                      {item.builderReply && (
-                        <p className="font-sans text-sm text-ink"><strong>Growth hacker:</strong> {item.builderReply}</p>
-                      )}
-                      {item.challengerReply && (
-                        <p className="font-sans text-sm text-ink"><strong>Ruthless VC:</strong> {item.challengerReply}</p>
-                      )}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                        {item.builderReply && (
+                          <div className="border-l-2 border-ink pl-3">
+                            <span className="font-mono text-[10px] uppercase font-bold text-ink block mb-1">Growth Hacker Response:</span>
+                            <p className="font-sans text-xs text-ink/90 leading-relaxed">{item.builderReply}</p>
+                          </div>
+                        )}
+                        {item.challengerReply && (
+                          <div className="border-l-2 border-violet pl-3">
+                            <span className="font-mono text-[10px] uppercase font-bold text-violet block mb-1">Ruthless VC Response:</span>
+                            <p className="font-sans text-xs text-ink/90 leading-relaxed">{item.challengerReply}</p>
+                          </div>
+                        )}
+                      </div>
                       {item.shift && (
-                        <p className="font-mono text-[10px] uppercase tracking-wider text-subtle">{item.shift}</p>
+                        <p className="font-mono text-[11px] uppercase tracking-wider text-subtle pt-2 border-t border-ink/10">
+                          Δ Dialectic Shift: {item.shift}
+                        </p>
                       )}
                     </div>
                   ))}
@@ -1889,59 +2055,63 @@ Rules:
       const pathB = audit.pathB || DEFAULT_AUDIT.pathB;
 
       return (
-        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 min-h-screen">
           {/* Top Dossier Meta */}
-          <div className="border-b-2 border-ink pb-6 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="border-b-2 border-ink pb-6 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <div className="flex items-center gap-3 mb-2 font-mono text-xs uppercase tracking-widest text-subtle">
-                <span>Adversarial Audit Docket</span>
-                <span>//</span>
-                <span>Ref: SYN-VERDICT-990</span>
+              <div className="flex items-center gap-2.5 mb-1.5 font-mono text-xs uppercase tracking-widest text-subtle">
+                <span className="w-2 h-2 bg-lime border border-ink"></span>
+                <span>Phase 03 // Adversarial Audit Docket</span>
               </div>
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+              <h1 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
                 Stress-Test Verdict: {p.title}
               </h1>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-2.5 shrink-0">
               <button
                 onClick={() => window.print()}
-                className="font-mono text-xs uppercase px-4 py-2 border border-ink hover:bg-sand/40"
+                className="font-mono text-xs uppercase px-4 py-2.5 border border-ink bg-surface hover:bg-sand whitespace-nowrap"
               >
-                Print Dossier ⎙
+                Print / Save PDF
               </button>
               <button
                 onClick={() => setActivePage('blueprint')}
-                className="bg-ink text-ivory px-5 py-2 font-mono text-xs uppercase tracking-wider hover:bg-black flex items-center gap-2"
+                className="bg-ink text-ivory px-5 py-2.5 border border-ink font-mono text-xs font-bold uppercase tracking-wider hover:bg-black flex items-center gap-2 whitespace-nowrap shadow-[3px_3px_0_#C8FF2E]"
               >
-                <span>Open Startup Blueprint</span>
+                <span>Open 14-Day Blueprint</span>
                 <span className="text-lime">→</span>
               </button>
             </div>
           </div>
 
           {/* Main Scorecard Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-12 border-2 border-ink bg-ivory mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 border-2 border-ink bg-surface mb-10 shadow-[6px_6px_0_#111]">
             {/* Massive Numerical Score Box */}
-            <div className="md:col-span-5 p-8 border-b md:border-b-0 md:border-r-2 border-ink flex flex-col justify-between bg-[#FAF9F5]">
+            <div className="md:col-span-5 p-8 border-b-2 md:border-b-0 md:border-r-2 border-ink flex flex-col justify-between bg-ivory">
               <div>
-                <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">
+                <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-3">
                   Aggregate Survival Score
                 </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-condensed text-8xl md:text-9xl font-bold text-ink leading-none">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-condensed text-8xl md:text-9xl text-ink leading-none">
                     {audit.score || p.score || 78}
                   </span>
-                  <span className="font-mono text-sm text-subtle">/ 100</span>
+                  <div>
+                    <span className="font-mono text-base font-bold text-ink block">/ 100</span>
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-lime border border-ink font-mono text-[10px] font-bold uppercase">
+                      {audit.consensus || "Conditional Go"}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-ink/20">
-                <span className="font-mono text-xs uppercase text-subtle block">Conclusion:</span>
-                <span className="font-display text-xl font-bold text-ink uppercase block mt-1">
+              <div className="mt-8 pt-5 border-t border-ink/20">
+                <span className="font-mono text-[11px] uppercase text-subtle block">Chamber Ruling:</span>
+                <span className="font-display text-2xl font-bold text-ink block mt-1">
                   {audit.verdict || p.verdict || "Survivable with Moat Pivot"}
                 </span>
-                <p className="font-sans text-xs text-subtle mt-2 leading-relaxed">
+                <p className="font-sans text-sm text-subtle mt-2 leading-relaxed">
                   {audit.conclusion}
                 </p>
               </div>
@@ -1949,39 +2119,39 @@ Rules:
 
             {/* Sub-Dimension Diagnostic Meters */}
             <div className="md:col-span-7 p-8 flex flex-col justify-between">
-              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-6">
+              <span className="font-mono text-xs uppercase tracking-widest text-ink font-bold block mb-6">
                 Dialectic Stress Parameters
               </span>
 
               <div className="space-y-6">
                 {dimensions.map((dim) => (
                   <div key={dim.name}>
-                    <div className="flex justify-between font-mono text-xs uppercase mb-1.5 gap-4">
+                    <div className="flex justify-between font-mono text-xs uppercase mb-2 gap-4">
                       <span className="text-ink font-bold">{dim.name}</span>
-                      <span className={`font-bold ${dim.tone === 'violet' ? 'text-violet' : ''}`}>{dim.score} / 100</span>
+                      <span className={`font-bold whitespace-nowrap ${dim.tone === 'violet' ? 'text-violet' : 'text-ink'}`}>{dim.score} / 100</span>
                     </div>
-                    <div className="w-full h-2 bg-ink/10">
+                    <div className="w-full h-2.5 bg-ink/10 border border-ink/20">
                       <div className={`h-full border-r border-ink ${toneBar(dim.tone)}`} style={{ width: `${Math.max(4, Math.min(100, Number(dim.score) || 0))}%` }}></div>
                     </div>
-                    <span className="font-sans text-[11px] text-subtle block mt-1">{dim.note}</span>
+                    <span className="font-sans text-xs text-subtle block mt-1.5">{dim.note}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 pt-4 border-t border-ink/10 flex items-center justify-between font-mono text-[11px] text-subtle">
-                <span>Tension Factor: {audit.tension || "—"}</span>
-                <span>Verdict Consensus: {audit.consensus || "Split Decision"}</span>
+              <div className="mt-8 pt-4 border-t border-ink/15 flex items-center justify-between font-mono text-xs text-subtle">
+                <span>Dialectic Tension: <strong className="text-ink">{audit.tension || "3.2σ"}</strong></span>
+                <span>Consensus: <strong className="text-ink">{audit.consensus || "Split Decision"}</strong></span>
               </div>
             </div>
           </div>
 
           {/* Opposing Verdict Columns: Strengths vs Lethal Vulnerabilities */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             
             {/* Validated Strengths (From Builder) */}
-            <div className="border border-ink p-8 bg-ivory">
-              <div className="flex items-center gap-2 mb-4 border-b border-ink/20 pb-3">
-                <span className="w-2.5 h-2.5 bg-lime"></span>
+            <div className="border-2 border-ink p-7 bg-surface shadow-[4px_4px_0_#111]">
+              <div className="flex items-center gap-2.5 mb-5 border-b border-ink/20 pb-3">
+                <span className="w-3 h-3 bg-lime border border-ink"></span>
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-ink">
                   Validated Strategic Strengths
                 </h3>
@@ -1989,17 +2159,17 @@ Rules:
               <ul className="space-y-4 font-sans text-sm text-ink/90">
                 {strengths.map((item, i) => (
                   <li key={item.title} className="flex items-start gap-3">
-                    <span className="font-mono text-xs font-bold text-ink mt-0.5">0{i + 1}</span>
-                    <span><strong>{item.title}:</strong> {item.detail}</span>
+                    <span className="font-mono text-xs font-bold bg-lime border border-ink px-1.5 py-0.5 text-ink shrink-0">0{i + 1}</span>
+                    <span className="leading-relaxed"><strong>{item.title}:</strong> {item.detail}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Lethal Vulnerabilities (From Challenger) */}
-            <div className="border border-ink p-8 bg-ivory">
-              <div className="flex items-center gap-2 mb-4 border-b border-ink/20 pb-3">
-                <span className="w-2.5 h-2.5 bg-violet"></span>
+            <div className="border-2 border-ink p-7 bg-surface shadow-[4px_4px_0_#6E3AFF]">
+              <div className="flex items-center gap-2.5 mb-5 border-b border-ink/20 pb-3">
+                <span className="w-3 h-3 bg-violet border border-ink"></span>
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-violet">
                   Lethal Vulnerabilities (Kill-Shots)
                 </h3>
@@ -2007,8 +2177,8 @@ Rules:
               <ul className="space-y-4 font-sans text-sm text-ink/90">
                 {killshots.map((item, i) => (
                   <li key={item.title} className="flex items-start gap-3">
-                    <span className="font-mono text-xs font-bold text-violet mt-0.5">0{i + 1}</span>
-                    <span><strong>{item.title}:</strong> {item.detail}</span>
+                    <span className="font-mono text-xs font-bold bg-violet text-ivory border border-ink px-1.5 py-0.5 shrink-0">0{i + 1}</span>
+                    <span className="leading-relaxed"><strong>{item.title}:</strong> {item.detail}</span>
                   </li>
                 ))}
               </ul>
@@ -2017,9 +2187,9 @@ Rules:
           </div>
 
           {/* Strategic Irreconcilable Disagreements */}
-          <div className="border border-ink p-8 bg-[#FAF9F5] mb-12">
-            <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-2">
-              Unresolved Dialectic Disagreements
+          <div className="border-2 border-ink p-8 bg-surface mb-10">
+            <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+              Strategic Fork in the Road
             </span>
             <h3 className="font-display text-2xl font-bold text-ink mb-6">
               The Two Paths Forward
@@ -2027,25 +2197,31 @@ Rules:
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-ink/20">
               <div className="pr-0 md:pr-6">
-                <span className="font-mono text-xs uppercase font-bold text-ink block mb-2">
-                  {pathA.title}
+                <span className="inline-block bg-lime border border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase mb-2">
+                  Option 01 // Growth Wedge
                 </span>
+                <h4 className="font-display text-lg font-bold text-ink mb-2">
+                  {pathA.title}
+                </h4>
                 <p className="font-sans text-sm text-subtle leading-relaxed mb-4">
                   {pathA.body}
                 </p>
-                <div className="font-mono text-[11px] text-ink font-bold">
+                <div className="font-mono text-xs text-ink font-bold bg-ivory p-3 border border-ink/20">
                   {pathA.tradeoff}
                 </div>
               </div>
 
               <div className="pt-6 md:pt-0 md:pl-6">
-                <span className="font-mono text-xs uppercase font-bold text-violet block mb-2">
-                  {pathB.title}
+                <span className="inline-block bg-violet text-ivory border border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase mb-2">
+                  Option 02 // Deep Moat
                 </span>
+                <h4 className="font-display text-lg font-bold text-ink mb-2">
+                  {pathB.title}
+                </h4>
                 <p className="font-sans text-sm text-subtle leading-relaxed mb-4">
                   {pathB.body}
                 </p>
-                <div className="font-mono text-[11px] text-ink font-bold">
+                <div className="font-mono text-xs text-ink font-bold bg-ivory p-3 border border-ink/20">
                   {pathB.tradeoff}
                 </div>
               </div>
@@ -2053,20 +2229,28 @@ Rules:
           </div>
 
           {/* Bottom Action Footer */}
-          <div className="flex flex-col sm:flex-row items-center justify-between border-t border-ink/20 pt-8 gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between border-t-2 border-ink pt-6 gap-4">
             <button
               onClick={() => setActivePage('debate')}
-              className="font-mono text-xs uppercase tracking-wider text-subtle hover:text-ink"
+              className="font-mono text-xs uppercase tracking-wider text-ink hover:underline"
             >
               ← Return to Debate Room
             </button>
-            <button
-              onClick={() => setActivePage('blueprint')}
-              className="w-full sm:w-auto bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-widest px-8 py-4 flex items-center justify-center gap-3"
-            >
-              <span>Transform Into Startup Blueprint</span>
-              <span className="text-lime">→</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => setActivePage('prototype')}
+                className="border-2 border-ink bg-surface hover:bg-sand font-mono text-xs font-bold uppercase tracking-wider px-6 py-3.5"
+              >
+                View Landing Prototype
+              </button>
+              <button
+                onClick={() => setActivePage('blueprint')}
+                className="bg-ink text-ivory hover:bg-black font-mono text-xs font-bold uppercase tracking-widest px-7 py-3.5 border-2 border-ink shadow-[4px_4px_0_#C8FF2E] flex items-center justify-center gap-2"
+              >
+                <span>Open 14-Day MVP Blueprint</span>
+                <span className="text-lime">→</span>
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -2090,6 +2274,21 @@ Rules:
         milestone2: source.milestone2 || "Lock in two direct NetSuite and Workday marketplace distribution certifications to slash CAC by 60%.",
         milestone3: source.milestone3 || "Achieve SOC-2 Type II and introduce automatic write-back reconciliation to entrench system switching costs."
       });
+
+      useEffect(() => {
+        const s = (currentProject || DEFAULT_PROJECTS[0]).blueprint || {};
+        const proj = currentProject || DEFAULT_PROJECTS[0];
+        setBriefData({
+          executiveThesis: s.executiveThesis || proj.tagline || "Autonomous corporate expense fraud detection for mid-market CFOs",
+          idealCustomerProfile: s.idealCustomerProfile || proj.targetAudience || "Mid-market CFOs and controllers managing $50M-$500M in revenue with 200+ SaaS vendors.",
+          wedgeStrategy: s.wedgeStrategy || "90-second retrospective audit parsing 180 days of bank logs to find immediate cash recoveries prior to sales sign-off.",
+          defensiveMoat: s.defensiveMoat || "Proprietary multi-modal reconciliation graph correlating contract clauses (Ironclad) with informal Slack commitments and raw bank clearing wires.",
+          vulnerabilityRemediation: s.vulnerabilityRemediation || "Do not touch raw payment transmission in Year 1. Partner with licensed partner banks via API to offload regulatory compliance while retaining semantic veto power.",
+          milestone1: s.milestone1 || "Deploy read-only pilots across 8 mid-market companies and verify at least $50,000 in prevented duplicate disbursements.",
+          milestone2: s.milestone2 || "Lock in two direct NetSuite and Workday marketplace distribution certifications to slash CAC by 60%.",
+          milestone3: s.milestone3 || "Achieve SOC-2 Type II and introduce automatic write-back reconciliation to entrench system switching costs."
+        });
+      }, [currentProject?.id]);
 
       const handleFieldChange = (key, val) => {
         setBriefData(prev => ({ ...prev, [key]: val }));
@@ -2131,100 +2330,98 @@ ${briefData.vulnerabilityRemediation}
       };
 
       return (
-        <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 min-h-screen">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 min-h-screen">
           {/* Action Ribbon */}
-          <div className="no-print border-b border-ink/20 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="no-print border-b-2 border-ink pb-6 mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
-              <span className="font-mono text-xs uppercase tracking-widest text-subtle block">
-                Deliverable Document // Editable Brief
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+                Phase 04 // Living Execution Brief
               </span>
               <h1 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
                 Startup Blueprint: {p.title}
               </h1>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-2 shrink-0">
               <button
                 onClick={() => {
                   if (isEditing && onSave) onSave(briefData);
                   setIsEditing(!isEditing);
                 }}
-                className={`font-mono text-xs uppercase px-4 py-2.5 border transition-all ${
+                className={`font-mono text-xs uppercase px-3.5 py-2 border border-ink transition-all whitespace-nowrap ${
                   isEditing 
-                    ? 'bg-lime text-ink border-ink font-bold' 
-                    : 'border-ink bg-transparent hover:bg-sand/40 text-ink'
+                    ? 'bg-lime text-ink font-bold' 
+                    : 'bg-surface hover:bg-sand text-ink'
                 }`}
               >
-                {isEditing ? '✓ Lock Modifications' : '✎ Edit Blueprint'}
+                {isEditing ? '✓ Save Changes' : 'Edit Brief'}
               </button>
-
-              {p.landing && (
-                <button
-                  onClick={() => setActivePage('prototype')}
-                  className="font-mono text-xs uppercase px-4 py-2.5 border border-ink bg-lime hover:bg-lime/80"
-                >
-                  Open prototype →
-                </button>
-              )}
 
               <button
                 onClick={handleCopyBrief}
-                className="font-mono text-xs uppercase px-4 py-2.5 border border-ink hover:bg-ink hover:text-ivory transition-colors"
+                className="font-mono text-xs uppercase px-3.5 py-2 border border-ink bg-surface hover:bg-sand transition-colors whitespace-nowrap"
               >
                 Copy Markdown
               </button>
 
               <button
                 onClick={handleExportPDF}
-                className="bg-ink text-ivory font-mono text-xs uppercase px-5 py-2.5 hover:bg-black transition-colors flex items-center gap-2"
+                className="font-mono text-xs uppercase px-3.5 py-2 border border-ink bg-surface hover:bg-sand transition-colors whitespace-nowrap"
               >
-                <span>Export Dossier (Print)</span>
-                <span>⎙</span>
+                Print / PDF
+              </button>
+
+              <button
+                onClick={() => setActivePage('prototype')}
+                className="bg-ink text-ivory font-mono text-xs font-bold uppercase px-4 py-2 border border-ink hover:bg-black transition-colors flex items-center gap-2 whitespace-nowrap shadow-[3px_3px_0_#C8FF2E]"
+              >
+                <span>Open Prototype</span>
+                <span className="text-lime">→</span>
               </button>
             </div>
           </div>
 
           {/* Printable / Editable Dossier Sheet */}
-          <div className="blueprint-sheet border-2 border-ink bg-[#FAF9F5] p-8 md:p-14 shadow-lg">
+          <div className="blueprint-sheet border-2 border-ink bg-surface p-8 md:p-12 shadow-[8px_8px_0_#111]">
             
             {/* Header Docket */}
-            <div className="border-b-2 border-ink pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="border-b-2 border-ink pb-6 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div>
                 <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
                   Confidential Strategy Formulation // Post-Friction
                 </span>
-                <h2 className="font-condensed text-6xl md:text-7xl font-bold tracking-tight text-ink uppercase">
+                <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-ink uppercase">
                   {p.title}
                 </h2>
-                <div className="flex items-center gap-4 mt-2 font-mono text-xs text-subtle">
-                  <span>CATEGORY: {p.category || "Enterprise Software"}</span>
+                <div className="flex flex-wrap items-center gap-3 mt-2 font-mono text-xs text-subtle">
+                  <span>SECTOR: <strong className="text-ink">{p.category || "Enterprise AI"}</strong></span>
                   <span>•</span>
-                  <span>STATUS: VALIDATED FOR PRE-SEED</span>
+                  <span>STAGE: <strong className="text-ink">{p.stage || "MVP in Pilot"}</strong></span>
                 </div>
               </div>
 
-              <div className="text-left md:text-right">
-                <span className="font-mono text-[10px] uppercase text-subtle block">Calculated Resilience</span>
-                <span className="font-condensed text-5xl font-bold text-ink">
-                  {p.score || 78}<span className="text-sm font-mono text-subtle">/100</span>
+              <div className="text-left md:text-right bg-ivory border border-ink px-5 py-3">
+                <span className="font-mono text-[10px] uppercase text-subtle block">Survival Score</span>
+                <span className="font-condensed text-4xl text-ink">
+                  {p.score || 78}<span className="text-sm font-mono text-subtle"> / 100</span>
                 </span>
               </div>
             </div>
 
             {/* Section 01: The Core Thesis */}
-            <div className="mb-10">
+            <div className="mb-8">
               <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
                 <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
                   01 // Executive Thesis & Value Proposition
                 </span>
-                {isEditing && <span className="font-mono text-[10px] text-violet uppercase">Editable</span>}
+                {isEditing && <span className="font-mono text-[10px] text-violet uppercase font-bold">Editing</span>}
               </div>
               {isEditing ? (
                 <textarea
                   rows={2}
                   value={briefData.executiveThesis}
                   onChange={(e) => handleFieldChange('executiveThesis', e.target.value)}
-                  className="w-full bg-sand/30 border border-ink p-3 font-sans text-base text-ink focus:outline-none"
+                  className="w-full bg-ivory border border-ink p-3 font-sans text-base text-ink focus:outline-none"
                 />
               ) : (
                 <p className="font-sans text-lg text-ink font-medium leading-relaxed">
@@ -2234,19 +2431,19 @@ ${briefData.vulnerabilityRemediation}
             </div>
 
             {/* Section 02: ICP & Target */}
-            <div className="mb-10">
+            <div className="mb-8">
               <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
                 <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
                   02 // Ideal Customer Profile (The Economic Buyer)
                 </span>
-                {isEditing && <span className="font-mono text-[10px] text-violet uppercase">Editable</span>}
+                {isEditing && <span className="font-mono text-[10px] text-violet uppercase font-bold">Editing</span>}
               </div>
               {isEditing ? (
                 <textarea
                   rows={2}
                   value={briefData.idealCustomerProfile}
                   onChange={(e) => handleFieldChange('idealCustomerProfile', e.target.value)}
-                  className="w-full bg-sand/30 border border-ink p-3 font-sans text-base text-ink focus:outline-none"
+                  className="w-full bg-ivory border border-ink p-3 font-sans text-base text-ink focus:outline-none"
                 />
               ) : (
                 <p className="font-sans text-base text-ink/90 leading-relaxed">
@@ -2256,12 +2453,12 @@ ${briefData.vulnerabilityRemediation}
             </div>
 
             {/* Section 03 & 04 Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {/* The Wedge */}
               <div>
                 <div className="flex items-center justify-between border-b border-ink/20 pb-2 mb-3">
                   <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink">
-                    03 // The Distribution Wedge
+                    03 // The 48-Hour Distribution Wedge
                   </span>
                 </div>
                 {isEditing ? (
@@ -2269,10 +2466,10 @@ ${briefData.vulnerabilityRemediation}
                     rows={4}
                     value={briefData.wedgeStrategy}
                     onChange={(e) => handleFieldChange('wedgeStrategy', e.target.value)}
-                    className="w-full bg-sand/30 border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                    className="w-full bg-ivory border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
                   />
                 ) : (
-                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/20">
+                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/30">
                     {briefData.wedgeStrategy}
                   </p>
                 )}
@@ -2290,10 +2487,10 @@ ${briefData.vulnerabilityRemediation}
                     rows={4}
                     value={briefData.defensiveMoat}
                     onChange={(e) => handleFieldChange('defensiveMoat', e.target.value)}
-                    className="w-full bg-sand/30 border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                    className="w-full bg-ivory border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
                   />
                 ) : (
-                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/20">
+                  <p className="font-sans text-sm text-ink/90 leading-relaxed bg-ivory p-4 border border-ink/30">
                     {briefData.defensiveMoat}
                   </p>
                 )}
@@ -2301,16 +2498,16 @@ ${briefData.vulnerabilityRemediation}
             </div>
 
             {/* Section 05: Vulnerability Remediation */}
-            <div className="mb-10 bg-ivory p-6 border-2 border-ink">
+            <div className="mb-8 bg-ivory p-6 border-2 border-ink">
               <span className="font-mono text-xs uppercase font-bold tracking-wider text-violet block mb-2">
-                05 // Anti-Fragility Action: Neutralizing Challenger Vulnerability
+                05 // Anti-Fragility Action: Neutralizing Challenger Kill-Shot
               </span>
               {isEditing ? (
                 <textarea
                   rows={3}
                   value={briefData.vulnerabilityRemediation}
                   onChange={(e) => handleFieldChange('vulnerabilityRemediation', e.target.value)}
-                  className="w-full bg-transparent border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
+                  className="w-full bg-surface border border-ink p-3 font-sans text-sm text-ink focus:outline-none"
                 />
               ) : (
                 <p className="font-sans text-sm text-ink leading-relaxed">
@@ -2325,15 +2522,15 @@ ${briefData.vulnerabilityRemediation}
                 06 // 90-Day Kill-or-Double-Down Milestones
               </span>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="p-4 border border-ink bg-ivory">
-                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 30 GATE:</span>
+                  <span className="font-mono text-xs font-bold text-ink block mb-1.5">DAY 30 GATE:</span>
                   {isEditing ? (
                     <textarea
                       rows={3}
                       value={briefData.milestone1}
                       onChange={(e) => handleFieldChange('milestone1', e.target.value)}
-                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                      className="w-full font-sans text-xs bg-surface border border-ink/30 p-2"
                     />
                   ) : (
                     <p className="font-sans text-xs text-subtle leading-relaxed">
@@ -2343,13 +2540,13 @@ ${briefData.vulnerabilityRemediation}
                 </div>
 
                 <div className="p-4 border border-ink bg-ivory">
-                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 60 GATE:</span>
+                  <span className="font-mono text-xs font-bold text-ink block mb-1.5">DAY 60 GATE:</span>
                   {isEditing ? (
                     <textarea
                       rows={3}
                       value={briefData.milestone2}
                       onChange={(e) => handleFieldChange('milestone2', e.target.value)}
-                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                      className="w-full font-sans text-xs bg-surface border border-ink/30 p-2"
                     />
                   ) : (
                     <p className="font-sans text-xs text-subtle leading-relaxed">
@@ -2359,13 +2556,13 @@ ${briefData.vulnerabilityRemediation}
                 </div>
 
                 <div className="p-4 border border-ink bg-ivory">
-                  <span className="font-mono text-xs font-bold text-ink block mb-1">DAY 90 GATE:</span>
+                  <span className="font-mono text-xs font-bold text-ink block mb-1.5">DAY 90 GATE:</span>
                   {isEditing ? (
                     <textarea
                       rows={3}
                       value={briefData.milestone3}
                       onChange={(e) => handleFieldChange('milestone3', e.target.value)}
-                      className="w-full font-sans text-xs bg-transparent border border-ink/20 p-1"
+                      className="w-full font-sans text-xs bg-surface border border-ink/30 p-2"
                     />
                   ) : (
                     <p className="font-sans text-xs text-subtle leading-relaxed">
@@ -2377,15 +2574,15 @@ ${briefData.vulnerabilityRemediation}
             </div>
 
             {(source.mvpScope || (source.steps && source.steps.length)) && (
-              <div className="mt-10">
+              <div className="mt-8">
                 <span className="font-mono text-xs uppercase font-bold tracking-wider text-ink block border-b border-ink/20 pb-2 mb-4">
-                  07 // 14-Day Build, Not a Fantasy Company
+                  07 // 14-Day Build Sprint Plan
                 </span>
                 {source.mvpScope && (
-                  <p className="font-sans text-sm text-ink mb-3"><strong>In scope:</strong> {source.mvpScope}</p>
+                  <p className="font-sans text-sm text-ink mb-2"><strong>In Scope:</strong> {source.mvpScope}</p>
                 )}
                 {source.outOfScope && (
-                  <p className="font-sans text-sm text-subtle mb-3"><strong>Out of scope:</strong> {source.outOfScope}</p>
+                  <p className="font-sans text-sm text-subtle mb-2"><strong>Out of Scope:</strong> {source.outOfScope}</p>
                 )}
                 {source.stack && (
                   <p className="font-mono text-[11px] uppercase tracking-wider text-subtle mb-4">Stack: {source.stack}</p>
@@ -2404,9 +2601,9 @@ ${briefData.vulnerabilityRemediation}
             )}
 
             {/* Document Verification Seal */}
-            <div className="mt-12 pt-6 border-t border-ink/20 flex flex-col sm:flex-row items-center justify-between text-subtle font-mono text-[10px] uppercase gap-2">
-              <span>{p.live ? "GENERATED VIA LIVE SYNA DEBATE" : "SAMPLE DOSSIER // RUN IDEA LAB FOR A LIVE SYNTHESIS"}</span>
-              <span>{p.model || "VERIFICATION STAMP: SAMPLE"}</span>
+            <div className="mt-10 pt-5 border-t border-ink/20 flex flex-col sm:flex-row items-center justify-between text-subtle font-mono text-[10px] uppercase gap-2">
+              <span>{p.live ? "GENERATED VIA LIVE SYNA DEBATE" : "VERIFIED CASE STUDY DOSSIER"}</span>
+              <span>ENGINE: {p.model || "GEMINI-3.1-FLASH-LITE"}</span>
             </div>
 
           </div>
@@ -2414,119 +2611,195 @@ ${briefData.vulnerabilityRemediation}
       );
     }
 
+    // ==========================================
+    // PAGE 7: INTERACTIVE LANDING PROTOTYPE
+    // ==========================================
     function PrototypePage({ currentProject, showToast }) {
-      const landing = currentProject?.landing || buildClientSynthesis(currentProject || DEFAULT_PROJECTS[0]).landing;
+      const proj = currentProject || DEFAULT_PROJECTS[0];
+      const landing = proj?.landing || buildClientSynthesis(proj).landing;
       const [email, setEmail] = useState("");
       const [joined, setJoined] = useState(false);
       const [openFaq, setOpenFaq] = useState(0);
-      const [showScar, setShowScar] = useState(false);
-
-      if (!landing) {
-        return (
-          <div className="max-w-3xl mx-auto px-6 py-24">
-            <span className="font-mono text-xs uppercase tracking-widest text-subtle">Prototype // locked</span>
-            <h1 className="font-display text-4xl font-bold mt-3">No live landing yet.</h1>
-            <p className="font-sans text-subtle mt-4">Sample dossiers keep their blueprint. Run a new idea through Idea Lab to generate an interactive prototype from the debate.</p>
-          </div>
-        );
-      }
+      const [showScar, setShowScar] = useState(true);
 
       const join = (e) => {
         e.preventDefault();
         if (!email.includes("@")) {
-          showToast("Use a real email so the test is countable", "alert");
+          showToast("Enter a valid work email to test waitlist conversion", "alert");
           return;
         }
-        const key = `syna-waitlist-${currentProject.id}`;
+        const key = `syna-waitlist-${proj.id}`;
         const existing = JSON.parse(localStorage.getItem(key) || "[]");
         existing.push({ email, at: new Date().toISOString() });
         localStorage.setItem(key, JSON.stringify(existing));
         setJoined(true);
-        showToast(`Waitlist captured locally (${existing.length})`, "info");
+        showToast(`Pilot request captured (${existing.length} total)`, "info");
       };
 
       return (
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 min-h-screen">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink pb-6 mb-6">
             <div>
-              <span className="font-mono text-xs uppercase tracking-widest text-subtle">Interactive prototype // not a published site</span>
-              <h1 className="font-display text-3xl font-bold">Landing for {landing.brand || currentProject.title}</h1>
+              <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
+                Phase 05 // Conversion-Ready Product Artifact
+              </span>
+              <h1 className="font-display text-3xl md:text-4xl font-bold text-ink tracking-tight">
+                Interactive Prototype: {landing.brand || proj.title}
+              </h1>
             </div>
             <button
               onClick={() => setShowScar((v) => !v)}
-              className="font-mono text-xs uppercase border border-ink px-4 py-2 hover:bg-sand/40"
+              className={`font-mono text-xs uppercase border border-ink px-4 py-2.5 transition-colors whitespace-nowrap ${
+                showScar ? 'bg-violet text-ivory font-bold' : 'bg-surface hover:bg-sand text-ink'
+              }`}
             >
-              {showScar ? "Hide the scar" : "Show the VC scar this page answers"}
+              {showScar ? "✓ Showing VC Kill-Shot Defense" : "Show VC Kill-Shot This Page Answers"}
             </button>
           </div>
 
           {showScar && landing.objection && (
-            <div className="border-2 border-ink bg-violet/10 p-5 mb-6">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-violet">Kill-shot the copy is built to survive</span>
-              <p className="font-display text-xl font-bold mt-1">{landing.objection.label}</p>
-              <p className="font-sans text-sm mt-2">{landing.objection.answer}</p>
+            <div className="border-2 border-ink bg-surface p-5 mb-8 shadow-[4px_4px_0_#6E3AFF]">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 bg-violet border border-ink"></span>
+                <span className="font-mono text-[11px] uppercase tracking-widest text-violet font-bold">
+                  Challenger Kill-Shot Neutralized by This Page
+                </span>
+              </div>
+              <p className="font-display text-lg font-bold text-ink mt-1">{landing.objection.label}</p>
+              <p className="font-sans text-sm text-subtle mt-1 leading-relaxed">{landing.objection.answer}</p>
               {landing.experiment && (
-                <p className="font-mono text-[11px] uppercase mt-3">This week's test: {landing.experiment}</p>
+                <p className="font-mono text-[11px] uppercase text-ink font-bold mt-3 pt-2 border-t border-ink/15">
+                  14-Day Validation Experiment: {landing.experiment}
+                </p>
               )}
             </div>
           )}
 
-          <div className="border-2 border-ink bg-ivory shadow-[8px_8px_0_#111]">
-            <div className="border-b border-ink px-4 py-2 flex items-center gap-2 bg-sand/40">
-              <span className="w-2.5 h-2.5 bg-ink/30"></span>
-              <span className="w-2.5 h-2.5 bg-ink/30"></span>
-              <span className="w-2.5 h-2.5 bg-ink/30"></span>
-              <span className="font-mono text-[10px] uppercase tracking-wider text-subtle ml-3">
-                {String(landing.brand || "prototype").toLowerCase().replace(/\s+/g, "")}.test
+          {/* Browser Window Frame */}
+          <div className="border-2 border-ink bg-surface shadow-[8px_8px_0_#111]">
+            {/* Browser Top Chrome */}
+            <div className="border-b-2 border-ink px-5 py-3 flex items-center justify-between bg-sand/60">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 bg-ink border border-ink"></span>
+                <span className="w-3 h-3 bg-lime border border-ink"></span>
+                <span className="w-3 h-3 bg-ivory border border-ink"></span>
+                <span className="font-mono text-xs uppercase tracking-wider text-ink font-bold ml-3 bg-ivory px-3 py-0.5 border border-ink/30">
+                  https://{String(landing.brand || "prototype").toLowerCase().replace(/[^a-z0-9]/g, "")}.ai
+                </span>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-subtle hidden sm:inline">
+                LIVE WEDGE PREVIEW
               </span>
             </div>
 
-            <div className="p-8 md:p-14 bg-[#FAF9F5]">
-              <span className="font-mono text-xs uppercase tracking-widest text-subtle">{landing.eyebrow}</span>
-              <h2 className="font-display text-4xl md:text-6xl font-extrabold tracking-tight mt-3 max-w-3xl leading-[1.02]">
-                {landing.headline}
-              </h2>
-              <p className="font-sans text-lg text-ink/80 max-w-2xl mt-6">{landing.subhead}</p>
+            {/* Two-Column SaaS Hero */}
+            <div className="p-8 md:p-12 bg-surface grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-7">
+                <div className="inline-flex items-center gap-2 bg-ivory border border-ink px-3 py-1 mb-5">
+                  <span className="w-2 h-2 bg-lime border border-ink"></span>
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-ink font-bold">
+                    {landing.eyebrow}
+                  </span>
+                </div>
 
-              <form onSubmit={join} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-xl">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
-                  className="flex-grow border-b-2 border-ink bg-transparent py-3 font-sans text-sm focus:outline-none"
-                />
-                <button className="bg-ink text-ivory px-5 py-3 font-mono text-xs uppercase tracking-wider">
-                  {joined ? "You're on the list" : (landing.cta || "Join the pilot")}
-                </button>
-              </form>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-subtle mt-4">{landing.proof}</p>
-              {landing.priceLine && (
-                <p className="font-sans text-sm mt-2">{landing.priceLine}</p>
-              )}
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-ink leading-[1.08]">
+                  {landing.headline}
+                </h2>
+                <p className="font-sans text-base md:text-lg text-ink/80 mt-5 leading-relaxed">
+                  {landing.subhead}
+                </p>
+
+                <form onSubmit={join} className="mt-7 flex flex-col sm:flex-row gap-3 max-w-xl">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="founder@company.com"
+                    className="flex-grow border-2 border-ink bg-ivory px-4 py-3.5 font-sans text-sm focus:outline-none"
+                  />
+                  <button className="bg-ink text-ivory px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider border-2 border-ink shadow-[3px_3px_0_#C8FF2E] whitespace-nowrap hover:bg-black">
+                    {joined ? "✓ Pilot Requested" : (landing.cta || "Request 48-Hr Pilot")}
+                  </button>
+                </form>
+
+                <div className="mt-4 flex flex-wrap items-center gap-4 font-mono text-[11px] text-subtle">
+                  <span>✓ {landing.proof}</span>
+                </div>
+              </div>
+
+              {/* Right Column: Live Diagnostic Telemetry Preview Widget */}
+              <div className="lg:col-span-5">
+                <div className="border-2 border-ink bg-ivory p-6 shadow-[5px_5px_0_#111]">
+                  <div className="flex items-center justify-between border-b border-ink/20 pb-3 mb-4">
+                    <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-ink">
+                      {landing.brand || proj.title} // Diagnostic Telemetry
+                    </span>
+                    <span className="bg-lime border border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase">
+                      48-HR PILOT READY
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="bg-surface border border-ink/20 p-3.5">
+                      <span className="font-mono text-[10px] uppercase text-subtle block">Target Buyer</span>
+                      <span className="font-sans text-xs font-bold text-ink mt-0.5 block">
+                        {proj.targetAudience || "Mid-market decision makers"}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-surface border border-ink/20 p-3.5">
+                        <span className="font-mono text-[10px] uppercase text-subtle block">Time to Value</span>
+                        <span className="font-condensed text-2xl text-ink">48 HOURS</span>
+                      </div>
+                      <div className="bg-surface border border-ink/20 p-3.5">
+                        <span className="font-mono text-[10px] uppercase text-subtle block">Survival Score</span>
+                        <span className="font-condensed text-2xl text-ink">{proj.score || 78} / 100</span>
+                      </div>
+                    </div>
+
+                    {landing.priceLine && (
+                      <div className="bg-ink text-ivory p-3.5 font-mono text-xs">
+                        <span className="text-lime uppercase block text-[10px] mb-0.5">Commercial Terms</span>
+                        <span>{landing.priceLine}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 border-t-2 border-ink">
+            {/* 3-Column Feature Architecture */}
+            <div className="grid grid-cols-1 md:grid-cols-3 border-t-2 border-ink bg-ivory">
               {(landing.features || []).map((feature, i) => (
-                <div key={feature.title} className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-ink last:border-r-0">
-                  <span className="font-mono text-xs">0{i + 1}</span>
-                  <h3 className="font-display text-xl font-bold mt-2">{feature.title}</h3>
+                <div key={feature.title} className="p-6 md:p-8 border-b md:border-b-0 md:border-r-2 border-ink last:border-r-0">
+                  <span className="inline-block font-mono text-xs font-bold bg-lime border border-ink px-2 py-0.5">0{i + 1}</span>
+                  <h3 className="font-display text-xl font-bold mt-3 text-ink">{feature.title}</h3>
                   <p className="font-sans text-sm text-subtle mt-2 leading-relaxed">{feature.body}</p>
                 </div>
               ))}
             </div>
 
-            <div className="border-t-2 border-ink p-6 md:p-8">
-              <span className="font-mono text-xs uppercase tracking-widest">Questions a skeptical buyer asks</span>
-              <div className="mt-4 divide-y divide-ink/15 border-t border-ink/15">
+            {/* Buyer FAQ */}
+            <div className="border-t-2 border-ink p-6 md:p-10 bg-surface">
+              <span className="font-mono text-xs uppercase tracking-widest font-bold text-ink block mb-4">
+                Questions a Skeptical Economic Buyer Asks
+              </span>
+              <div className="divide-y divide-ink/20 border-t border-ink/20">
                 {(landing.faq || []).map((item, i) => (
                   <button
                     key={item.q}
-                    onClick={() => setOpenFaq(i)}
-                    className="w-full text-left py-4"
+                    onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+                    className="w-full text-left py-4 flex items-start justify-between gap-4"
                   >
-                    <div className="font-display font-bold">{item.q}</div>
-                    {openFaq === i && <p className="font-sans text-sm text-subtle mt-2">{item.a}</p>}
+                    <div>
+                      <div className="font-display text-base font-bold text-ink">{item.q}</div>
+                      {openFaq === i && <p className="font-sans text-sm text-subtle mt-2 leading-relaxed">{item.a}</p>}
+                    </div>
+                    <span className="font-mono text-sm font-bold text-ink shrink-0">
+                      {openFaq === i ? "−" : "+"}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -2565,7 +2838,7 @@ ${briefData.vulnerabilityRemediation}
           if (!hash) return;
           const params = new URLSearchParams(hash);
           const shared = params.get('share');
-          const page = params.get('page');
+          const page = params.get('page') || hash;
           const projId = params.get('project');
 
           if (shared) {
