@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYNA — Adversarial AI Idea Stress Lab | Pitch Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#F4F1EA',
+            surface: '#FAF9F5',
+            sand: '#E8E3D8',
+            ink: '#111111',
+            subtle: '#52504C',
+            lime: '#C8FF2E',
+            violet: '#6E3AFF',
+            crimson: '#E62E2D'
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', 'sans-serif'],
+            condensed: ['"Anton"', 'sans-serif'],
+            sans: ['"Inter"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      background-color: #181818;
+      color: #111111;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .font-condensed {
+      letter-spacing: 0.03em;
+    }
+    .slide-deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      padding: 88px 24px 64px;
+    }
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background-color: #F4F1EA;
+      border: 3px solid #111111;
+      box-shadow: 12px 12px 0 #000000;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 52px 30px;
+      flex-shrink: 0;
+    }
+    body.single-slide-mode .slide-deck {
+      padding: 76px 16px 24px;
+      min-height: 100vh;
+      justify-content: center;
+    }
+    body.single-slide-mode .slide {
+      display: none;
+    }
+    body.single-slide-mode .slide.active-slide {
+      display: flex;
+    }
+
+    @page {
+      size: 1280px 720px;
+      margin: 0;
+    }
+    @media print {
+      html, body {
+        background: #F4F1EA !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 1280px !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide-deck {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+      }
+      .slide {
+        display: flex !important;
+        width: 1280px !important;
+        height: 720px !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .slide:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Presentation Control Bar (Hidden in PDF Print) -->
+  <header class="no-print fixed top-0 left-0 right-0 z-50 bg-ivory border-b-2 border-ink px-6 h-16 flex items-center justify-between shadow-md">
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="flex items-center gap-2 text-ink hover:opacity-80 transition-opacity">
+        <span class="font-condensed text-2xl tracking-wider">SYNA</span>
+        <span class="w-2.5 h-2.5 bg-lime border border-ink"></span>
+      </a>
+      <span class="font-mono text-xs uppercase tracking-widest text-subtle border-l border-ink/20 pl-4">
+        Official Pitch Deck // 10 Slides (16:9)
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setMode('scroll')" id="btn-scroll" class="font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-ink text-ivory font-bold">
+        All Slides (Scroll)
+      </button>
+      <button onclick="setMode('single')" id="btn-single" class="font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-surface text-ink hover:bg-sand">
+        Slide-by-Slide
+      </button>
+      <div id="slide-nav-controls" class="hidden items-center gap-1.5 ml-2 pl-2 border-l border-ink/20">
+        <button onclick="prevSlide()" class="font-mono text-xs px-2.5 py-1.5 border border-ink bg-surface hover:bg-lime font-bold">←</button>
+        <span id="slide-indicator" class="font-mono text-xs font-bold px-2">01 / 10</span>
+        <button onclick="nextSlide()" class="font-mono text-xs px-2.5 py-1.5 border border-ink bg-surface hover:bg-lime font-bold">→</button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <a href="SYNA-Pitch-Deck.pdf" download class="font-mono text-xs font-bold uppercase px-4 py-2 border-2 border-ink bg-lime text-ink hover:bg-lime/80 shadow-[3px_3px_0_#111] flex items-center gap-2">
+        <span>↓ Download PDF</span>
+      </a>
+      <button onclick="window.print()" class="font-mono text-xs uppercase px-3.5 py-2 border border-ink bg-surface hover:bg-sand text-ink">
+        Print Deck
+      </button>
+      <a href="index.html" class="font-mono text-xs font-bold uppercase px-4 py-2 border border-ink bg-ink text-ivory hover:bg-black">
+        Open Live App →
+      </a>
+    </div>
+  </header>
+
+  <main class="slide-deck">
+
+    <!-- ==========================================
+         SLIDE 01: COVER / TITLE SLIDE
+         ========================================== -->
+    <section class="slide active-slide">
+      <!-- Top Header Strip -->
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-condensed text-2xl text-ink">SYNA</span>
+          <span class="w-2.5 h-2.5 bg-lime border border-ink"></span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle border-l border-ink/30 pl-3">
+            Adversarial AI Idea Stress Lab
+          </span>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-xs uppercase">
+          <span class="bg-lime px-2.5 py-0.5 border border-ink font-bold">MVP Live</span>
+          <span class="text-subtle">01 // 10</span>
+        </div>
+      </div>
+
+      <!-- Main Hero Content -->
+      <div class="grid grid-cols-12 gap-8 items-center my-auto py-2">
+        <div class="col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 border-2 border-ink bg-surface px-3.5 py-1 shadow-[3px_3px_0_#111]">
+            <span class="w-2 h-2 bg-lime border border-ink"></span>
+            <span class="font-mono text-xs font-bold uppercase tracking-widest">A Better Startup Starts With Friction</span>
+          </div>
+
+          <h1 class="font-display text-6xl font-bold tracking-tight leading-[1.03] text-ink">
+            Good ideas don’t need praise.<br/>
+            <span class="bg-lime px-2 border-2 border-ink inline-block mt-1.5">They need pressure.</span>
+          </h1>
+
+          <p class="font-sans text-lg text-ink/85 leading-relaxed max-w-xl">
+            SYNA puts any startup thesis between an opportunistic <strong>Growth Hacker</strong> and a <strong>Ruthless VC</strong> across 4 adversarial rounds—delivering an un-inflated survival score, a 14-day execution blueprint, and a live landing-page prototype in 60 seconds.
+          </p>
+
+          <div class="grid grid-cols-3 gap-4 pt-3 border-t-2 border-ink/20 max-w-xl">
+            <div>
+              <div class="font-condensed text-3xl text-ink">04 ROUNDS</div>
+              <div class="font-mono text-xs uppercase text-subtle">Wedge, Moat, CAC & Risk</div>
+            </div>
+            <div class="border-l-2 border-ink/20 pl-4">
+              <div class="font-condensed text-3xl text-ink">60 SECONDS</div>
+              <div class="font-mono text-xs uppercase text-subtle">Napkin to MVP Plan</div>
+            </div>
+            <div class="border-l-2 border-ink/20 pl-4">
+              <div class="font-condensed text-3xl text-ink">100% LIVE</div>
+              <div class="font-mono text-xs uppercase text-subtle">Zero API Keys Needed</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Dossier Graphic -->
+        <div class="col-span-5">
+          <div class="border-2 border-ink bg-surface p-6 shadow-[8px_8px_0_#111]">
+            <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-4 font-mono text-xs uppercase text-subtle">
+              <span>Chamber Dialectic // Engine V3.8</span>
+              <span class="flex items-center gap-1.5 text-ink font-bold">
+                <span class="w-2 h-2 bg-lime border border-ink"></span> Active
+              </span>
+            </div>
+
+            <div class="border-2 border-ink bg-ivory p-4 mb-3">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink">Agent 01 // Advocate</span>
+                <span class="font-mono text-xs text-subtle">Conviction: 84%</span>
+              </div>
+              <div class="flex items-baseline justify-between gap-3 mt-2">
+                <span class="font-condensed text-5xl text-ink leading-none">BUILD</span>
+                <div class="text-right">
+                  <div class="font-display text-sm font-bold text-ink">Growth Hacker</div>
+                  <p class="font-sans text-xs text-subtle">Finds the 48-hour wedge, distribution hack & rapid ROI hook.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center my-2">
+              <span class="font-mono text-xs font-bold uppercase tracking-widest px-3 py-1 bg-ink text-ivory">
+                VS // ADVERSARIAL FRICTION
+              </span>
+            </div>
+
+            <div class="border-2 border-ink bg-ivory p-4 mt-3">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-violet text-ivory border border-ink">Agent 02 // Skeptic</span>
+                <span class="font-mono text-xs text-subtle">Skepticism: MAX</span>
+              </div>
+              <div class="flex items-baseline justify-between gap-3 mt-2">
+                <div>
+                  <div class="font-display text-sm font-bold text-violet">Ruthless VC</div>
+                  <p class="font-sans text-xs text-subtle">Exposes incumbent bundling, unit-econ traps & fatal risk.</p>
+                </div>
+                <span class="font-condensed text-5xl text-ink leading-none">BREAK</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-2.5 border-t border-ink/20 flex items-center justify-between font-mono text-xs uppercase text-subtle whitespace-nowrap">
+              <span>Output: Verdict + 14D Plan</span>
+              <span class="text-ink font-bold">5-Stage Pipeline →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Footer Strip -->
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Adversarial AI Startup Validation Chamber</span>
+        <span>Live URL: https://1-qube.github.io/innovative-ai/</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 02: THE PROBLEM (THE ECHO CHAMBER)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory">01 // The Problem</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Why Founders Build Into Brick Walls</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">02 // 10</span>
+      </div>
+
+      <div class="my-auto py-1 space-y-4">
+        <div class="flex items-end justify-between gap-8">
+          <div>
+            <h2 class="font-display text-4xl font-bold text-ink tracking-tight leading-tight">
+              Standard AI chatbots are trained to be polite.<br/>
+              <span class="text-violet">Markets and VCs are trained to be ruthless.</span>
+            </h2>
+          </div>
+          <div class="border-2 border-ink bg-lime px-4 py-2 shadow-[4px_4px_0_#111] shrink-0">
+            <div class="font-condensed text-3xl text-ink leading-none">42% OF STARTUPS</div>
+            <div class="font-mono text-xs uppercase font-bold text-ink mt-0.5">Die from building a feature, not a company</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+          <!-- Left: Polite Chatbot Echo Chamber -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-3">
+                <span class="font-mono text-xs font-bold uppercase text-crimson">✗ The "Polite AI" Echo Chamber</span>
+                <span class="font-mono text-xs uppercase px-2 py-0.5 bg-sand border border-ink/30">Default Chatbots</span>
+              </div>
+              <p class="font-sans text-xs text-subtle mb-3">
+                When a founder pitches a weak idea to a generic LLM, RLHF politeness produces sycophantic validation instead of structural pushback:
+              </p>
+              <div class="space-y-2.5 font-sans text-xs">
+                <div class="p-2.5 bg-ivory border border-ink/30">
+                  <strong class="font-mono text-xs uppercase block text-crimson">1. Sycophantic Praise ("Great idea!")</strong>
+                  Validates fatally flawed unit economics and ignores 12-month enterprise security stalls.
+                </div>
+                <div class="p-2.5 bg-ivory border border-ink/30">
+                  <strong class="font-mono text-xs uppercase block text-crimson">2. Blind to Incumbent Bundling</strong>
+                  Fails to name the exact incumbent (Brex, Ramp, Coupa, Epic) shipping the same feature for free next quarter.
+                </div>
+                <div class="p-2.5 bg-ivory border border-ink/30">
+                  <strong class="font-mono text-xs uppercase block text-crimson">3. Generic Boilerplate Advice</strong>
+                  Outputs vague textbook SWOT lists instead of a 48-hour wedge or falsifiable 14-day experiment.
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-ink/20 font-mono text-xs uppercase text-crimson font-bold">
+              Result: 6 months wasted building a commodity wrapper.
+            </div>
+          </div>
+
+          <!-- Right: SYNA Adversarial Chamber -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_#6E3AFF] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-3">
+                <span class="font-mono text-xs font-bold uppercase text-ink">✓ The SYNA Adversarial Chamber</span>
+                <span class="font-mono text-xs uppercase px-2 py-0.5 bg-lime border border-ink font-bold">Structured Friction</span>
+              </div>
+              <p class="font-sans text-xs text-subtle mb-3">
+                SYNA replaces polite agreement with a structured 4-round adversarial clash between two opposing incentives:
+              </p>
+              <div class="space-y-2.5 font-sans text-xs">
+                <div class="p-2.5 bg-ivory border-2 border-ink">
+                  <strong class="font-mono text-xs uppercase block text-ink">1. Specific Incumbent & Margin Kill-Shots</strong>
+                  Names the exact system of record, procurement stall, and liability trap that could kill the company.
+                </div>
+                <div class="p-2.5 bg-ivory border-2 border-ink">
+                  <strong class="font-mono text-xs uppercase block text-ink">2. Narrow 48-Hour Distribution Wedge</strong>
+                  Forces the Growth Hacker to find a zero-permission audit or bottom-up hook that proves ROI in 48 hours.
+                </div>
+                <div class="p-2.5 bg-ivory border-2 border-ink">
+                  <strong class="font-mono text-xs uppercase block text-ink">3. Buildable 14-Day Output + Live Prototype</strong>
+                  Synthesizes the clash into a scored audit, 30/60/90-day gates, and a conversion-ready landing page.
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-ink/20 font-mono text-xs uppercase text-ink font-bold">
+              Result: Battle-tested thesis before writing a single line of code.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Problem Statement</span>
+        <span>Replacing Sycophantic AI With Adversarial Truth</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 03: THE SOLUTION & 4-ROUND DIALECTIC
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink text-ink">02 // The Solution</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">4-Round Multi-Agent Dialectic + Founder Intervention</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">03 // 10</span>
+      </div>
+
+      <div class="my-auto py-3 space-y-5">
+        <div>
+          <h2 class="font-display text-4xl font-bold text-ink tracking-tight">
+            Two specialized agents clash across 4 rounds. You can intervene live.
+          </h2>
+          <p class="font-sans text-base text-subtle mt-1">
+            Every claim is anchored to the founder’s specific buyer, pricing model, and technical wedge—never recycled generic SaaS advice.
+          </p>
+        </div>
+
+        <!-- 4 Rounds Grid -->
+        <div class="grid grid-cols-4 gap-4">
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-condensed text-3xl text-ink">ROUND 01</span>
+              <span class="font-mono text-xs uppercase px-2 py-0.5 bg-lime border border-ink font-bold">Wedge</span>
+            </div>
+            <h3 class="font-display text-base font-bold text-ink mb-1.5">Market Wedge & Willingness to Pay</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed">
+              Can the founder prove dollar ROI in 48 hours without an IT overhaul, or will buyers treat this as a vitamin?
+            </p>
+          </div>
+
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-condensed text-3xl text-ink">ROUND 02</span>
+              <span class="font-mono text-xs uppercase px-2 py-0.5 bg-violet text-ivory border border-ink font-bold">Moat</span>
+            </div>
+            <h3 class="font-display text-base font-bold text-ink mb-1.5">Defensibility & Feature vs. Company</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed">
+              Why can’t the incumbent ERP/card rail bundle a 70%-as-good clone for free next quarter? Where is the data moat?
+            </p>
+          </div>
+
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-condensed text-3xl text-ink">ROUND 03</span>
+              <span class="font-mono text-xs uppercase px-2 py-0.5 bg-lime border border-ink font-bold">Unit Econ</span>
+            </div>
+            <h3 class="font-display text-base font-bold text-ink mb-1.5">Unit Economics & Go-To-Market</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed">
+              Does bottom-up distribution work, or do SOC-2 reviews and bespoke onboarding turn SaaS margins into consulting?
+            </p>
+          </div>
+
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-condensed text-3xl text-ink">ROUND 04</span>
+              <span class="font-mono text-xs uppercase px-2 py-0.5 bg-ink text-ivory border border-ink font-bold">Survival</span>
+            </div>
+            <h3 class="font-display text-base font-bold text-ink mb-1.5">Existential Risk & The Saving Bet</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed">
+              What single false-positive or regulatory liability kills the company, and what architectural bet neutralizes it?
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Interactive Loop Banner -->
+        <div class="border-2 border-ink bg-ink text-ivory p-5 shadow-[6px_6px_0_#C8FF2E] grid grid-cols-12 gap-6 items-center">
+          <div class="col-span-4 border-r border-ivory/20 pr-4">
+            <span class="font-mono text-xs uppercase tracking-widest text-lime block mb-1">Interactive Loop</span>
+            <h4 class="font-display text-xl font-bold">Live Founder Intervention Console</h4>
+          </div>
+          <div class="col-span-8 font-sans text-sm text-ivory/90 leading-relaxed">
+            Founders aren’t passive spectators. At any point during the debate, the user can inject counter-evidence (e.g., <em>"We already signed 6 pilot customers on read-only logs"</em> or <em>"Pricing is 15% of verified savings"</em>). Both AI agents immediately respond in a new round and <strong>recalculate the Survival Score</strong> (+ or − delta).
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Adversarial Mechanics</span>
+        <span>4 Structured Rounds + Real-Time Founder Pushback</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 04: PRODUCT WALKTHROUGH I (IDEA LAB & DEBATE)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory">03 // Product Walkthrough I</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Stage 01: Idea Lab & Stage 02: Adversarial Debate Room</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">04 // 10</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto py-2">
+        <!-- Left Card: Idea Lab Screenshot -->
+        <div class="border-2 border-ink bg-surface p-4 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="font-mono text-xs font-bold uppercase px-2.5 py-0.5 bg-lime border border-ink">01 // Idea Stress Chamber</span>
+              <span class="font-mono text-xs text-subtle">8-Point Dossier Intake</span>
+            </div>
+            <div class="border-2 border-ink overflow-hidden bg-ivory mb-3">
+              <img src="assets/ui_idealab.png" alt="SYNA Idea Lab UI" class="w-full h-[290px] object-cover object-top" />
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Surgical Thesis Calibration + 1-Click Presets</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Captures working title, maturity stage, elevator thesis, economic buyer, bleeding pain point, technical wedge, revenue model, and the founder’s secret fear—plus 1-click presets (<em>Supply Chain AI</em>, <em>Fintech Chargebacks</em>, <em>Clinical Coding</em>) for instant testing.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Card: Debate Room Screenshot -->
+        <div class="border-2 border-ink bg-surface p-4 shadow-[6px_6px_0_#6E3AFF] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="font-mono text-xs font-bold uppercase px-2.5 py-0.5 bg-violet text-ivory border border-ink">02 // Live Debate Room</span>
+              <span class="font-mono text-xs text-subtle">Growth Hacker vs. Ruthless VC</span>
+            </div>
+            <div class="border-2 border-ink overflow-hidden bg-ivory mb-3">
+              <img src="assets/ui_debate.png" alt="SYNA Debate Room UI" class="w-full h-[290px] object-cover object-top" />
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Head-to-Head Dialectic + Rebuttal Injection</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Side-by-side adversarial cards highlight the Growth Hacker’s <em>Primary Lever</em> & <em>Time to Value</em> against the Ruthless VC’s <em>Fatal Risk</em> & <em>Sales Friction</em>, with round-by-round navigation, auto-play mode, and live mid-debate founder intervention.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Live UI Walkthrough (Stages 01 & 02)</span>
+        <span>Polished Neo-Brutalist Editorial Interface</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 05: PRODUCT WALKTHROUGH II (VERDICT & BLUEPRINT)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory">04 // Product Walkthrough II</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Stage 03: Audit Verdict & Stage 04: 14-Day Execution Blueprint</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">05 // 10</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 my-auto py-2">
+        <!-- Left Card: Verdict Screenshot -->
+        <div class="border-2 border-ink bg-surface p-4 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="font-mono text-xs font-bold uppercase px-2.5 py-0.5 bg-lime border border-ink">03 // Adversarial Audit Verdict</span>
+              <span class="font-mono text-xs text-subtle">Survival Score + Strategic Fork</span>
+            </div>
+            <div class="border-2 border-ink overflow-hidden bg-ivory mb-3">
+              <img src="assets/ui_verdict.png" alt="SYNA Verdict UI" class="w-full h-[290px] object-cover object-top" />
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Un-Inflated Scoring & Kill-Shot Docket</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Scores <em>Demand Urgency</em>, <em>Defensibility vs. Incumbents</em>, and <em>GTM Velocity</em> out of 100. Lists 3 validated strengths, 3 lethal vulnerabilities, and presents a concrete <strong>Path A (Fast Wedge) vs. Path B (Moat Lock-In)</strong> decision fork.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Card: Blueprint Screenshot -->
+        <div class="border-2 border-ink bg-surface p-4 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="font-mono text-xs font-bold uppercase px-2.5 py-0.5 bg-ink text-ivory border border-ink">04 // Living Startup Blueprint</span>
+              <span class="font-mono text-xs text-subtle">Editable + Markdown/PDF Export</span>
+            </div>
+            <div class="border-2 border-ink overflow-hidden bg-ivory mb-3">
+              <img src="assets/ui_blueprint.png" alt="SYNA Blueprint UI" class="w-full h-[290px] object-cover object-top" />
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">14-Day MVP Build Plan & 30/60/90-Day Gates</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Translates the debate into an editable execution brief: ICP, 48-hour wedge, anti-fragility action neutralizing the VC’s kill-shot, strict Day 30/60/90 validation gates, and a day-by-day 14-day build sprint (what to ship vs. what to refuse to build).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Live UI Walkthrough (Stages 03 & 04)</span>
+        <span>From Adversarial Critique to Concrete Execution</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 06: PRODUCT WALKTHROUGH III (PROTOTYPE & LANDING)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink text-ink">05 // Product Walkthrough III</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Stage 05: Conversion-Ready SaaS Prototype & Overview</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">06 // 10</span>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6 my-auto py-2 items-center">
+        <!-- Left 7 cols: Prototype Screenshot -->
+        <div class="col-span-7 border-2 border-ink bg-surface p-4 shadow-[6px_6px_0_#111]">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-mono text-xs font-bold uppercase px-2.5 py-0.5 bg-lime border border-ink">05 // Interactive SaaS Prototype</span>
+            <span class="font-mono text-xs text-subtle">Auto-Synthesized For Target Buyer</span>
+          </div>
+          <div class="border-2 border-ink overflow-hidden bg-ivory">
+            <img src="assets/ui_prototype.png" alt="SYNA Prototype UI" class="w-full h-[360px] object-cover object-top" />
+          </div>
+        </div>
+
+        <!-- Right 5 cols: Key Capabilities of Stage 05 -->
+        <div class="col-span-5 space-y-4">
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <span class="font-mono text-xs font-bold uppercase text-violet block mb-1">Built-In Objection Defense</span>
+            <h3 class="font-display text-lg font-bold text-ink">Neutralizes the VC Kill-Shot Upfront</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Every generated prototype embeds a dedicated defense banner explaining how the product overcomes the exact objection raised by the Ruthless VC during the debate.
+            </p>
+          </div>
+
+          <div class="border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+            <span class="font-mono text-xs font-bold uppercase text-ink block mb-1">Diagnostic Telemetry Card</span>
+            <h3 class="font-display text-lg font-bold text-ink">48-Hour Pilot Hook & Commercial Terms</h3>
+            <p class="font-sans text-xs text-subtle mt-1 leading-relaxed">
+              Generates buyer-specific headline copy, a working pilot waitlist capture interaction, commercial pricing terms, and 3 FAQ answers tailored to the founder’s thesis.
+            </p>
+          </div>
+
+          <div class="border-2 border-ink bg-ink text-ivory p-4 shadow-[4px_4px_0_#C8FF2E]">
+            <span class="font-mono text-xs font-bold uppercase text-lime block mb-1">1-Click Shareable Dossier Links</span>
+            <p class="font-sans text-xs text-ivory/90 leading-relaxed">
+              Clicking <strong>Share</strong> encodes the entire custom project dossier into a self-contained URL hash (`#page=verdict&share=...`) so co-founders and judges can open any live stress-test on any device.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Live UI Walkthrough (Stage 05)</span>
+        <span>Every Stress-Test Ends With a Testable Artifact</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 07: TECHNICAL ARCHITECTURE & GEMINI ENGINE
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory">06 // System Architecture</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Dual-Mode Gemini Synthesis & Zero-Friction Edge Runtime</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">07 // 10</span>
+      </div>
+
+      <div class="my-auto py-2 space-y-5">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-ink tracking-tight">
+            Built for 100% reliability across Cloudflare Pages, Node, and Static Hosting
+          </h2>
+          <p class="font-sans text-sm text-subtle mt-1">
+            Zero build step required. Pre-wired Gemini API key + multi-model fallback cascade guarantees judges never hit a dead end or configuration modal.
+          </p>
+        </div>
+
+        <!-- 3-Tier Architecture Flow -->
+        <div class="grid grid-cols-3 gap-5">
+          <!-- Tier 1: Client Layer -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-3">
+                <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink">Layer 01 // Frontend</span>
+                <span class="font-mono text-xs text-subtle">index.html</span>
+              </div>
+              <h3 class="font-display text-lg font-bold text-ink mb-2">Single-File React 18 Dossier SPA</h3>
+              <ul class="space-y-2 font-sans text-xs text-ink/85">
+                <li class="p-2 bg-ivory border border-ink/20"><strong>5-Stage State Machine:</strong> Idea Lab → Debate → Verdict → Blueprint → Prototype.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong>Local + URL Persistence:</strong> Saves dossiers in <code>localStorage</code> and Base64 URL hashes.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong>Print / Markdown Engine:</strong> Native <code>@media print</code> PDF export & clean Markdown clipboard copy.</li>
+              </ul>
+            </div>
+            <div class="mt-3 pt-2 border-t border-ink/20 font-mono text-xs text-subtle">
+              Stack: React 18 + Tailwind CSS + Neo-Brutalist UI
+            </div>
+          </div>
+
+          <!-- Tier 2: Serverless / API Layer -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-3">
+                <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-violet text-ivory border border-ink">Layer 02 // Edge API</span>
+                <span class="font-mono text-xs text-subtle">functions/api/*</span>
+              </div>
+              <h3 class="font-display text-lg font-bold text-ink mb-2">Cloudflare Pages Functions + Node Server</h3>
+              <ul class="space-y-2 font-sans text-xs text-ink/85">
+                <li class="p-2 bg-ivory border border-ink/20"><strong><code>POST /api/debate</code>:</strong> Orchestrates 4-round debate, audit, blueprint, and landing page synthesis.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong><code>POST /api/intervene</code>:</strong> Injects founder rebuttal and recalculates survival score delta.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong><code>GET /api/health</code>:</strong> Verifies Gemini key readiness and active model cascade.</li>
+              </ul>
+            </div>
+            <div class="mt-3 pt-2 border-t border-ink/20 font-mono text-xs text-subtle">
+              Stack: Cloudflare Workers + Node.js HTTP Server
+            </div>
+          </div>
+
+          <!-- Tier 3: Gemini Multi-Model Engine -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_#111] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-ink/20 pb-2.5 mb-3">
+                <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory border border-ink">Layer 03 // AI Core</span>
+                <span class="font-mono text-xs text-subtle">lib/syna-engine.js</span>
+              </div>
+              <h3 class="font-display text-lg font-bold text-ink mb-2">Cascading Gemini Model Router</h3>
+              <ul class="space-y-2 font-sans text-xs text-ink/85">
+                <li class="p-2 bg-ivory border border-ink/20"><strong>Model Cascade:</strong> Automatically falls back across <code>gemini-3.1-flash-lite</code> → <code>gemini-3.8-flash</code> → <code>gemini-3.5-flash</code> → <code>gemini-flash-latest</code>.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong>Strict JSON Schema:</strong> Uses <code>responseMimeType: "application/json"</code> + fault-tolerant parser.</li>
+                <li class="p-2 bg-ivory border border-ink/20"><strong>Deterministic Fallback:</strong> Idea-specific synthesis engine guarantees zero downtime even offline.</li>
+              </ul>
+            </div>
+            <div class="mt-3 pt-2 border-t border-ink/20 font-mono text-xs text-subtle">
+              Stack: Google Gemini REST API + Deterministic Fallback
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Technical Architecture</span>
+        <span>Zero-Config Judge Experience • Multi-Model Resilience</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 08: CASE STUDY (OMNILEDGER)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink text-ink">07 // Live Case Study</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">How SYNA Stress-Tests "OmniLedger" (B2B Expense Fraud AI)</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">08 // 10</span>
+      </div>
+
+      <div class="my-auto py-2 space-y-5">
+        <div class="flex items-center justify-between border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#111]">
+          <div>
+            <span class="font-mono text-xs uppercase text-subtle block">Input Thesis Submitted to Chamber</span>
+            <h2 class="font-display text-2xl font-bold text-ink">OmniLedger — Autonomous corporate expense fraud detection for mid-market CFOs</h2>
+          </div>
+          <div class="flex items-center gap-4 shrink-0">
+            <div class="text-right">
+              <span class="font-mono text-xs uppercase text-subtle block">Chamber Ruling</span>
+              <span class="font-display text-base font-bold text-ink">Survivable with Moat Pivot</span>
+            </div>
+            <div class="border-2 border-ink bg-lime px-4 py-2 text-center">
+              <span class="font-condensed text-4xl text-ink leading-none">78</span>
+              <span class="font-mono text-xs font-bold text-ink">/100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-5">
+          <!-- Column 1: Growth Hacker Argument -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[5px_5px_0_#111]">
+            <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime border border-ink">Growth Hacker Wedge</span>
+            <h3 class="font-display text-lg font-bold text-ink mt-3 mb-2">90-Second Read-Only Plaid Audit</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed mb-3">
+              “Don’t ask CFOs for a 6-month ERP overhaul. Hook read-only into 90 days of historical logs and surface $34,000 in duplicate SaaS seats and shadow billing in round one. Charge 15% of verified savings.”
+            </p>
+            <div class="p-2.5 bg-ivory border border-ink/20 font-mono text-xs">
+              <span class="text-subtle block uppercase">Time to Value:</span>
+              <strong class="text-ink">Under 90 seconds (Zero IT permissions)</strong>
+            </div>
+          </div>
+
+          <!-- Column 2: Ruthless VC Kill-Shot -->
+          <div class="border-2 border-ink bg-surface p-5 shadow-[5px_5px_0_#6E3AFF]">
+            <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-violet text-ivory border border-ink">Ruthless VC Kill-Shot</span>
+            <h3 class="font-display text-lg font-bold text-ink mt-3 mb-2">Incumbent Bundling & Wire Liability</h3>
+            <p class="font-sans text-xs text-subtle leading-relaxed mb-3">
+              “Brex, Ramp, and Coupa already own the card rail and are bundling native AI receipt matching for free. Worse: the first time your AI halts a legitimate payroll wire, the CFO fires you immediately.”
+            </p>
+            <div class="p-2.5 bg-ivory border border-ink/20 font-mono text-xs">
+              <span class="text-subtle block uppercase">Defensibility Score:</span>
+              <strong class="text-violet">48 / 100 (High Commodity Trap Risk)</strong>
+            </div>
+          </div>
+
+          <!-- Column 3: SYNA Synthesized Pivot -->
+          <div class="border-2 border-ink bg-ink text-ivory p-5 shadow-[5px_5px_0_#C8FF2E]">
+            <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-lime text-ink border border-ink">SYNA 14-Day Pivot Plan</span>
+            <h3 class="font-display text-lg font-bold text-ivory mt-3 mb-2">Multi-Silo Semantic Graph</h3>
+            <p class="font-sans text-xs text-ivory/85 leading-relaxed mb-3">
+              Refuse to touch raw payment rails in Year 1. Build the moat where card issuers are blind: cross-referencing signed Ironclad MSAs and Slack thread approvals against ERP invoices.
+            </p>
+            <div class="p-2.5 bg-ivory/10 border border-ivory/20 font-mono text-xs">
+              <span class="text-lime block uppercase">Day 30 Kill/Double-Down Gate:</span>
+              <strong class="text-ivory">8 read-only pilots • $50k verified leakage</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Case Study Verification</span>
+        <span>Explore Full Case Study Live in the App</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 09: WHY SYNA WINS (COMPETITIVE MATRIX)
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs font-bold uppercase px-2 py-0.5 bg-ink text-ivory">08 // Differentiation</span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle">Why SYNA Outperforms Generic AI Wrappers & Pitch Deck Generators</span>
+        </div>
+        <span class="font-mono text-xs text-subtle">09 // 10</span>
+      </div>
+
+      <div class="my-auto py-2 space-y-5">
+        <h2 class="font-display text-3xl font-bold text-ink tracking-tight">
+          Not another chatbot wrapper—an end-to-end adversarial venture foundry
+        </h2>
+
+        <!-- Comparison Table -->
+        <div class="border-2 border-ink bg-surface shadow-[6px_6px_0_#111] overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-ink text-ivory font-mono text-xs uppercase">
+                <th class="p-3.5 border-r border-ivory/20">Capability / Dimension</th>
+                <th class="p-3.5 border-r border-ivory/20 text-ivory/70">Generic LLM Chatbots</th>
+                <th class="p-3.5 border-r border-ivory/20 text-ivory/70">Static Pitch Generators</th>
+                <th class="p-3.5 bg-lime text-ink font-bold">SYNA Stress Chamber</th>
+              </tr>
+            </thead>
+            <tbody class="font-sans text-xs divide-y divide-ink/20">
+              <tr>
+                <td class="p-3.5 font-bold font-mono uppercase bg-ivory border-r border-ink/20"> Analytical Posture</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Sycophantic ("Yes-Man" praise)</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Cosmetic formatting only</td>
+                <td class="p-3.5 font-bold text-ink bg-lime/20">4-Round Adversarial Clash (Build vs. Break)</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold font-mono uppercase bg-ivory border-r border-ink/20">Incumbent & Moat Audit</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Generic SWOT bullet points</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">None</td>
+                <td class="p-3.5 font-bold text-ink bg-lime/20">Names specific incumbents, CAC traps & liability</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold font-mono uppercase bg-ivory border-r border-ink/20">Founder Pushback Loop</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Unstructured chat thread</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Static one-shot generation</td>
+                <td class="p-3.5 font-bold text-ink bg-lime/20">Live Mid-Debate Intervention + Score Delta</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold font-mono uppercase bg-ivory border-r border-ink/20">Execution Plan Output</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Vague 6-month roadmap</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">Slide templates</td>
+                <td class="p-3.5 font-bold text-ink bg-lime/20">Day-by-Day 14-Day MVP Sprint + 30/60/90 Gates</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold font-mono uppercase bg-ivory border-r border-ink/20">Customer Validation Artifact</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">None</td>
+                <td class="p-3.5 border-r border-ink/20 text-subtle">None</td>
+                <td class="p-3.5 font-bold text-ink bg-lime/20">Interactive SaaS Landing Page + Objection Defense</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="border-2 border-ink bg-surface p-3.5">
+            <span class="font-mono text-xs font-bold uppercase text-ink block">01 // For Solo Founders</span>
+            <p class="font-sans text-xs text-subtle mt-1">Kill weak assumptions in 60 seconds before spending 6 months building a feature incumbents bundle for free.</p>
+          </div>
+          <div class="border-2 border-ink bg-surface p-3.5">
+            <span class="font-mono text-xs font-bold uppercase text-ink block">02 // For Accelerators & Hackathons</span>
+            <p class="font-sans text-xs text-subtle mt-1">Standardize cohort stress-testing with shareable dossier URLs, survival scores, and falsifiable 14-day pilot experiments.</p>
+          </div>
+          <div class="border-2 border-ink bg-surface p-3.5">
+            <span class="font-mono text-xs font-bold uppercase text-ink block">03 // For Venture Studios</span>
+            <p class="font-sans text-xs text-subtle mt-1">Rapidly compare dozens of vertical AI theses across Demand Urgency, Defensibility, and GTM Velocity.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Competitive Advantage</span>
+        <span>Built to Falsify Weak Ideas & Accelerate Strong Ones</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 10: CLOSING & LIVE DEMO LINKS
+         ========================================== -->
+    <section class="slide">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3">
+        <div class="flex items-center gap-3">
+          <span class="font-condensed text-2xl text-ink">SYNA</span>
+          <span class="w-2.5 h-2.5 bg-lime border border-ink"></span>
+          <span class="font-mono text-xs uppercase tracking-widest text-subtle border-l border-ink/30 pl-3">
+            Ready For Judges // Zero Setup Required
+          </span>
+        </div>
+        <span class="font-mono text-xs text-subtle">10 // 10</span>
+      </div>
+
+      <div class="grid grid-cols-12 gap-8 items-center my-auto py-4">
+        <div class="col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 border-2 border-ink bg-lime px-3.5 py-1 shadow-[3px_3px_0_#111]">
+            <span class="font-mono text-xs font-bold uppercase tracking-widest text-ink">Try SYNA Right Now — No API Keys Needed</span>
+          </div>
+
+          <h2 class="font-display text-5xl font-bold text-ink tracking-tight leading-[1.06]">
+            Enter the chamber.<br/>
+            Stress-test your idea in 60 seconds.
+          </h2>
+
+          <p class="font-sans text-base text-subtle leading-relaxed max-w-xl">
+            Click a 1-click preset in the Idea Lab or type any startup thesis. Watch the Growth Hacker and Ruthless VC clash across 4 rounds, inject a live founder rebuttal, and export your 14-day blueprint and interactive prototype.
+          </p>
+
+          <div class="space-y-3 pt-2">
+            <div class="border-2 border-ink bg-surface p-4 shadow-[5px_5px_0_#111] flex items-center justify-between">
+              <div>
+                <span class="font-mono text-xs uppercase text-subtle block">Live Production Web App</span>
+                <a href="https://1-qube.github.io/innovative-ai/" target="_blank" class="font-mono text-lg font-bold text-ink underline">
+                  https://1-qube.github.io/innovative-ai/
+                </a>
+              </div>
+              <span class="font-mono text-xs font-bold uppercase px-3 py-1.5 bg-ink text-lime">Live Now →</span>
+            </div>
+
+            <div class="border-2 border-ink bg-surface p-4 shadow-[5px_5px_0_#111] flex items-center justify-between">
+              <div>
+                <span class="font-mono text-xs uppercase text-subtle block">GitHub Repository & Source Code</span>
+                <a href="https://github.com/1-Qube/innovative-ai" target="_blank" class="font-mono text-base font-bold text-ink underline">
+                  https://github.com/1-Qube/innovative-ai
+                </a>
+              </div>
+              <span class="font-mono text-xs uppercase px-3 py-1 border border-ink bg-ivory">Open Source</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 5 cols: Landing Screenshot Preview + 5-Stage Summary -->
+        <div class="col-span-5">
+          <div class="border-2 border-ink bg-surface p-4 shadow-[8px_8px_0_#111] space-y-3">
+            <div class="border-2 border-ink overflow-hidden bg-ivory">
+              <img src="assets/ui_landing.png" alt="SYNA Landing Page" class="w-full h-[220px] object-cover object-top" />
+            </div>
+            <div class="font-mono text-xs uppercase font-bold text-ink border-b border-ink/20 pb-1.5">
+              Complete 5-Stage Chamber Pipeline:
+            </div>
+            <div class="grid grid-cols-1 gap-1.5 font-mono text-xs">
+              <div class="flex items-center justify-between p-2 bg-ivory border border-ink/20">
+                <span><strong>01 Idea Lab</strong> — 8-Field Intake + 1-Click Presets</span>
+                <span class="text-ink font-bold">✓ Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-ivory border border-ink/20">
+                <span><strong>02 Debate Room</strong> — 4 Rounds + Live Intervention</span>
+                <span class="text-ink font-bold">✓ Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-ivory border border-ink/20">
+                <span><strong>03 Audit Verdict</strong> — Survival Score & Kill-Shots</span>
+                <span class="text-ink font-bold">✓ Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-ivory border border-ink/20">
+                <span><strong>04 Startup Blueprint</strong> — 14-Day Build Sprint</span>
+                <span class="text-ink font-bold">✓ Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-lime border border-ink font-bold">
+                <span><strong>05 Live Prototype</strong> — Conversion-Ready SaaS Page</span>
+                <span>✓ Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between border-t-2 border-ink pt-3 font-mono text-xs uppercase text-subtle">
+        <span>SYNA // Adversarial AI Idea Stress Lab</span>
+        <span>Thank You • Questions & Live Stress-Test Demo</span>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let currentSlide = 0;
+    const slides = Array.from(document.querySelectorAll('.slide'));
+
+    function updateSlideView() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active-slide', idx === currentSlide);
+      });
+      const ind = document.getElementById('slide-indicator');
+      if (ind) {
+        ind.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      }
+    }
+
+    function setMode(mode) {
+      const isSingle = mode === 'single';
+      document.body.classList.toggle('single-slide-mode', isSingle);
+      document.getElementById('btn-scroll').className = isSingle
+        ? 'font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-surface text-ink hover:bg-sand'
+        : 'font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-ink text-ivory font-bold';
+      document.getElementById('btn-single').className = isSingle
+        ? 'font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-ink text-ivory font-bold'
+        : 'font-mono text-xs uppercase px-3 py-1.5 border border-ink bg-surface text-ink hover:bg-sand';
+      const nav = document.getElementById('slide-nav-controls');
+      nav.classList.toggle('hidden', !isSingle);
+      nav.classList.toggle('flex', isSingle);
+      updateSlideView();
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateSlideView();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateSlideView();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (!document.body.classList.contains('single-slide-mode')) return;
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>

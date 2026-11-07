@@ -181,20 +181,29 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (
-      req.method === "GET" &&
-      (url.pathname === "/" ||
-        url.pathname === "/index.html" ||
-        decodeURIComponent(url.pathname) === "/innovative hackaton.html")
-    ) {
-      const targetFile = fs.existsSync(INDEX_FILE) ? INDEX_FILE : LEGACY_HTML_FILE;
-      const html = fs.readFileSync(targetFile);
-      res.writeHead(200, {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
-      });
-      res.end(html);
-      return;
+    if (req.method === "GET") {
+      const cleanPath = decodeURIComponent(url.pathname === "/" ? "/index.html" : url.pathname);
+      const safePath = path.resolve(__dirname, "." + cleanPath);
+      if (safePath.startsWith(__dirname) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+        const ext = path.extname(safePath).toLowerCase();
+        const mimeMap = {
+          ".html": "text/html; charset=utf-8",
+          ".png": "image/png",
+          ".jpg": "image/jpeg",
+          ".jpeg": "image/jpeg",
+          ".pdf": "application/pdf",
+          ".mp4": "video/mp4",
+          ".js": "application/javascript; charset=utf-8",
+          ".css": "text/css; charset=utf-8",
+          ".json": "application/json; charset=utf-8",
+        };
+        res.writeHead(200, {
+          "Content-Type": mimeMap[ext] || "application/octet-stream",
+          "Cache-Control": "no-store",
+        });
+        res.end(fs.readFileSync(safePath));
+        return;
+      }
     }
 
     sendJson(res, 404, { error: "Not found" });
