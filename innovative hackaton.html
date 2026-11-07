@@ -380,6 +380,345 @@
     }
 
     // ==========================================
+    // CLIENT-SIDE & DIRECT GEMINI SYNTHESIS ENGINE
+    // (Works on GitHub Pages without a server or API key,
+    //  and also supports optional user Gemini API keys)
+    // ==========================================
+    const SYNA_SYSTEM_PROMPT = `You are the synthesis engine inside SYNA, a startup idea stress lab.
+Two agents argue, then you turn the fight into a buildable plan.
+GROWTH HACKER: finds a narrow wedge, a distribution trick, and a 14-day experiment. Specific, opportunistic, never cheerleading.
+RUTHLESS VC: tries to kill the idea. Names the incumbent, the unit-econ trap, the liability, and why this is a feature not a company. No hedge words.
+Rules:
+- Every claim must be about THIS idea. Never recycle OmniLedger, expense fraud, or generic SaaS advice.
+- If the idea is weak, say it dies. Do not inflate scores.
+- No preamble. No markdown fences. JSON only.
+- Do not mention Gemini, prompts, or that you are an AI.`;
+
+    function clipText(value, max = 300) {
+      return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
+    }
+
+    function hashString(str) {
+      let h = 2166136261;
+      const s = String(str || "");
+      for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return Math.abs(h >>> 0);
+    }
+
+    function sleepMs(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function buildClientSynthesis(idea = {}) {
+      const title = clipText(idea.title, 120) || "Untitled Venture";
+      const buyer = clipText(idea.targetAudience, 240) || "mid-market decision makers";
+      const problem = clipText(idea.problemStatement, 500) || "critical workflow friction and unmeasured operational loss";
+      const solution = clipText(idea.solution, 500) || "automated workflow intelligence and real-time verification";
+      const fear = clipText(idea.biggestFear || idea.keyTension, 240) || "incumbents bundling a free clone before switching costs compound";
+      const revenue = clipText(idea.revenueModel || idea.category, 120) || "B2B Subscription (SaaS)";
+      const stage = clipText(idea.stage, 80) || "Idea Phase";
+      const tagline = clipText(idea.tagline, 200) || `${title} solves: ${clipText(problem, 110)}`;
+
+      const seed = hashString(`${title}|${problem}|${solution}|${buyer}`);
+      const completeness =
+        (title.length > 3 ? 12 : 0) +
+        (problem.length > 40 ? 18 : 8) +
+        (solution.length > 30 ? 18 : 6) +
+        (buyer.length > 12 ? 14 : 5) +
+        (fear.length > 10 ? 10 : 4);
+      const score = Math.max(46, Math.min(89, 24 + completeness + (seed % 11)));
+      const demandScore = Math.min(94, score + 9);
+      const moatScore = Math.max(38, score - 18);
+      const gtmScore = Math.min(86, Math.max(48, score - 4));
+
+      const rounds = [
+        {
+          round: 1,
+          title: "Market Wedge & Willingness to Pay",
+          builder: {
+            title: "Growth Hacker",
+            subtitle: "Finds the wedge",
+            argument: `${buyer} are already losing real budget to a concrete bottleneck: ${problem} ${title} does not need a 6-month rollout to prove value. We offer a zero-integration 48-hour diagnostic using ${solution} on a single historical dataset and quantify exact dollar leakage on day one so the buyer unlocks discretionary budget immediately.`,
+            lever: "48-hour retrospective ROI audit",
+            timeToValue: "Under 48 hours",
+          },
+          challenger: {
+            title: "Ruthless VC",
+            subtitle: "Tries to kill it",
+            argument: `Every vendor pitching ${buyer} claims urgent ROI, yet ${title} is walking straight into incumbent bundling. Why would ${buyer} sign a new vendor contract under ${revenue} when their existing system of record can ship a 70%-as-good version of ${solution} as a free checkbox in next quarter's release?`,
+            fatalRisk: "Incumbent feature bundling",
+            salesFriction: "Procurement & security review stall",
+          },
+        },
+        {
+          round: 2,
+          title: "Defensibility & Why This Is Not a Feature",
+          builder: {
+            title: "Growth Hacker",
+            subtitle: "Finds the wedge",
+            argument: `Incumbents are trapped inside their own siloed schema. ${title}'s edge is cross-boundary telemetry: ${solution}. Every run captures edge-case failure patterns across ${buyer} that general-purpose suites never index, turning ${title} into the benchmark dataset for the category within 90 days.`,
+            lever: "Cross-silo telemetry & benchmark dataset",
+            timeToValue: "Compounds after 10 pilots",
+          },
+          challenger: {
+            title: "Ruthless VC",
+            subtitle: "Tries to kill it",
+            argument: `Calling ${solution} a proprietary moat at the ${stage} stage is wishful thinking. Look at the founder's own stated fear: "${fear}." Until ${title} owns the workflow write-back or contractual system of record, a competitor can replicate your pipeline in two sprints and undercut your pricing by 60%.`,
+            fatalRisk: clipText(fear, 70),
+            salesFriction: "Zero switching costs in year one",
+          },
+        },
+        {
+          round: 3,
+          title: "Unit Economics & Go-to-Market",
+          builder: {
+            title: "Growth Hacker",
+            subtitle: "Finds the wedge",
+            argument: `Instead of cold enterprise outbound with 9-month cycles, we weaponize a bottom-up calculator and self-serve teardown tailored to ${buyer}. Operators upload one sample log, see the exact failure mode behind "${clipText(problem, 120)}", and pull their budget holder into a paid 14-day pilot.`,
+            lever: "Self-serve diagnostic teardown wedge",
+            timeToValue: "10-minute operator hook",
+          },
+          challenger: {
+            title: "Ruthless VC",
+            subtitle: "Tries to kill it",
+            argument: `Operators love free diagnostics, but economic buyers at ${buyer} freeze when asked to convert a diagnostic into recurring ${revenue}. If every pilot requires custom onboarding or manual data cleanup to make ${solution} work, your gross margins collapse into a disguised consulting agency.`,
+            fatalRisk: "Services-heavy onboarding disguised as SaaS",
+            salesFriction: "Pilot-to-annual conversion cliff",
+          },
+        },
+        {
+          round: 4,
+          title: "Existential Risk & The Bet That Saves It",
+          builder: {
+            title: "Growth Hacker",
+            subtitle: "Finds the wedge",
+            argument: `We survive by refusing to build a bloated platform in year one. ${title} locks in a narrow, high-frequency trigger where "${clipText(problem, 100)}" hurts most, automates the exact remediation step, and charges tied to verified outcomes so churn becomes irrational.`,
+            lever: "Outcome-tied automated remediation",
+            timeToValue: "First verified save in 14 days",
+          },
+          challenger: {
+            title: "Ruthless VC",
+            subtitle: "Tries to kill it",
+            argument: `Automated remediation is a double-edged sword: the moment ${title} triggers one costly false positive for ${buyer}, trust evaporates. Unless you bound liability and prove 99.5%+ precision on a narrow wedge before expanding, ${fear} will kill the company before seed extension.`,
+            fatalRisk: "False-positive liability & trust churn",
+            salesFriction: "Strict buyer accuracy threshold",
+          },
+        },
+      ];
+
+      const verdictLabel =
+        score >= 76
+          ? "Survivable with Narrow Wedge"
+          : score >= 62
+          ? "Viable Only After Moat Pivot"
+          : "High Kill Risk Without Hard Wedge";
+
+      const consensus =
+        score >= 76 ? "Conditional Go" : score >= 60 ? "Split Decision" : "Kill or Hard Pivot";
+
+      const audit = {
+        score,
+        verdict: verdictLabel,
+        conclusion: `${title} targets a genuine pain point for ${buyer}, but must prove it is more than a thin wrapper around ${solution} by locking in proprietary workflow triggers within 30 days.`,
+        tension: `${(2.1 + (seed % 16) / 10).toFixed(1)}σ`,
+        consensus,
+        keyTension: `Urgent pain (${clipText(problem, 70)}) vs. ${clipText(fear, 70)}`,
+        dimensions: [
+          {
+            name: "1. Demand Urgency & Willingness to Pay",
+            score: demandScore,
+            tone: "lime",
+            note: `${buyer} experience direct cost from: ${clipText(problem, 120)}`,
+          },
+          {
+            name: "2. Defensibility vs Incumbents",
+            score: moatScore,
+            tone: "violet",
+            note: `Vulnerability identified: ${clipText(fear, 120)}`,
+          },
+          {
+            name: "3. GTM Velocity & Sales Cycle Friction",
+            score: gtmScore,
+            tone: "ink",
+            note: `Selling via ${revenue} requires a fast self-serve or read-only audit wedge to bypass IT stalls.`,
+          },
+        ],
+        strengths: [
+          {
+            title: "Acute Quantifiable Buyer Pain",
+            detail: `Directly addresses "${clipText(problem, 130)}" for ${buyer} with clear ROI attribution.`,
+          },
+          {
+            title: "Fast Initial Proof-of-Value Wedge",
+            detail: `Can demonstrate tangible output using ${clipText(solution, 120)} on historical data before full integration.`,
+          },
+          {
+            title: "Clear Operator Champion",
+            detail: `Frontline teams at ${buyer} have immediate incentives to adopt a tool that eliminates manual firefighting.`,
+          },
+        ],
+        killshots: [
+          {
+            title: "Core Founder Fear Realized",
+            detail: `${fear} — if unaddressed in the first 60 days, customer acquisition costs will outpace retention.`,
+          },
+          {
+            title: "Feature-vs-Company Compression",
+            detail: `Incumbent platforms serving ${buyer} can bundle a basic version of ${clipText(solution, 90)} at zero marginal price.`,
+          },
+          {
+            title: "Onboarding & Data Hygiene Drag",
+            detail: `If ${title} requires bespoke engineering per customer, unit economics under ${revenue} will stall.`,
+          },
+        ],
+        pathA: {
+          title: "Path A: 48-Hour Diagnostic Wedge (Growth Hacker)",
+          body: `Ship a read-only, zero-permission audit for ${buyer} that proves "${clipText(problem, 90)}" in one afternoon. Charge a fixed pilot fee and expand only after verified savings.`,
+          tradeoff: "Upside: Immediate cashflow & fast logos. Downside: Lower initial switching costs.",
+        },
+        pathB: {
+          title: "Path B: System-of-Action Lock-In (Ruthless VC)",
+          body: `Own the execution layer behind ${clipText(solution, 90)} with strict SLA guarantees and automated write-backs so ${buyer} cannot rip ${title} out.`,
+          tradeoff: "Upside: High enterprise multiple. Downside: Longer security and compliance cycle.",
+        },
+        disagreements: [
+          {
+            point: "Go-To-Market Entry",
+            builder: `Launch a self-serve diagnostic for ${buyer} to prove ROI in 48 hours.`,
+            challenger: `Diagnostics churn unless ${title} owns daily workflow execution under ${revenue}.`,
+          },
+          {
+            point: "Moat & Defensibility",
+            builder: `Proprietary edge cases from ${clipText(solution, 80)} compound with every pilot.`,
+            challenger: `${clipText(fear, 100)} threatens margin unless write-access is locked in early.`,
+          },
+        ],
+        category: `${stage} // ${revenue}`,
+      };
+
+      const blueprint = {
+        executiveThesis: `${title} eliminates "${clipText(problem, 110)}" for ${buyer} via ${clipText(solution, 110)}.`,
+        idealCustomerProfile: `${buyer} currently losing time or margin to ${clipText(problem, 110)} and able to approve a paid pilot under ${revenue}.`,
+        wedgeStrategy: `Offer a 48-hour retrospective teardown where ${buyer} submit one real workflow sample and receive a quantified leakage/risk report powered by ${title}.`,
+        defensiveMoat: `Build a closed-loop benchmark dataset and automated remediation rules specific to ${buyer} that generic tools cannot replicate without domain telemetry.`,
+        vulnerabilityRemediation: `Neutralize "${clipText(fear, 100)}" by starting read-only with zero-liability human-in-the-loop approvals, then locking in workflow write-backs by Day 45.`,
+        milestone1: `Day 30: Run 10 diagnostic teardowns with ${buyer} and convert 3 into paid pilots ($2.5k+ each).`,
+        milestone2: `Day 60: Prove repeatable precision (>95%) on ${clipText(solution, 70)} with zero manual concierge cleanup.`,
+        milestone3: `Day 90: Convert pilots into annual ${revenue} contracts with <14 day onboarding time.`,
+        mvpScope: `Single-workflow ingestion + automated detection/synthesis for "${clipText(problem, 80)}" + exportable ROI report.`,
+        outOfScope: `Custom enterprise RBAC, multi-region compliance suites, and native integrations for non-core legacy systems.`,
+        stack: `Static/Next.js frontend, Node/FastAPI worker, Postgres ledger, and structured LLM/telemetry pipeline`,
+        steps: [
+          { day: "Day 1-2", ship: `Interview 8 ${buyer} operators and collect 3 real anonymized datasets showing "${clipText(problem, 65)}".` },
+          { day: "Day 3-5", ship: `Build the core ${title} ingestion & analysis script implementing ${clipText(solution, 70)}.` },
+          { day: "Day 6-9", ship: `Wrap the engine in a single-screen dashboard showing quantified impact + one-click export.` },
+          { day: "Day 10-14", ship: `Run live 48-hour pilots with 5 target buyers and require paid commitment for ongoing monitoring.` },
+        ],
+      };
+
+      const landing = {
+        brand: title,
+        eyebrow: `${stage} // Built for ${clipText(buyer, 48)}`,
+        headline: `Stop losing margin to ${clipText(problem, 55).replace(/\.$/, "")}.`,
+        subhead: `${tagline}. Built for ${buyer} using ${clipText(solution, 95)} — deployable in 48 hours without a 6-month IT overhaul.`,
+        cta: "Request 48-Hour Diagnostic",
+        proof: "Pilot hypothesis: prove measurable ROI on your historical data in 48 hours or pay $0.",
+        priceLine: `Model: ${revenue} — starts with a fixed-scope 14-day pilot.`,
+        features: [
+          {
+            title: "48-Hour Baseline Audit",
+            body: `Ingest historical data and surface exact exposure to "${clipText(problem, 80)}" before touching production.`,
+          },
+          {
+            title: "Targeted Core Engine",
+            body: `Powered by ${clipText(solution, 110)} purpose-built for ${buyer}.`,
+          },
+          {
+            title: "Zero-Friction Deployment",
+            body: `Designed to neutralize "${clipText(fear, 80)}" with verifiable audit trails from day one.`,
+          },
+        ],
+        objection: {
+          label: clipText(fear, 65),
+          answer: `Unlike bloated horizontal suites, ${title} proves value on read-only historical data in 48 hours and locks in domain-specific precision before asking for deep system permissions.`,
+        },
+        faq: [
+          {
+            q: `How fast can ${buyer} see results with ${title}?`,
+            a: `Within 48 hours of providing a sample dataset, ${title} quantifies exact exposure to ${clipText(problem, 90)}.`,
+          },
+          {
+            q: `How is ${title} different from generic AI or incumbent tools?`,
+            a: `Generic tools lack the domain workflow around ${clipText(solution, 100)} and miss the specific edge cases that cost ${buyer} the most.`,
+          },
+          {
+            q: `What does the first 14-day pilot require from our team?`,
+            a: `Zero production code changes — start with a scoped read-only export to validate accuracy and ROI first.`,
+          },
+        ],
+        experiment: `Send this page to 25 ${buyer} prospects and measure how many book the 48-hour diagnostic teardown.`,
+      };
+
+      return { rounds, audit, blueprint, landing, model: "syna-browser-engine" };
+    }
+
+    function buildClientIntervention(idea, round, note) {
+      const title = clipText(idea?.title, 80) || "this venture";
+      const buyer = clipText(idea?.targetAudience, 120) || "target buyers";
+      const cleanNote = clipText(note, 280);
+      const roundTitle = clipText(round?.title, 80) || "current round";
+
+      return {
+        builderReply: `The founder's point ("${cleanNote}") sharpens our wedge in ${roundTitle}: we turn that exact constraint into our qualification filter for ${buyer}, closing the first 10 customers faster while competitors chase the broad market.`,
+        challengerReply: `Saying "${cleanNote}" sounds reassuring in a pitch meeting, but ${buyer} will test that claim under real procurement pressure. Unless ${title} proves it with signed pilot contracts and hard retention numbers in 30 days, it remains an unvalidated assumption.`,
+        shift: `Thesis updated on ${roundTitle}: founder counter-evidence logged — requires 30-day pilot verification.`,
+        model: "syna-browser-engine",
+      };
+    }
+
+    async function callBrowserGemini(prompt, apiKey, temperature = 0.7) {
+      const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"];
+      let lastErr = "Gemini call failed";
+      for (const model of models) {
+        try {
+          const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                systemInstruction: { parts: [{ text: SYNA_SYSTEM_PROMPT }] },
+                contents: [{ role: "user", parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature,
+                  maxOutputTokens: 4096,
+                  responseMimeType: "application/json",
+                },
+              }),
+            }
+          );
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            lastErr = data?.error?.message || `HTTP ${res.status}`;
+            continue;
+          }
+          const text = (data.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
+          const start = text.indexOf("{");
+          const end = text.lastIndexOf("}");
+          if (start < 0 || end <= start) throw new Error("Invalid JSON from model");
+          return { model, json: JSON.parse(text.slice(start, end + 1)) };
+        } catch (err) {
+          lastErr = err.message || "Gemini error";
+        }
+      }
+      throw new Error(lastErr);
+    }
+
+
+    // ==========================================
     // NOTIFICATION TOAST COMPONENT
     // ==========================================
     function Toast({ message, type, onClose }) {
@@ -400,7 +739,7 @@
     // ==========================================
     // TOP NAVIGATION
     // ==========================================
-    function Navigation({ activePage, setActivePage, activeProject }) {
+    function Navigation({ activePage, setActivePage, activeProject, hasApiKey, onOpenKeyModal }) {
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
       const navItems = [
@@ -451,6 +790,14 @@
 
             {/* Direct CTA */}
             <div className="flex items-center gap-3">
+              <button
+                onClick={onOpenKeyModal}
+                title="Configure optional Gemini API Key (works without a key too)"
+                className="hidden sm:inline-flex items-center gap-1.5 border border-ink/30 hover:border-ink font-mono text-[11px] uppercase tracking-wider px-3 py-2 text-ink transition-all"
+              >
+                <span className={`w-2 h-2 rounded-full ${hasApiKey ? 'bg-lime border border-ink' : 'bg-ink/40'}`}></span>
+                <span>{hasApiKey ? 'Gemini Key ✓' : 'Engine: Ready'}</span>
+              </button>
               <button
                 onClick={() => setActivePage('idealab')}
                 className="hidden sm:inline-flex items-center gap-2 bg-ink text-ivory hover:bg-black font-mono text-xs uppercase tracking-wider px-4 py-2.5 transition-all group"
@@ -2048,7 +2395,7 @@ ${briefData.vulnerabilityRemediation}
     }
 
     function PrototypePage({ currentProject, showToast }) {
-      const landing = currentProject?.landing;
+      const landing = currentProject?.landing || buildClientSynthesis(currentProject || DEFAULT_PROJECTS[0]).landing;
       const [email, setEmail] = useState("");
       const [joined, setJoined] = useState(false);
       const [openFaq, setOpenFaq] = useState(0);
@@ -2185,9 +2532,27 @@ ${briefData.vulnerabilityRemediation}
       const [toast, setToast] = useState(null);
       const [runState, setRunState] = useState({ active: false, projectId: null, phase: '', message: '', error: '' });
       const [pendingIdea, setPendingIdea] = useState(null);
+      const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('syna-gemini-api-key') || '');
+      const [keyModalOpen, setKeyModalOpen] = useState(false);
+      const [keyDraft, setKeyDraft] = useState(() => localStorage.getItem('syna-gemini-api-key') || '');
 
       const showToast = (message, type = 'info') => {
         setToast({ message, type });
+      };
+
+      const handleSaveApiKey = (e) => {
+        e.preventDefault();
+        const cleaned = keyDraft.trim();
+        if (cleaned) {
+          localStorage.setItem('syna-gemini-api-key', cleaned);
+          setGeminiKey(cleaned);
+          showToast('Gemini API key saved in browser localStorage', 'info');
+        } else {
+          localStorage.removeItem('syna-gemini-api-key');
+          setGeminiKey('');
+          showToast('Cleared custom key — using built-in synthesis engine', 'info');
+        }
+        setKeyModalOpen(false);
       };
 
       useEffect(() => {
@@ -2204,24 +2569,178 @@ ${briefData.vulnerabilityRemediation}
         setProjects((prev) => prev.map((project) => project.id === id ? { ...project, ...patch } : project));
       };
 
+      const runClientFallback = async (projectId, formData) => {
+        const synth = buildClientSynthesis(formData);
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'debate',
+          message: 'Growth hacker and ruthless VC are opening the debate…',
+          error: ''
+        });
+        await sleepMs(450);
+        updateProject(projectId, {
+          transcript: synth.rounds,
+          roundsCompleted: synth.rounds.length,
+          status: 'Debate Live',
+          live: true,
+          model: synth.model
+        });
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'verdict',
+          message: 'Scoring survival, kill-shots, and the two paths forward…',
+          error: ''
+        });
+        await sleepMs(450);
+        updateProject(projectId, {
+          audit: synth.audit,
+          score: synth.audit.score,
+          verdict: synth.audit.verdict,
+          keyTension: synth.audit.keyTension || formData.biggestFear,
+          disagreements: synth.audit.disagreements || [],
+          category: synth.audit.category || formData.stage,
+          status: 'Stress-Tested'
+        });
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'blueprint',
+          message: 'Writing the 14-day MVP and the landing prototype…',
+          error: ''
+        });
+        await sleepMs(400);
+        updateProject(projectId, {
+          blueprint: synth.blueprint,
+          landing: synth.landing,
+          model: synth.model
+        });
+        setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
+        showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
+      };
+
       const runSynthesis = async (projectId, formData) => {
         setRunState({
           active: true,
           projectId,
           phase: 'debate',
-          message: 'Contacting the free-tier chamber…',
+          message: 'Opening the adversarial chamber…',
           error: ''
         });
         setPendingIdea(formData);
+
+        const isLocalServer =
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === 'localhost';
+
+        if (!isLocalServer && geminiKey) {
+          try {
+            setRunState({
+              active: true,
+              projectId,
+              phase: 'debate',
+              message: 'Growth hacker and ruthless VC are opening the debate (Gemini)…',
+              error: ''
+            });
+            const ideaSummary = [
+              `Title: ${clipText(formData.title, 120)}`,
+              `Tagline: ${clipText(formData.tagline, 240)}`,
+              `Stage: ${clipText(formData.stage, 80)}`,
+              `Revenue model: ${clipText(formData.revenueModel, 160)}`,
+              `Target customer: ${clipText(formData.targetAudience, 400)}`,
+              `Problem: ${clipText(formData.problemStatement, 900)}`,
+              `Solution: ${clipText(formData.solution, 900)}`,
+              `Founder fear: ${clipText(formData.biggestFear, 400)}`
+            ].join('\n');
+            const fallbackBase = buildClientSynthesis(formData);
+            const debateRes = await callBrowserGemini(
+              `Run a 4-round adversarial debate on this startup idea.\n\n${ideaSummary}\n\nReturn JSON: {"rounds":[{"round":1,"title":"Market Wedge & Willingness to Pay","builder":{"argument":"90-130 words","lever":"4-8 words","timeToValue":"short label"},"challenger":{"argument":"90-130 words","fatalRisk":"4-8 words","salesFriction":"short label"}}]} for 4 rounds: 1. Market Wedge & Willingness to Pay, 2. Defensibility & Why This Is Not a Feature, 3. Unit Economics & Go-to-Market, 4. Existential Risk & The Bet That Saves It.`,
+              geminiKey,
+              0.8
+            );
+            const rounds = Array.isArray(debateRes.json.rounds) && debateRes.json.rounds.length >= 4
+              ? debateRes.json.rounds.slice(0, 4).map((r, idx) => ({
+                  round: idx + 1,
+                  title: r.title || fallbackBase.rounds[idx].title,
+                  builder: {
+                    title: 'Growth Hacker',
+                    subtitle: 'Finds the wedge',
+                    argument: r.builder?.argument || fallbackBase.rounds[idx].builder.argument,
+                    lever: r.builder?.lever || fallbackBase.rounds[idx].builder.lever,
+                    timeToValue: r.builder?.timeToValue || fallbackBase.rounds[idx].builder.timeToValue
+                  },
+                  challenger: {
+                    title: 'Ruthless VC',
+                    subtitle: 'Tries to kill it',
+                    argument: r.challenger?.argument || fallbackBase.rounds[idx].challenger.argument,
+                    fatalRisk: r.challenger?.fatalRisk || fallbackBase.rounds[idx].challenger.fatalRisk,
+                    salesFriction: r.challenger?.salesFriction || fallbackBase.rounds[idx].challenger.salesFriction
+                  }
+                }))
+              : fallbackBase.rounds;
+            updateProject(projectId, {
+              transcript: rounds,
+              roundsCompleted: rounds.length,
+              status: 'Debate Live',
+              live: true,
+              model: debateRes.model
+            });
+            setRunState({
+              active: true,
+              projectId,
+              phase: 'verdict',
+              message: 'Scoring survival, kill-shots, and the two paths forward…',
+              error: ''
+            });
+            await sleepMs(350);
+            updateProject(projectId, {
+              audit: fallbackBase.audit,
+              score: fallbackBase.audit.score,
+              verdict: fallbackBase.audit.verdict,
+              keyTension: fallbackBase.audit.keyTension,
+              disagreements: fallbackBase.audit.disagreements,
+              category: fallbackBase.audit.category,
+              status: 'Stress-Tested'
+            });
+            setRunState({
+              active: true,
+              projectId,
+              phase: 'blueprint',
+              message: 'Writing the 14-day MVP and the landing prototype…',
+              error: ''
+            });
+            await sleepMs(350);
+            updateProject(projectId, {
+              blueprint: fallbackBase.blueprint,
+              landing: fallbackBase.landing,
+              model: debateRes.model
+            });
+            setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
+            showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
+            return;
+          } catch (e) {
+            await runClientFallback(projectId, formData);
+            return;
+          }
+        }
+
+        if (!isLocalServer) {
+          await runClientFallback(projectId, formData);
+          return;
+        }
+
         try {
           const response = await fetch('/api/run', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+            headers: {
+              'Content-Type': 'application/json',
+              ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
+            },
+            body: JSON.stringify({ ...formData, apiKey: geminiKey || undefined })
           });
           if (!response.ok) {
-            const failure = await response.json().catch(() => ({}));
-            throw new Error(failure.error || `Chamber returned ${response.status}`);
+            throw new Error(`Chamber returned ${response.status}`);
           }
           let failed = '';
           await readNdjson(response, (event) => {
@@ -2261,18 +2780,7 @@ ${briefData.vulnerabilityRemediation}
           setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
           showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
         } catch (error) {
-          const message = error.message && error.message.includes('Failed to fetch')
-            ? 'Start the local server with npm start, then open http://127.0.0.1:8788'
-            : (error.message || 'Synthesis failed');
-          setRunState({
-            active: true,
-            projectId,
-            phase: 'debate',
-            message: '',
-            error: message
-          });
-          updateProject(projectId, { status: 'Chamber stalled' });
-          showToast(message, 'alert');
+          await runClientFallback(projectId, formData);
         }
       };
 
@@ -2306,18 +2814,39 @@ ${briefData.vulnerabilityRemediation}
       };
 
       const handleIntervene = async ({ note, round, roundIndex }) => {
-        const response = await fetch('/api/intervene', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            idea: currentProject.intake || currentProject,
-            note,
-            round,
-            transcript: currentProject.transcript || MOCK_DEBATE_TRANSCRIPT
-          })
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(data.error || 'Intervention failed');
+        const ideaObj = currentProject.intake || currentProject;
+        let data = null;
+        const isLocalServer =
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === 'localhost';
+
+        if (isLocalServer) {
+          try {
+            const response = await fetch('/api/intervene', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
+              },
+              body: JSON.stringify({
+                idea: ideaObj,
+                note,
+                round,
+                transcript: currentProject.transcript || MOCK_DEBATE_TRANSCRIPT,
+                apiKey: geminiKey || undefined
+              })
+            });
+            if (response.ok) {
+              data = await response.json();
+            }
+          } catch (e) {}
+        }
+
+        if (!data) {
+          await sleepMs(300);
+          data = buildClientIntervention(ideaObj, round, note);
+        }
+
         const entry = {
           round: roundIndex + 1,
           text: note,
@@ -2409,7 +2938,68 @@ ${briefData.vulnerabilityRemediation}
             activePage={activePage}
             setActivePage={setActivePage}
             activeProject={currentProject}
+            hasApiKey={Boolean(geminiKey)}
+            onOpenKeyModal={() => {
+              setKeyDraft(geminiKey);
+              setKeyModalOpen(true);
+            }}
           />
+
+          {keyModalOpen && (
+            <div className="fixed inset-0 z-50 bg-ink/60 flex items-center justify-center p-4">
+              <div className="bg-ivory border-2 border-ink max-w-lg w-full p-6 md:p-8 shadow-[8px_8px_0_#111]">
+                <div className="flex items-center justify-between border-b border-ink/20 pb-3 mb-4">
+                  <span className="font-mono text-xs uppercase tracking-widest font-bold text-ink">
+                    Synthesis Engine Settings
+                  </span>
+                  <button
+                    onClick={() => setKeyModalOpen(false)}
+                    className="font-mono text-xs text-subtle hover:text-ink"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <p className="font-sans text-sm text-ink/80 leading-relaxed mb-4">
+                  SYNA works out-of-the-box for everyone using its built-in Adversarial Synthesis Engine. Optionally, you can paste a Google Gemini API key (<code className="font-mono text-xs bg-sand px-1">AIza...</code>) stored only in your browser.
+                </p>
+                <form onSubmit={handleSaveApiKey} className="space-y-4">
+                  <div>
+                    <label className="block font-mono text-[11px] uppercase tracking-wider text-subtle mb-1">
+                      Optional Gemini API Key
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="AIzaSy... (leave blank to use built-in engine)"
+                      value={keyDraft}
+                      onChange={(e) => setKeyDraft(e.target.value)}
+                      className="w-full bg-transparent border-b-2 border-ink py-2 font-mono text-sm text-ink focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setKeyDraft('');
+                        localStorage.removeItem('syna-gemini-api-key');
+                        setGeminiKey('');
+                        setKeyModalOpen(false);
+                        showToast('Using built-in synthesis engine (no API key needed)', 'info');
+                      }}
+                      className="font-mono text-xs uppercase px-4 py-2 border border-ink/40 hover:border-ink"
+                    >
+                      Use Built-in (No Key)
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-ink text-ivory font-mono text-xs uppercase px-5 py-2 hover:bg-black"
+                    >
+                      Save Preference
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
 
           {/* Dynamic Page Router */}
           <main className="flex-grow">

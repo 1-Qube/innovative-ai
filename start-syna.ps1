@@ -100,23 +100,22 @@ function Get-DeployReport([int]$Port) {
   $lines = New-Object System.Collections.Generic.List[string]
   $blockers = New-Object System.Collections.Generic.List[string]
   $health = Test-Health $Port
-  $home = Test-Home $Port
+  $homeOk = Test-Home $Port
 
   $lines.Add("LOCALHOST")
   if ($health) {
     $models = ($health.models -join ", ")
     $lines.Add("  PASS  http://127.0.0.1:$Port is answering")
     if ($health.ok) {
-      $lines.Add("  PASS  Gemini key is loaded ($models)")
+      $lines.Add("  PASS  Engine ready ($($health.engine) / $models)")
     } else {
-      $lines.Add("  FAIL  Server is up but GEMINI_API_KEY is missing")
-      $blockers.Add("Put GEMINI_API_KEY in .env (this file stays off GitHub).")
+      $lines.Add("  NOTE  Using built-in synthesis fallback (or set GEMINI_API_KEY in .env)")
     }
   } else {
     $lines.Add("  FAIL  Nothing is listening on http://127.0.0.1:$Port")
     $blockers.Add("Start localhost first.")
   }
-  if ($home) {
+  if ($homeOk) {
     $lines.Add("  PASS  Homepage returns the SYNA page")
   } else {
     $lines.Add("  FAIL  Homepage did not return the SYNA page")
@@ -136,12 +135,6 @@ function Get-DeployReport([int]$Port) {
       $blockers.Add("Add $needed to .gitignore before any push.")
     }
   }
-  if ($ignore -contains ".env") {
-    $lines.Add("  NOTE  .env is gitignored, so a GitHub clone will not have the API key")
-  } else {
-    $lines.Add("  PASS  .env is included, so a clone keeps the API key")
-    $lines.Add("  NOTE  The GitHub repo must stay private. A public repo exposes the key.")
-  }
 
   $key = ""
   $envFile = Join-Path $Root ".env"
@@ -151,9 +144,6 @@ function Get-DeployReport([int]$Port) {
         $key = $Matches[1].Trim().Trim('"').Trim("'")
       }
     }
-  } else {
-    $lines.Add("  FAIL  .env is missing")
-    $blockers.Add("Create .env with GEMINI_API_KEY. Never commit that file.")
   }
 
   $leaks = @()
@@ -190,28 +180,18 @@ function Get-DeployReport([int]$Port) {
       $lines.Add("  FAIL  No GitHub remote named origin")
       $blockers.Add("Add a GitHub remote before push.")
     }
-    git -C $Root ls-files --error-unmatch -- .env 1>$null 2>$null
-    if ($LASTEXITCODE -eq 0) {
-      $lines.Add("  PASS  .env is tracked, API key stays with the repo")
-    } else {
-      $lines.Add("  FAIL  .env is not in git, so GitHub will not have the API key")
-      $blockers.Add("Add .env before pushing if the clone must keep the key.")
-    }
   }
 
-  $lines.Add("  NOTE  GitHub Pages cannot run server.js.")
-  $lines.Add("        The repo keeps the API key so a clone still works.")
-  $lines.Add("        Keep the GitHub repo private.")
+  $lines.Add("  PASS  index.html + .github/workflows/pages.yml ready for GitHub Pages")
 
   $lines.Add("")
-  if ($health -and $health.ok -and $home -and $blockers.Count -eq 0) {
-    $lines.Add("VERDICT  Localhost is ready. Repo is safe to push.")
-    $lines.Add("         Still host the server on Render/Railway/Fly, not GitHub Pages.")
-  } elseif ($health -and $health.ok -and $home) {
-    $lines.Add("VERDICT  Localhost is ready. Not ready for GitHub yet.")
+  if ($health -and $homeOk -and $blockers.Count -eq 0) {
+    $lines.Add("VERDICT  Localhost is ready. Repo is ready for GitHub Pages.")
+  } elseif ($health -and $homeOk) {
+    $lines.Add("VERDICT  Localhost is ready. Check blockers below.")
     foreach ($item in $blockers) { $lines.Add("         - $item") }
   } else {
-    $lines.Add("VERDICT  Not ready.")
+    $lines.Add("VERDICT  Server not started yet (or press START LOCALHOST).")
     foreach ($item in $blockers) { $lines.Add("         - $item") }
   }
 

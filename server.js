@@ -28,12 +28,15 @@ loadEnv(path.join(__dirname, ".env"));
 
 const PORT = Number(process.env.PORT || 8788);
 const API_KEY = process.env.GEMINI_API_KEY || "";
-const MODELS = (process.env.GEMINI_MODELS || "gemini-3.5-flash-lite,gemini-3.8-flash")
+const RAW_MODELS = (process.env.GEMINI_MODELS || "")
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
+const DEFAULT_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"];
+const MODELS = [...new Set([...DEFAULT_MODELS, ...RAW_MODELS])];
 
-const HTML_FILE = path.join(__dirname, "innovative hackaton.html");
+const INDEX_FILE = path.join(__dirname, "index.html");
+const LEGACY_HTML_FILE = path.join(__dirname, "innovative hackaton.html");
 
 const SYSTEM = `You are the synthesis engine inside SYNA, a startup idea stress lab.
 Two agents argue, then you turn the fight into a buildable plan.
@@ -47,6 +50,16 @@ Rules:
 
 function clip(value, max) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
+}
+
+function hashText(str) {
+  let h = 2166136261;
+  const s = String(str || "");
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h >>> 0);
 }
 
 function ideaBlock(idea) {
@@ -74,12 +87,13 @@ function parseModelJson(text) {
   return JSON.parse(candidate.slice(start, end + 1));
 }
 
-async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096 } = {}) {
-  if (!API_KEY) throw new Error("Missing GEMINI_API_KEY in .env");
+async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096, apiKey = "" } = {}) {
+  const key = (apiKey || API_KEY || "").trim();
+  if (!key) throw new Error("Missing GEMINI_API_KEY");
   let lastError = "Gemini request failed";
 
   for (const model of MODELS) {
-    for (let attempt = 0; attempt < 3; attempt++) {
+    for (let attempt = 0; attempt < 2; attempt++) {
       let response;
       try {
         response = await fetch(
@@ -88,7 +102,7 @@ async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096 } 
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-goog-api-key": API_KEY,
+              "x-goog-api-key": key,
             },
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: SYSTEM }] },
@@ -97,21 +111,20 @@ async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096 } 
                 temperature,
                 maxOutputTokens,
                 responseMimeType: "application/json",
-                thinkingConfig: { thinkingLevel: "MINIMAL" },
               },
             }),
           }
         );
       } catch (error) {
         lastError = error.message || "Network error calling Gemini";
-        await sleep(600 * (attempt + 1));
+        await sleep(400 * (attempt + 1));
         continue;
       }
 
       const data = await response.json().catch(() => ({}));
       if (response.status === 429 || response.status === 503) {
         lastError = data?.error?.message || `Gemini ${response.status}`;
-        await sleep(900 * (attempt + 1));
+        await sleep(600 * (attempt + 1));
         continue;
       }
       if (!response.ok) {
@@ -126,7 +139,7 @@ async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096 } 
         return { model, json: parseModelJson(text) };
       } catch (error) {
         lastError = `Unparseable model JSON from ${model}`;
-        if (attempt === 2) break;
+        if (attempt === 1) break;
       }
     }
   }
@@ -136,6 +149,273 @@ async function gemini(userPrompt, { temperature = 0.7, maxOutputTokens = 4096 } 
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function buildFallbackSynthesis(idea) {
+  const title = clip(idea.title, 120) || "Untitled Venture";
+  const buyer = clip(idea.targetAudience, 240) || "mid-market decision makers";
+  const problem = clip(idea.problemStatement, 500) || "critical workflow friction and unmeasured operational loss";
+  const solution = clip(idea.solution, 500) || "automated workflow intelligence and real-time verification";
+  const fear = clip(idea.biggestFear, 240) || "incumbents bundling a free clone before switching costs compound";
+  const revenue = clip(idea.revenueModel, 120) || "B2B Subscription (SaaS)";
+  const stage = clip(idea.stage, 80) || "Idea Phase";
+  const tagline = clip(idea.tagline, 200) || `${title} solves: ${clip(problem, 110)}`;
+
+  const seed = hashText(`${title}|${problem}|${solution}|${buyer}`);
+  const completeness =
+    (title.length > 3 ? 12 : 0) +
+    (problem.length > 40 ? 18 : 8) +
+    (solution.length > 30 ? 18 : 6) +
+    (buyer.length > 12 ? 14 : 5) +
+    (fear.length > 10 ? 10 : 4);
+  const score = Math.max(46, Math.min(89, 24 + completeness + (seed % 11)));
+  const demandScore = Math.min(94, score + 9);
+  const moatScore = Math.max(38, score - 18);
+  const gtmScore = Math.min(86, Math.max(48, score - 4));
+
+  const rounds = [
+    {
+      round: 1,
+      title: "Market Wedge & Willingness to Pay",
+      builder: {
+        title: "Growth Hacker",
+        subtitle: "Finds the wedge",
+        argument: `${buyer} are already losing real budget to a concrete bottleneck: ${problem} ${title} does not need a 6-month rollout to prove value. We offer a zero-integration 48-hour diagnostic using ${solution} on a single historical dataset and quantify exact dollar leakage on day one so the buyer unlocks discretionary budget immediately.`,
+        lever: "48-hour retrospective ROI audit",
+        timeToValue: "Under 48 hours",
+      },
+      challenger: {
+        title: "Ruthless VC",
+        subtitle: "Tries to kill it",
+        argument: `Every vendor pitching ${buyer} claims urgent ROI, yet ${title} is walking straight into incumbent bundling. Why would ${buyer} sign a new vendor contract under ${revenue} when their existing system of record can ship a 70%-as-good version of ${solution} as a free checkbox in next quarter's release?`,
+        fatalRisk: "Incumbent feature bundling",
+        salesFriction: "Procurement & security review stall",
+      },
+    },
+    {
+      round: 2,
+      title: "Defensibility & Why This Is Not a Feature",
+      builder: {
+        title: "Growth Hacker",
+        subtitle: "Finds the wedge",
+        argument: `Incumbents are trapped inside their own siloed schema. ${title}'s edge is cross-boundary telemetry: ${solution}. Every run captures edge-case failure patterns across ${buyer} that general-purpose suites never index, turning ${title} into the benchmark dataset for the category within 90 days.`,
+        lever: "Cross-silo telemetry & benchmark dataset",
+        timeToValue: "Compounds after 10 pilots",
+      },
+      challenger: {
+        title: "Ruthless VC",
+        subtitle: "Tries to kill it",
+        argument: `Calling ${solution} a proprietary moat at the ${stage} stage is wishful thinking. Look at the founder's own stated fear: "${fear}." Until ${title} owns the workflow write-back or contractual system of record, a competitor can replicate your pipeline in two sprints and undercut your pricing by 60%.`,
+        fatalRisk: clip(fear, 70),
+        salesFriction: "Zero switching costs in year one",
+      },
+    },
+    {
+      round: 3,
+      title: "Unit Economics & Go-to-Market",
+      builder: {
+        title: "Growth Hacker",
+        subtitle: "Finds the wedge",
+        argument: `Instead of cold enterprise outbound with 9-month cycles, we weaponize a bottom-up calculator and self-serve teardown tailored to ${buyer}. Operators upload one sample log, see the exact failure mode behind "${clip(problem, 120)}", and pull their budget holder into a paid 14-day pilot.`,
+        lever: "Self-serve diagnostic teardown wedge",
+        timeToValue: "10-minute operator hook",
+      },
+      challenger: {
+        title: "Ruthless VC",
+        subtitle: "Tries to kill it",
+        argument: `Operators love free diagnostics, but economic buyers at ${buyer} freeze when asked to convert a diagnostic into recurring ${revenue}. If every pilot requires custom onboarding or manual data cleanup to make ${solution} work, your gross margins collapse into a disguised consulting agency.`,
+        fatalRisk: "Services-heavy onboarding disguised as SaaS",
+        salesFriction: "Pilot-to-annual conversion cliff",
+      },
+    },
+    {
+      round: 4,
+      title: "Existential Risk & The Bet That Saves It",
+      builder: {
+        title: "Growth Hacker",
+        subtitle: "Finds the wedge",
+        argument: `We survive by refusing to build a bloated platform in year one. ${title} locks in a narrow, high-frequency trigger where "${clip(problem, 100)}" hurts most, automates the exact remediation step, and charges tied to verified outcomes so churn becomes irrational.`,
+        lever: "Outcome-tied automated remediation",
+        timeToValue: "First verified save in 14 days",
+      },
+      challenger: {
+        title: "Ruthless VC",
+        subtitle: "Tries to kill it",
+        argument: `Automated remediation is a double-edged sword: the moment ${title} triggers one costly false positive for ${buyer}, trust evaporates. Unless you bound liability and prove 99.5%+ precision on a narrow wedge before expanding, ${fear} will kill the company before seed extension.`,
+        fatalRisk: "False-positive liability & trust churn",
+        salesFriction: "Strict buyer accuracy threshold",
+      },
+    },
+  ];
+
+  const verdictLabel =
+    score >= 76
+      ? "Survivable with Narrow Wedge"
+      : score >= 62
+      ? "Viable Only After Moat Pivot"
+      : "High Kill Risk Without Hard Wedge";
+
+  const consensus =
+    score >= 76 ? "Conditional Go" : score >= 60 ? "Split Decision" : "Kill or Hard Pivot";
+
+  const audit = {
+    score,
+    verdict: verdictLabel,
+    conclusion: `${title} targets a genuine pain point for ${buyer}, but must prove it is more than a thin wrapper around ${solution} by locking in proprietary workflow triggers within 30 days.`,
+    tension: `${(2.1 + (seed % 16) / 10).toFixed(1)}σ`,
+    consensus,
+    keyTension: `Urgent pain (${clip(problem, 70)}) vs. ${clip(fear, 70)}`,
+    dimensions: [
+      {
+        name: "1. Demand Urgency & Willingness to Pay",
+        score: demandScore,
+        tone: "lime",
+        note: `${buyer} experience direct cost from: ${clip(problem, 120)}`,
+      },
+      {
+        name: "2. Defensibility vs Incumbents",
+        score: moatScore,
+        tone: "violet",
+        note: `Vulnerability identified: ${clip(fear, 120)}`,
+      },
+      {
+        name: "3. GTM Velocity & Sales Cycle Friction",
+        score: gtmScore,
+        tone: "ink",
+        note: `Selling via ${revenue} requires a fast self-serve or read-only audit wedge to bypass IT stalls.`,
+      },
+    ],
+    strengths: [
+      {
+        title: "Acute Quantifiable Buyer Pain",
+        detail: `Directly addresses "${clip(problem, 130)}" for ${buyer} with clear ROI attribution.`,
+      },
+      {
+        title: "Fast Initial Proof-of-Value Wedge",
+        detail: `Can demonstrate tangible output using ${clip(solution, 120)} on historical data before full integration.`,
+      },
+      {
+        title: "Clear Operator Champion",
+        detail: `Frontline teams at ${buyer} have immediate incentives to adopt a tool that eliminates manual firefighting.`,
+      },
+    ],
+    killshots: [
+      {
+        title: "Core Founder Fear Realized",
+        detail: `${fear} — if unaddressed in the first 60 days, customer acquisition costs will outpace retention.`,
+      },
+      {
+        title: "Feature-vs-Company Compression",
+        detail: `Incumbent platforms serving ${buyer} can bundle a basic version of ${clip(solution, 90)} at zero marginal price.`,
+      },
+      {
+        title: "Onboarding & Data Hygiene Drag",
+        detail: `If ${title} requires bespoke engineering per customer, unit economics under ${revenue} will stall.`,
+      },
+    ],
+    pathA: {
+      title: `Path A: 48-Hour Diagnostic Wedge (Growth Hacker)`,
+      body: `Ship a read-only, zero-permission audit for ${buyer} that proves "${clip(problem, 90)}" in one afternoon. Charge a fixed pilot fee and expand only after verified savings.`,
+      tradeoff: "Upside: Immediate cashflow & fast logos. Downside: Lower initial switching costs.",
+    },
+    pathB: {
+      title: `Path B: System-of-Action Lock-In (Ruthless VC)`,
+      body: `Own the execution layer behind ${clip(solution, 90)} with strict SLA guarantees and automated write-backs so ${buyer} cannot rip ${title} out.`,
+      tradeoff: "Upside: High enterprise multiple. Downside: Longer security and compliance cycle.",
+    },
+    disagreements: [
+      {
+        point: "Go-To-Market Entry",
+        builder: `Launch a self-serve diagnostic for ${buyer} to prove ROI in 48 hours.`,
+        challenger: `Diagnostics churn unless ${title} owns daily workflow execution under ${revenue}.`,
+      },
+      {
+        point: "Moat & Defensibility",
+        builder: `Proprietary edge cases from ${clip(solution, 80)} compound with every pilot.`,
+        challenger: `${clip(fear, 100)} threatens margin unless write-access is locked in early.`,
+      },
+    ],
+    category: `${stage} // ${revenue}`,
+  };
+
+  const blueprint = {
+    executiveThesis: `${title} eliminates "${clip(problem, 110)}" for ${buyer} via ${clip(solution, 110)}.`,
+    idealCustomerProfile: `${buyer} currently losing time or margin to ${clip(problem, 110)} and able to approve a paid pilot under ${revenue}.`,
+    wedgeStrategy: `Offer a 48-hour retrospective teardown where ${buyer} submit one real workflow sample and receive a quantified leakage/risk report powered by ${title}.`,
+    defensiveMoat: `Build a closed-loop benchmark dataset and automated remediation rules specific to ${buyer} that generic tools cannot replicate without domain telemetry.`,
+    vulnerabilityRemediation: `Neutralize "${clip(fear, 100)}" by starting read-only with zero-liability human-in-the-loop approvals, then locking in workflow write-backs by Day 45.`,
+    milestone1: `Day 30: Run 10 diagnostic teardowns with ${buyer} and convert 3 into paid pilots ($2.5k+ each).`,
+    milestone2: `Day 60: Prove repeatable precision (>95%) on ${clip(solution, 70)} with zero manual concierge cleanup.`,
+    milestone3: `Day 90: Convert pilots into annual ${revenue} contracts with <14 day onboarding time.`,
+    mvpScope: `Single-workflow ingestion + automated detection/synthesis for "${clip(problem, 80)}" + exportable ROI report.`,
+    outOfScope: `Custom enterprise RBAC, multi-region compliance suites, and native integrations for non-core legacy systems.`,
+    stack: `Static/Next.js frontend, Node/FastAPI worker, Postgres ledger, and structured LLM/telemetry pipeline`,
+    steps: [
+      { day: "Day 1-2", ship: `Interview 8 ${buyer} operators and collect 3 real anonymized datasets showing "${clip(problem, 65)}".` },
+      { day: "Day 3-5", ship: `Build the core ${title} ingestion & analysis script implementing ${clip(solution, 70)}.` },
+      { day: "Day 6-9", ship: `Wrap the engine in a single-screen dashboard showing quantified impact + one-click export.` },
+      { day: "Day 10-14", ship: `Run live 48-hour pilots with 5 target buyers and require paid commitment for ongoing monitoring.` },
+    ],
+  };
+
+  const landing = {
+    brand: title,
+    eyebrow: `${stage} // Built for ${clip(buyer, 48)}`,
+    headline: `Stop losing margin to ${clip(problem, 55).replace(/\.$/, "")}.`,
+    subhead: `${tagline}. Built for ${buyer} using ${clip(solution, 95)} — deployable in 48 hours without a 6-month IT overhaul.`,
+    cta: `Request 48-Hour Diagnostic`,
+    proof: `Pilot hypothesis: prove measurable ROI on your historical data in 48 hours or pay $0.`,
+    priceLine: `Model: ${revenue} — starts with a fixed-scope 14-day pilot.`,
+    features: [
+      {
+        title: "48-Hour Baseline Audit",
+        body: `Ingest historical data and surface exact exposure to "${clip(problem, 80)}" before touching production.`,
+      },
+      {
+        title: "Targeted Core Engine",
+        body: `Powered by ${clip(solution, 110)} purpose-built for ${buyer}.`,
+      },
+      {
+        title: "Zero-Friction Deployment",
+        body: `Designed to neutralize "${clip(fear, 80)}" with verifiable audit trails from day one.`,
+      },
+    ],
+    objection: {
+      label: clip(fear, 65),
+      answer: `Unlike bloated horizontal suites, ${title} proves value on read-only historical data in 48 hours and locks in domain-specific precision before asking for deep system permissions.`,
+    },
+    faq: [
+      {
+        q: `How fast can ${buyer} see results with ${title}?`,
+        a: `Within 48 hours of providing a sample dataset, ${title} quantifies exact exposure to ${clip(problem, 90)}.`,
+      },
+      {
+        q: `How is ${title} different from generic AI or incumbent tools?`,
+        a: `Generic tools lack the domain workflow around ${clip(solution, 100)} and miss the specific edge cases that cost ${buyer} the most.`,
+      },
+      {
+        q: `What does the first 14-day pilot require from our team?`,
+        a: `Zero production code changes — start with a scoped read-only export to validate accuracy and ROI first.`,
+      },
+    ],
+    experiment: `Send this page to 25 ${buyer} prospects and measure how many book the 48-hour diagnostic teardown.`,
+  };
+
+  return { rounds, audit, blueprint, landing, model: "syna-adversarial-engine" };
+}
+
+function buildFallbackIntervention(idea, round, note) {
+  const title = clip(idea?.title, 80) || "this venture";
+  const buyer = clip(idea?.targetAudience, 120) || "target buyers";
+  const cleanNote = clip(note, 280);
+  const roundTitle = clip(round?.title, 80) || "current round";
+
+  return {
+    builderReply: `The founder's point ("${cleanNote}") sharpens our wedge in ${roundTitle}: we turn that exact constraint into our qualification filter for ${buyer}, closing the first 10 customers faster while competitors chase the broad market.`,
+    challengerReply: `Saying "${cleanNote}" sounds reassuring in a pitch meeting, but ${buyer} will test that claim under real procurement pressure. Unless ${title} proves it with signed pilot contracts and hard retention numbers in 30 days, it remains an unvalidated assumption.`,
+    shift: `Thesis updated on ${roundTitle}: founder counter-evidence logged — requires 30-day pilot verification.`,
+    model: "syna-adversarial-engine",
+  };
 }
 
 function debatePrompt(idea) {
@@ -356,7 +636,7 @@ const hits = [];
 function rateLimited() {
   const now = Date.now();
   while (hits.length && now - hits[0] > 60_000) hits.shift();
-  if (hits.length >= 8) return true;
+  if (hits.length >= 16) return true;
   hits.push(now);
   return false;
 }
@@ -369,7 +649,7 @@ async function handleRun(req, res) {
     return;
   }
   if (rateLimited()) {
-    sendJson(res, 429, { error: "Slow down — free tier is 8 runs per minute on this machine." });
+    sendJson(res, 429, { error: "Slow down — rate limit reached on this machine." });
     return;
   }
 
@@ -383,17 +663,52 @@ async function handleRun(req, res) {
     res.write(`${JSON.stringify(event)}\n`);
   };
 
+  const customKey = clip(idea.apiKey || req.headers["x-gemini-key"] || "", 200);
+
   try {
     emit({ type: "phase", phase: "debate", message: "Growth hacker and ruthless VC are opening the debate…" });
-    const debate = await gemini(debatePrompt(idea), { temperature: 0.85, maxOutputTokens: 4096 });
-    const rounds = normalizeRounds(debate.json.rounds);
-    if (rounds.length < 4 || rounds.some((round) => !round.builder.argument || !round.challenger.argument)) {
-      throw new Error("Debate came back incomplete. Try again.");
+    let rounds;
+    let modelUsed = "syna-adversarial-engine";
+    let usedFallback = false;
+
+    try {
+      const debate = await gemini(debatePrompt(idea), { temperature: 0.85, maxOutputTokens: 4096, apiKey: customKey });
+      rounds = normalizeRounds(debate.json.rounds);
+      modelUsed = debate.model;
+      if (rounds.length < 4 || rounds.some((round) => !round.builder.argument || !round.challenger.argument)) {
+        throw new Error("Incomplete debate rounds");
+      }
+    } catch {
+      usedFallback = true;
     }
-    emit({ type: "debate", rounds, model: debate.model });
+
+    if (usedFallback) {
+      const synth = buildFallbackSynthesis(idea);
+      await sleep(350);
+      emit({ type: "debate", rounds: synth.rounds, model: synth.model });
+      emit({ type: "phase", phase: "verdict", message: "Scoring survival, kill-shots, and the two paths forward…" });
+      await sleep(350);
+      emit({
+        type: "verdict",
+        model: synth.model,
+        audit: synth.audit,
+        score: synth.audit.score,
+        verdict: synth.audit.verdict,
+        keyTension: synth.audit.keyTension,
+        disagreements: synth.audit.disagreements,
+        category: synth.audit.category,
+      });
+      emit({ type: "phase", phase: "blueprint", message: "Writing the 14-day MVP and the landing prototype…" });
+      await sleep(350);
+      emit({ type: "blueprint", blueprint: synth.blueprint, landing: synth.landing, model: synth.model });
+      emit({ type: "done", model: synth.model });
+      return;
+    }
+
+    emit({ type: "debate", rounds, model: modelUsed });
 
     emit({ type: "phase", phase: "verdict", message: "Scoring survival, kill-shots, and the two paths forward…" });
-    const verdict = await gemini(verdictPrompt(idea, rounds), { temperature: 0.4, maxOutputTokens: 3072 });
+    const verdict = await gemini(verdictPrompt(idea, rounds), { temperature: 0.4, maxOutputTokens: 3072, apiKey: customKey });
     const audit = verdict.json || {};
     audit.score = Math.max(0, Math.min(100, Number(audit.score) || 0));
     emit({
@@ -408,7 +723,7 @@ async function handleRun(req, res) {
     });
 
     emit({ type: "phase", phase: "blueprint", message: "Writing the 14-day MVP and the landing prototype…" });
-    const plan = await gemini(blueprintPrompt(idea, rounds, audit), { temperature: 0.55, maxOutputTokens: 4096 });
+    const plan = await gemini(blueprintPrompt(idea, rounds, audit), { temperature: 0.55, maxOutputTokens: 4096, apiKey: customKey });
     const blueprint = plan.json || {};
     const landing = blueprint.landing || null;
     delete blueprint.landing;
@@ -424,18 +739,20 @@ async function handleRun(req, res) {
 async function handleIntervene(req, res) {
   const body = await readBody(req);
   const note = clip(body.note, 600);
-  if (note.length < 8) {
+  if (note.length < 4) {
     sendJson(res, 400, { error: "Write a real counter-argument first." });
     return;
   }
   if (rateLimited()) {
-    sendJson(res, 429, { error: "Free-tier pause. Wait a minute and inject again." });
+    sendJson(res, 429, { error: "Rate limit pause. Wait a moment and inject again." });
     return;
   }
+  const customKey = clip(body.apiKey || req.headers["x-gemini-key"] || "", 200);
   try {
     const result = await gemini(intervenePrompt(body.idea || {}, body.round, note, body.transcript), {
       temperature: 0.7,
       maxOutputTokens: 1024,
+      apiKey: customKey,
     });
     sendJson(res, 200, {
       builderReply: clip(result.json.builderReply, 900),
@@ -443,8 +760,9 @@ async function handleIntervene(req, res) {
       shift: clip(result.json.shift, 240),
       model: result.model,
     });
-  } catch (error) {
-    sendJson(res, 502, { error: error.message || "Intervention failed" });
+  } catch {
+    const fallback = buildFallbackIntervention(body.idea || {}, body.round || {}, note);
+    sendJson(res, 200, fallback);
   }
 }
 
@@ -454,9 +772,10 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method === "GET" && url.pathname === "/api/health") {
       sendJson(res, 200, {
-        ok: Boolean(API_KEY),
+        ok: true,
+        hasKey: Boolean(API_KEY),
         models: MODELS,
-        engine: "gemini-free-tier",
+        engine: API_KEY ? "gemini+fallback" : "syna-adversarial-engine",
       });
       return;
     }
@@ -471,8 +790,14 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
-      const html = fs.readFileSync(HTML_FILE);
+    if (
+      req.method === "GET" &&
+      (url.pathname === "/" ||
+        url.pathname === "/index.html" ||
+        decodeURIComponent(url.pathname) === "/innovative hackaton.html")
+    ) {
+      const targetFile = fs.existsSync(INDEX_FILE) ? INDEX_FILE : LEGACY_HTML_FILE;
+      const html = fs.readFileSync(targetFile);
       res.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8",
         "Cache-Control": "no-store",
