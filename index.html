@@ -1149,7 +1149,7 @@ Rules:
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-ink/20 pb-8 mb-8 gap-6">
             <div>
               <span className="font-mono text-xs uppercase tracking-widest text-subtle block mb-1">
-                Directory / 06 Projects Tracked
+                Directory / {String(projects.length).padStart(2, '0')} Projects Tracked
               </span>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
                 Stress-Test Dossiers
@@ -2535,9 +2535,116 @@ ${briefData.vulnerabilityRemediation}
       const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('syna-gemini-api-key') || '');
       const [keyModalOpen, setKeyModalOpen] = useState(false);
       const [keyDraft, setKeyDraft] = useState(() => localStorage.getItem('syna-gemini-api-key') || '');
+      const [apiStatus, setApiStatus] = useState({ online: false, hasKey: false, engine: 'syna-browser-engine' });
 
       const showToast = (message, type = 'info') => {
         setToast({ message, type });
+      };
+
+      // Probe /api/health on mount (works on localhost, Cloudflare Pages Functions, Render, etc.)
+      useEffect(() => {
+        let cancelled = false;
+        fetch('/api/health', { method: 'GET', cache: 'no-store' })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (!cancelled && data && data.ok) {
+              setApiStatus({
+                online: true,
+                hasKey: Boolean(data.hasKey),
+                engine: data.engine || 'syna-adversarial-engine',
+              });
+            }
+          })
+          .catch(() => {});
+        return () => {
+          cancelled = true;
+        };
+      }, []);
+
+      // Check URL hash for shared project dossier or direct page link on load
+      useEffect(() => {
+        try {
+          const hash = window.location.hash.replace(/^#/, '');
+          if (!hash) return;
+          const params = new URLSearchParams(hash);
+          const shared = params.get('share');
+          const page = params.get('page');
+          const projId = params.get('project');
+
+          if (shared) {
+            const jsonStr = decodeURIComponent(escape(atob(shared)));
+            const imported = JSON.parse(jsonStr);
+            if (imported && imported.id && imported.title) {
+              setProjects((prev) => {
+                const exists = prev.some((p) => p.id === imported.id);
+                return exists
+                  ? prev.map((p) => (p.id === imported.id ? { ...p, ...imported } : p))
+                  : [imported, ...prev];
+              });
+              setSelectedProjectId(imported.id);
+              setActivePage(page || 'verdict');
+              showToast(`Loaded shared dossier: "${imported.title}"`, 'info');
+              return;
+            }
+          }
+          if (projId) {
+            setSelectedProjectId(projId);
+          }
+          if (page && ['landing', 'dashboard', 'idealab', 'debate', 'verdict', 'blueprint', 'prototype'].includes(page)) {
+            setActivePage(page);
+          }
+        } catch (err) {}
+      }, []);
+
+      const handleShareLink = () => {
+        try {
+          const base = `${window.location.origin}${window.location.pathname}`;
+          let shareUrl = base;
+          if (currentProject && currentProject.live) {
+            const compact = {
+              id: currentProject.id,
+              title: currentProject.title,
+              tagline: currentProject.tagline,
+              stage: currentProject.stage,
+              status: currentProject.status,
+              verdict: currentProject.verdict,
+              score: currentProject.score,
+              createdAt: currentProject.createdAt,
+              category: currentProject.category,
+              roundsCompleted: currentProject.roundsCompleted,
+              keyTension: currentProject.keyTension,
+              targetAudience: currentProject.targetAudience,
+              problemStatement: currentProject.problemStatement,
+              solution: currentProject.solution,
+              revenueModel: currentProject.revenueModel,
+              biggestFear: currentProject.biggestFear,
+              live: true,
+              model: currentProject.model,
+              transcript: currentProject.transcript,
+              audit: currentProject.audit,
+              blueprint: currentProject.blueprint,
+              landing: currentProject.landing,
+              disagreements: currentProject.disagreements,
+            };
+            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(compact))));
+            const targetPage = activePage === 'landing' || activePage === 'idealab' ? 'verdict' : activePage;
+            shareUrl = `${base}#page=${encodeURIComponent(targetPage)}&share=${encodeURIComponent(encoded)}`;
+          } else if (activePage !== 'landing') {
+            shareUrl = `${base}#page=${encodeURIComponent(activePage)}&project=${encodeURIComponent(currentProject?.id || 'syna-01')}`;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl);
+            showToast('Shareable link copied to clipboard!', 'info');
+          } else {
+            window.prompt('Copy this shareable link:', shareUrl);
+          }
+        } catch (err) {
+          const fallbackUrl = window.location.href;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fallbackUrl);
+            showToast('Link copied to clipboard!', 'info');
+          }
+        }
       };
 
       const handleSaveApiKey = (e) => {
@@ -2620,6 +2727,133 @@ ${briefData.vulnerabilityRemediation}
         showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
       };
 
+      const runBrowserGeminiSynthesis = async (projectId, formData) => {
+        const fallbackBase = buildClientSynthesis(formData);
+        const ideaSummary = [
+          `Title: ${clipText(formData.title, 120)}`,
+          `Tagline: ${clipText(formData.tagline, 240)}`,
+          `Stage: ${clipText(formData.stage, 80)}`,
+          `Revenue model: ${clipText(formData.revenueModel, 160)}`,
+          `Target customer: ${clipText(formData.targetAudience, 400)}`,
+          `Problem: ${clipText(formData.problemStatement, 900)}`,
+          `Solution: ${clipText(formData.solution, 900)}`,
+          `Founder fear: ${clipText(formData.biggestFear, 400)}`
+        ].join('\n');
+
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'debate',
+          message: 'Growth hacker and ruthless VC are opening the debate (Gemini)…',
+          error: ''
+        });
+
+        const debateRes = await callBrowserGemini(
+          `Run a 4-round adversarial debate on this startup idea.\n\n${ideaSummary}\n\nReturn JSON: {"rounds":[{"round":1,"title":"Market Wedge & Willingness to Pay","builder":{"argument":"90-130 words","lever":"4-8 words","timeToValue":"short label"},"challenger":{"argument":"90-130 words","fatalRisk":"4-8 words","salesFriction":"short label"}}]} for 4 rounds: 1. Market Wedge & Willingness to Pay, 2. Defensibility & Why This Is Not a Feature, 3. Unit Economics & Go-to-Market, 4. Existential Risk & The Bet That Saves It.`,
+          geminiKey,
+          0.8
+        );
+
+        const rounds = Array.isArray(debateRes.json.rounds) && debateRes.json.rounds.length >= 4
+          ? debateRes.json.rounds.slice(0, 4).map((r, idx) => ({
+              round: idx + 1,
+              title: r.title || fallbackBase.rounds[idx].title,
+              builder: {
+                title: 'Growth Hacker',
+                subtitle: 'Finds the wedge',
+                argument: r.builder?.argument || fallbackBase.rounds[idx].builder.argument,
+                lever: r.builder?.lever || fallbackBase.rounds[idx].builder.lever,
+                timeToValue: r.builder?.timeToValue || fallbackBase.rounds[idx].builder.timeToValue
+              },
+              challenger: {
+                title: 'Ruthless VC',
+                subtitle: 'Tries to kill it',
+                argument: r.challenger?.argument || fallbackBase.rounds[idx].challenger.argument,
+                fatalRisk: r.challenger?.fatalRisk || fallbackBase.rounds[idx].challenger.fatalRisk,
+                salesFriction: r.challenger?.salesFriction || fallbackBase.rounds[idx].challenger.salesFriction
+              }
+            }))
+          : fallbackBase.rounds;
+
+        let modelUsed = debateRes.model || fallbackBase.model;
+        updateProject(projectId, {
+          transcript: rounds,
+          roundsCompleted: rounds.length,
+          status: 'Debate Live',
+          live: true,
+          model: modelUsed
+        });
+
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'verdict',
+          message: 'Scoring survival, kill-shots, and the two paths forward…',
+          error: ''
+        });
+
+        let audit = fallbackBase.audit;
+        try {
+          const verdictRes = await callBrowserGemini(
+            `Score this idea after the debate. Be willing to score under 50 if it should die.\n\n${ideaSummary}\n\nDEBATE:\n${JSON.stringify(rounds)}\n\nReturn JSON with keys: score (0-100), verdict (5-8 words), conclusion (2 sentences), tension (e.g. "2.4σ"), consensus ("Kill" | "Split Decision" | "Conditional Go"), keyTension (1 sentence), dimensions (array of 3 {name, score, tone: "lime"|"violet"|"ink", note}), strengths (array of 3 {title, detail}), killshots (array of 3 {title, detail}), pathA ({title, body, tradeoff}), pathB ({title, body, tradeoff}), disagreements (array of 2 {point, builder, challenger}), category.`,
+            geminiKey,
+            0.4
+          );
+          if (verdictRes.json && typeof verdictRes.json === 'object') {
+            audit = {
+              ...fallbackBase.audit,
+              ...verdictRes.json,
+              score: Math.max(0, Math.min(100, Number(verdictRes.json.score) || fallbackBase.audit.score))
+            };
+            modelUsed = verdictRes.model || modelUsed;
+          }
+        } catch (e) {}
+
+        updateProject(projectId, {
+          audit,
+          score: audit.score,
+          verdict: audit.verdict,
+          keyTension: audit.keyTension || fallbackBase.audit.keyTension,
+          disagreements: audit.disagreements || fallbackBase.audit.disagreements,
+          category: audit.category || fallbackBase.audit.category,
+          status: 'Stress-Tested'
+        });
+
+        setRunState({
+          active: true,
+          projectId,
+          phase: 'blueprint',
+          message: 'Writing the 14-day MVP and the landing prototype…',
+          error: ''
+        });
+
+        let blueprint = fallbackBase.blueprint;
+        let landing = fallbackBase.landing;
+        try {
+          const planRes = await callBrowserGemini(
+            `Turn the debate into a 14-day MVP and a landing-page prototype.\n\n${ideaSummary}\n\nVERDICT:\n${JSON.stringify(audit)}\n\nReturn JSON with keys: executiveThesis, idealCustomerProfile, wedgeStrategy, defensiveMoat, vulnerabilityRemediation, milestone1, milestone2, milestone3, mvpScope, outOfScope, stack, steps (array of 4 {day, ship}), landing ({brand, eyebrow, headline, subhead, cta, proof, priceLine, features: array of 3 {title, body}, objection: {label, answer}, faq: array of 3 {q, a}, experiment}).`,
+            geminiKey,
+            0.55
+          );
+          if (planRes.json && typeof planRes.json === 'object') {
+            const rawLanding = planRes.json.landing || fallbackBase.landing;
+            const rawBlueprint = { ...planRes.json };
+            delete rawBlueprint.landing;
+            blueprint = { ...fallbackBase.blueprint, ...rawBlueprint };
+            landing = { ...fallbackBase.landing, ...rawLanding };
+            modelUsed = planRes.model || modelUsed;
+          }
+        } catch (e) {}
+
+        updateProject(projectId, {
+          blueprint,
+          landing,
+          model: modelUsed
+        });
+        setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
+        showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
+      };
+
       const runSynthesis = async (projectId, formData) => {
         setRunState({
           active: true,
@@ -2630,106 +2864,7 @@ ${briefData.vulnerabilityRemediation}
         });
         setPendingIdea(formData);
 
-        const isLocalServer =
-          window.location.hostname === '127.0.0.1' ||
-          window.location.hostname === 'localhost';
-
-        if (!isLocalServer && geminiKey) {
-          try {
-            setRunState({
-              active: true,
-              projectId,
-              phase: 'debate',
-              message: 'Growth hacker and ruthless VC are opening the debate (Gemini)…',
-              error: ''
-            });
-            const ideaSummary = [
-              `Title: ${clipText(formData.title, 120)}`,
-              `Tagline: ${clipText(formData.tagline, 240)}`,
-              `Stage: ${clipText(formData.stage, 80)}`,
-              `Revenue model: ${clipText(formData.revenueModel, 160)}`,
-              `Target customer: ${clipText(formData.targetAudience, 400)}`,
-              `Problem: ${clipText(formData.problemStatement, 900)}`,
-              `Solution: ${clipText(formData.solution, 900)}`,
-              `Founder fear: ${clipText(formData.biggestFear, 400)}`
-            ].join('\n');
-            const fallbackBase = buildClientSynthesis(formData);
-            const debateRes = await callBrowserGemini(
-              `Run a 4-round adversarial debate on this startup idea.\n\n${ideaSummary}\n\nReturn JSON: {"rounds":[{"round":1,"title":"Market Wedge & Willingness to Pay","builder":{"argument":"90-130 words","lever":"4-8 words","timeToValue":"short label"},"challenger":{"argument":"90-130 words","fatalRisk":"4-8 words","salesFriction":"short label"}}]} for 4 rounds: 1. Market Wedge & Willingness to Pay, 2. Defensibility & Why This Is Not a Feature, 3. Unit Economics & Go-to-Market, 4. Existential Risk & The Bet That Saves It.`,
-              geminiKey,
-              0.8
-            );
-            const rounds = Array.isArray(debateRes.json.rounds) && debateRes.json.rounds.length >= 4
-              ? debateRes.json.rounds.slice(0, 4).map((r, idx) => ({
-                  round: idx + 1,
-                  title: r.title || fallbackBase.rounds[idx].title,
-                  builder: {
-                    title: 'Growth Hacker',
-                    subtitle: 'Finds the wedge',
-                    argument: r.builder?.argument || fallbackBase.rounds[idx].builder.argument,
-                    lever: r.builder?.lever || fallbackBase.rounds[idx].builder.lever,
-                    timeToValue: r.builder?.timeToValue || fallbackBase.rounds[idx].builder.timeToValue
-                  },
-                  challenger: {
-                    title: 'Ruthless VC',
-                    subtitle: 'Tries to kill it',
-                    argument: r.challenger?.argument || fallbackBase.rounds[idx].challenger.argument,
-                    fatalRisk: r.challenger?.fatalRisk || fallbackBase.rounds[idx].challenger.fatalRisk,
-                    salesFriction: r.challenger?.salesFriction || fallbackBase.rounds[idx].challenger.salesFriction
-                  }
-                }))
-              : fallbackBase.rounds;
-            updateProject(projectId, {
-              transcript: rounds,
-              roundsCompleted: rounds.length,
-              status: 'Debate Live',
-              live: true,
-              model: debateRes.model
-            });
-            setRunState({
-              active: true,
-              projectId,
-              phase: 'verdict',
-              message: 'Scoring survival, kill-shots, and the two paths forward…',
-              error: ''
-            });
-            await sleepMs(350);
-            updateProject(projectId, {
-              audit: fallbackBase.audit,
-              score: fallbackBase.audit.score,
-              verdict: fallbackBase.audit.verdict,
-              keyTension: fallbackBase.audit.keyTension,
-              disagreements: fallbackBase.audit.disagreements,
-              category: fallbackBase.audit.category,
-              status: 'Stress-Tested'
-            });
-            setRunState({
-              active: true,
-              projectId,
-              phase: 'blueprint',
-              message: 'Writing the 14-day MVP and the landing prototype…',
-              error: ''
-            });
-            await sleepMs(350);
-            updateProject(projectId, {
-              blueprint: fallbackBase.blueprint,
-              landing: fallbackBase.landing,
-              model: debateRes.model
-            });
-            setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
-            showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
-            return;
-          } catch (e) {
-            await runClientFallback(projectId, formData);
-            return;
-          }
-        }
-
-        if (!isLocalServer) {
-          await runClientFallback(projectId, formData);
-          return;
-        }
-
+        // 1. Try the server / Cloudflare Pages Function endpoint (/api/run) first
         try {
           const response = await fetch('/api/run', {
             method: 'POST',
@@ -2743,7 +2878,9 @@ ${briefData.vulnerabilityRemediation}
             throw new Error(`Chamber returned ${response.status}`);
           }
           let failed = '';
+          let receivedEvents = 0;
           await readNdjson(response, (event) => {
+            receivedEvents++;
             if (event.type === 'phase') {
               setRunState((prev) => ({ ...prev, phase: event.phase, message: event.message, error: '' }));
             }
@@ -2776,10 +2913,19 @@ ${briefData.vulnerabilityRemediation}
             }
             if (event.type === 'error') failed = event.message || 'Synthesis failed';
           });
-          if (failed) throw new Error(failed);
+          if (failed || receivedEvents === 0) throw new Error(failed || 'Empty stream');
           setRunState({ active: false, projectId, phase: 'done', message: 'Chamber closed.', error: '' });
           showToast('Debate, verdict, MVP plan, and prototype are ready', 'info');
-        } catch (error) {
+          return;
+        } catch (serverErr) {
+          // 2. If on static hosting (e.g. GitHub Pages) and user supplied a Gemini API key, call Gemini from browser
+          if (geminiKey) {
+            try {
+              await runBrowserGeminiSynthesis(projectId, formData);
+              return;
+            } catch (geminiErr) {}
+          }
+          // 3. Always succeed with built-in Adversarial Synthesis Engine
           await runClientFallback(projectId, formData);
         }
       };
@@ -2816,28 +2962,40 @@ ${briefData.vulnerabilityRemediation}
       const handleIntervene = async ({ note, round, roundIndex }) => {
         const ideaObj = currentProject.intake || currentProject;
         let data = null;
-        const isLocalServer =
-          window.location.hostname === '127.0.0.1' ||
-          window.location.hostname === 'localhost';
 
-        if (isLocalServer) {
+        try {
+          const response = await fetch('/api/intervene', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
+            },
+            body: JSON.stringify({
+              idea: ideaObj,
+              note,
+              round,
+              transcript: currentProject.transcript || MOCK_DEBATE_TRANSCRIPT,
+              apiKey: geminiKey || undefined
+            })
+          });
+          if (response.ok) {
+            data = await response.json();
+          }
+        } catch (e) {}
+
+        if (!data && geminiKey) {
           try {
-            const response = await fetch('/api/intervene', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
-              },
-              body: JSON.stringify({
-                idea: ideaObj,
-                note,
-                round,
-                transcript: currentProject.transcript || MOCK_DEBATE_TRANSCRIPT,
-                apiKey: geminiKey || undefined
-              })
-            });
-            if (response.ok) {
-              data = await response.json();
+            const res = await callBrowserGemini(
+              `The founder just interrupted the debate in round "${round?.title || 'Current Round'}".\nIdea: ${ideaObj?.title || ''} — ${ideaObj?.problemStatement || ''}\nFounder counter-argument: "${clipText(note, 500)}"\nReturn JSON: {"builderReply":"60-90 words from Growth Hacker","challengerReply":"60-90 words from Ruthless VC","shift":"one sentence on what changed in the thesis"}`,
+              geminiKey,
+              0.7
+            );
+            if (res.json?.builderReply && res.json?.challengerReply) {
+              data = {
+                builderReply: clipText(res.json.builderReply, 900),
+                challengerReply: clipText(res.json.challengerReply, 900),
+                shift: clipText(res.json.shift, 240)
+              };
             }
           } catch (e) {}
         }
@@ -2939,6 +3097,8 @@ ${briefData.vulnerabilityRemediation}
             setActivePage={setActivePage}
             activeProject={currentProject}
             hasApiKey={Boolean(geminiKey)}
+            apiOnline={apiStatus.online}
+            onShareLink={handleShareLink}
             onOpenKeyModal={() => {
               setKeyDraft(geminiKey);
               setKeyModalOpen(true);
